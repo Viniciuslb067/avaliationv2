@@ -1,0 +1,24 @@
+.headerContainer {
+  background: var(--white);
+  height: 6.5rem;
+
+  display: flex;
+  align-items: center;
+
+  padding: 2rem 4rem;
+
+  border: 1px solid var(--gray-100);
+
+  .list {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .user {
+    margin-left: auto;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
