@@ -1,12 +1,66 @@
 .sidebarContainer {
-  padding: 3rem 4rem;
   width: 26.5rem;
   height: 100vh;
 
-  background: red;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  background: var(--gray-500);
+  color: var(--white);
 }
+
+.sidebarHeader {
+  width: 100%;
+  height: 5rem;
+  padding: 0;
+
+  strong {  
+    width: 100%;
+    padding: 2rem;
+    height: auto;
+    
+    font-size: 2rem;
+    font-family: Lexend, sans-serif;
+
+    display: grid;
+    place-items: center;
+
+    background-color: var(--gray-800);
+    border: 1px solid var(--gray-800);
+
+  }
+
+}
+
+.sidebarList {
+  width: 100%;
+  margin-top: 1.35rem;
+  padding: 0;
+
+  li {
+    width: 100%;
+    height: 6rem;
+    list-style: none;
+    margin: 0;
+    justify-content: center;
+    align-items: center;  
+    display: flex;
+    flex-direction: row;
+    font-family: Lexend, sans-serif;
+
+    #icon {
+      flex: 30%;
+      display: grid;
+      place-items: center;
+    }
+
+    #title {
+      flex: 70%;
+    }
+
+
+    &:hover {
+      background-color: red;
+      cursor: pointer
+    }
+
+  }
+}
+
