@@ -1,9 +1,12 @@
 .sidebarContainer {
   width: 26.5rem;
   height: 100vh;
-
   background: var(--gray-500);
   color: var(--white);
+}
+
+.sidebarHide {
+  display: none;
 }
 
 .sidebarHeader {
@@ -11,22 +14,20 @@
   height: 5rem;
   padding: 0;
 
-  strong {  
+  strong {
     width: 100%;
     padding: 2rem;
     height: auto;
-    
+
     font-size: 2rem;
     font-family: Lexend, sans-serif;
 
     display: grid;
-    place-items: center;
+    place-items: inherit;
 
     background-color: var(--gray-800);
     border: 1px solid var(--gray-800);
-
   }
-
 }
 
 .sidebarList {
@@ -40,10 +41,11 @@
     list-style: none;
     margin: 0;
     justify-content: center;
-    align-items: center;  
+    align-items: center;
     display: flex;
     flex-direction: row;
-    font-family: Lexend, sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
 
     #icon {
       flex: 30%;
@@ -55,12 +57,17 @@
       flex: 70%;
     }
 
-
     &:hover {
       background-color: red;
-      cursor: pointer
+      cursor: pointer;
     }
-
   }
 }
 
+.test {
+  background: green;
+}
+
+.test1 {
+  background: yellow;
+}

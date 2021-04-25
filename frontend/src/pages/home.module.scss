@@ -1,0 +1,46 @@
+.main {
+  grid-area: main;
+  overflow-y: auto;
+}
+
+.container {
+  padding: 20px 35px;
+
+  .mainCard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+    margin: 20px 0;
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 50px;
+      border-radius: 5px;
+      background: #ffffff;
+      box-shadow: 5px 5px 13px #ededed, -5px -5px 13px #ffffff;
+
+      p {
+        font-size: 1.5rem;
+      }
+
+      span {
+        font-size: 1.75rem;
+        font-weight: 600;
+      }
+
+      .icon {
+        height: 50px;
+        width: 50px;
+        margin-bottom: 20px;
+      }
+
+      .cardInner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+}

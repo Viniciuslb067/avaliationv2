@@ -17,6 +17,7 @@
 
   .user {
     margin-left: auto;
+    transition: 2s;
     &:hover {
       cursor: pointer;
     }
