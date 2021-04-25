@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "../styles/global.scss";
 
 import { Header } from "../components/Header";

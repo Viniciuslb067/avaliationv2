@@ -16,11 +16,11 @@ export function Header() {
         <AiOutlineArrowRight
           size={38}
           onClick={() => closeSidebar(false)}
-          className={styles.list}
+          className={styles.icon}
         />
       ) : (
         <BsList
-          className={styles.list}
+          className={styles.icon}
           size={38}
           onClick={() => openSidebar(true)}
         />

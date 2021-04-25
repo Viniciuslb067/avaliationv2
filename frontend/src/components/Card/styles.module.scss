@@ -1,0 +1,22 @@
+.card {
+  width: 18rem;
+  height: 7rem;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 2px;
+  
+  .card:first-child div:last-child span {
+    background-color: red;
+  }
+
+  div:last-child span {
+    font-size: 3rem;
+    color: gray;
+  }
+
+  span:first-child {
+    color: var(--text-grey);
+  }
+}

@@ -10,7 +10,7 @@ export function Sidebar() {
   const { isOpen } = useContext(SidebarContext)
 
   return (
-    <div  className={isOpen ? stlyes.sidebarContainer : stlyes.sidebarHide}>
+    <div  className={isOpen ? stlyes.siderbarShow: stlyes.sidebarHide}>
 
       <header className={stlyes.sidebarHeader}>
   
