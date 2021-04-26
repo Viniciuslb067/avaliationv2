@@ -1,12 +1,10 @@
 import { Card } from "../components/Card/index";
-import { Chart } from "../components/Chart/index";
+import { Table } from "../components/Table/index";
 
-import { AiOutlineUser } from "react-icons/ai";
+
 import { FaFileExport } from "react-icons/fa";
 import { VscTools } from "react-icons/vsc";
-import { GoGraph } from "react-icons/go";
-import { GrSystem } from "react-icons/gr";
-
+1
 import { Sidebar } from "../components/Sidebar/index";
 
 import styles from "./home.module.scss";
@@ -39,6 +37,7 @@ export default function Home() {
           </div>
         </div>
         <Card />
+        <Table />
       </main>
     </>
   );
