@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
-import { SiderbarData } from "./data";
-
 import { FaBalanceScale } from "react-icons/fa";
 import {
   AiFillPieChart,

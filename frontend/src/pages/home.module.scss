@@ -1,0 +1,29 @@
+.mainContainer {
+  margin-left: 280px;
+  padding: 1.5rem;
+  background: #f1f5f9;
+  min-height: calc(100vh - 70px);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerActions {
+  button {
+    outline: none;
+    color: #fff;
+    background: #5850ec;
+    border: none;
+    padding: 0.6rem 2rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+    font-weight: 600;
+
+    span {
+      font-size: 1.25rem;
+      margin-right: 0.6rem;
+    }
+  }
+}
