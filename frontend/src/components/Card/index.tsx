@@ -1,10 +1,8 @@
 import { useContext } from "react";
 
-import { Button } from 'react-bootstrap';
-
 import { AiOutlineUser, AiOutlineArrowRight } from "react-icons/ai";
 
-import styles from "./styles.module.scss";
+import "./styles.module.css";
 
 interface CardProps {
   title: string;
@@ -18,7 +16,7 @@ const icons = {
 
 export function Card({ title, icon, number }: CardProps) {
   return (
-    <div className={styles.card}>
+    <div className="">
       <div>
         <h1>{number}</h1>
         <span>{title}</span>

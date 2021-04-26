@@ -3,29 +3,115 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 
 import { SiderbarData } from "./data";
 
-import stlyes from "./styles.module.scss";
+import { FaBalanceScale } from "react-icons/fa";
+import {
+  AiFillPieChart,
+  AiOutlineCalendar,
+  AiOutlineBell,
+} from "react-icons/ai";
+import { HiOutlineUsers } from "react-icons/hi";
+import { FiShoppingCart } from "react-icons/fi";
+import { BsEnvelope } from "react-icons/bs";
+import { BiUser } from "react-icons/bi";
+import { FaUserCircle } from "react-icons/fa";
+
+import styles from "./styles.module.scss";
 
 export function Sidebar() {
-
-  const { isOpen } = useContext(SidebarContext)
+  const { isOpen } = useContext(SidebarContext);
 
   return (
-    <div  className={isOpen ? stlyes.siderbarShow: stlyes.sidebarHide}>
+    <>
+      <div className={styles.sidebar}>
+        <div className={styles.sidebarBrand}>
+          <div className={styles.brandFlex}>
+            <span>
+              <BiUser />
+            </span>
+            <div className={styles.brandIcons}>
+              <span>
+                <AiOutlineBell />
+              </span>
+              <span>
+                <FaUserCircle />
+              </span>
+            </div>
+          </div>
+        </div>
 
-      <header className={stlyes.sidebarHeader}>
-  
-        <strong>INSS</strong>
-      </header>
-      <ul className={stlyes.sidebarList}>
-        {SiderbarData.map((item, key) => {
-          return (
-            <li key={key}>
-              <div id={stlyes.icon}>{item.icon}</div>
-              <div id={stlyes.title}>{item.title}</div>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+        <div className={styles.sidebarMain}>
+          <div className={styles.sidebarUser}>
+            <img src="/logo.png" alt="Logo INSS" />
+            <div>
+              <h3>Vinicius Lima</h3>
+              <span>vinicius@gmail.com</span>
+            </div>
+          </div>
+
+          <div className={styles.sidebarMenu}>
+            <div className={styles.menuHead}>
+              <span>Dashboard</span>
+            </div>
+            <ul>
+              <li>
+                <a href="">
+                  <span>
+                    <FaBalanceScale />
+                  </span>
+                  Finance
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <span>
+                    {" "}
+                    <AiFillPieChart />{" "}
+                  </span>
+                  Analytics
+                </a>
+              </li>
+            </ul>
+
+            <div className={styles.menuHead}>
+              <span>Applications</span>
+            </div>
+            <ul>
+              <li>
+                <a href="">
+                  <span>
+                    <AiOutlineCalendar />
+                  </span>
+                  Calendar
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <span>
+                    <HiOutlineUsers />
+                  </span>
+                  Contacts
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <span>
+                    <FiShoppingCart />
+                  </span>
+                  Ecommerce
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <span>
+                    <BsEnvelope />
+                  </span>
+                  Mailbox
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

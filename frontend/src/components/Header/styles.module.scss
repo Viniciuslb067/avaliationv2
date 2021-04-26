@@ -1,26 +1,62 @@
-.headerContainer {
-  background: var(--white);
-  height: 6.5rem;
+.mainContent {
+  margin-left: 280px;
 
-  display: flex;
-  align-items: center;
+  header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+  }
+}
+.menuToggle {
+  label {
+    height: 60px;
+    width: 60px;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    border-radius: 50%;
 
-  padding: 2rem 4rem;
-
-  border: 1px solid var(--gray-100);
-
-  .icon {
-    transition: all 0.5s;
     &:hover {
-      cursor: pointer;
+      background: #efefef;
     }
   }
+}
 
-  .user {
-    margin-left: auto;
-    transition: 2s;
-    &:hover {
-      cursor: pointer;
+.headerIcons {
+  span {
+    display: inline-block;
+    margin-left: 0.7rem;
+    font-size: 1.5rem;
+  }
+}
+
+.mainContainer {
+  padding: 1.5rem;
+  background: #f1f5f9;
+  min-height: calc(100vh - 70px);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerActions {
+  button {
+    outline: none;
+    color: #fff;
+    background: #5850ec;
+    border: none;
+    padding: 0.6rem 2rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+    font-weight: 600;
+
+    span {
+      font-size: 1.25rem;
+      margin-right: 0.6rem;
     }
   }
 }

@@ -1,13 +1,12 @@
-import { useState } from "react";
+import "../styles/global.css";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "../styles/global.scss";
+import { useState } from "react";
 
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SidebarContext } from "../contexts/SidebarContext"
 
-import styles from "../styles/app.module.scss";
+import styles from "../styles/app.module.css";
 
 function MyApp({ Component, pageProps }) {
   const [isOpen, setIsOpen] = useState(false);
