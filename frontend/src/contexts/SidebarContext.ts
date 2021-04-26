@@ -2,8 +2,8 @@ import { createContext } from "react";
 
 interface SidebarContextData {
   isOpen: boolean;
-  closeSidebar: (value) => void;
-  openSidebar: (value) => void;
+  closeSidebar: () => void;
+  openSidebar: () => void;
 }
 
 export const SidebarContext = createContext({} as SidebarContextData);

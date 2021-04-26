@@ -1,18 +1,21 @@
 import { Card } from "../components/Card/index";
 import { Table } from "../components/Table/index";
+import { CardHome } from "../components/CardHome/index";
 
+import { useContext } from "react";
+import { SidebarContext } from "../contexts/SidebarContext";
 
 import { FaFileExport } from "react-icons/fa";
 import { VscTools } from "react-icons/vsc";
-1
 import { Sidebar } from "../components/Sidebar/index";
 
 import styles from "./home.module.scss";
 
 export default function Home() {
+  const { isOpen } = useContext(SidebarContext);
   return (
     <>
-      <main className={styles.mainContainer}>
+      <main className={isOpen ? styles.mainContainer : styles.mainContainerHide}>
         <div className={styles.pageHeader}>
           <div>
             <h1>Painel de Controle</h1>
@@ -37,7 +40,11 @@ export default function Home() {
           </div>
         </div>
         <Card />
-        <Table />
+
+        <div className={styles.grid}>
+          <CardHome />
+          <Table />
+        </div>
       </main>
     </>
   );

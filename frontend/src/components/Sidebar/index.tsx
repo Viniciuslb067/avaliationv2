@@ -20,7 +20,7 @@ export function Sidebar() {
 
   return (
     <>
-      <div className={styles.sidebar}>
+      <div className={isOpen ? styles.sidebar : styles.sidebarHide}>
         <div className={styles.sidebarBrand}>
           <div className={styles.brandFlex}>
             <span>

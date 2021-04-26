@@ -5,16 +5,12 @@ import { BsArrowRightShort } from "react-icons/bs";
 export function Table() {
   return (
     <>
-      <div className={styles.tableGrid}>
         <div className={styles.table}>
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h3>Avaliações Recentes</h3>
               <button>
                 Ver todas
-                <span>
-                  <BsArrowRightShort />
-                </span>
               </button>
             </div>
 
@@ -43,7 +39,6 @@ export function Table() {
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 }

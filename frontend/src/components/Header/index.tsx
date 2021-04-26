@@ -11,12 +11,16 @@ export function Header() {
 
   return (
     <>
-      <div className={styles.mainContent}>
+      <div className={isOpen ? styles.mainContent : styles.mainContentHide}>
         <header>
           <div className={styles.menuToggle}>
-            <label htmlFor="">
+            <label htmlFor={styles.mainContentHide}>
               <span>
-                <BsList />
+                {isOpen ? (
+                  <AiOutlineArrowRight onClick={() => closeSidebar()} />
+                ) : (
+                  <BsList onClick={() => openSidebar()} />
+                )}
               </span>
             </label>
           </div>
@@ -27,8 +31,6 @@ export function Header() {
             </span>
           </div>
         </header>
-
-
       </div>
     </>
   );

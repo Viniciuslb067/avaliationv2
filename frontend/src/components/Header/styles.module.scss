@@ -1,5 +1,26 @@
 .mainContent {
   margin-left: 280px;
+  transition: margin-left 300ms;
+  header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    position: fixed;
+    left: 280px;
+    width: calc(100% - 280px);
+    top: 0;
+    z-index: 20;
+    background: #fff;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+    transition: left 300ms;
+  }
+}
+
+.mainContentHide {
+  margin-left: 0;
+  transition: margin-left 300ms;
 
   header {
     height: 70px;
@@ -7,7 +28,17 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    background: #fff;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+    transition: left 300ms;
+    margin-bottom: 3rem;
   }
+  
 }
 
 .menuToggle {
@@ -20,7 +51,7 @@
     border-radius: 50%;
 
     &:hover {
-      background: #efefef;
+      cursor: pointer;
     }
   }
 }
