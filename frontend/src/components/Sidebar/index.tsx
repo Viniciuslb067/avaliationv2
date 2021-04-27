@@ -1,17 +1,13 @@
+import Link from "next/link";
 import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
-import {
-  AiOutlineBell,
-  AiOutlineHome
-} from "react-icons/ai";
+import { AiOutlineBell, AiOutlineHome } from "react-icons/ai";
 import { HiOutlineUsers } from "react-icons/hi";
-import { FiShoppingCart } from "react-icons/fi";
-import { BsEnvelope } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
-import { VscGraph } from "react-icons/vsc"
-import { RiComputerLine } from "react-icons/ri"
+import { VscGraph } from "react-icons/vsc";
+import { RiComputerLine } from "react-icons/ri";
 
 import styles from "./styles.module.scss";
 
@@ -52,21 +48,25 @@ export function Sidebar() {
             </div>
             <ul>
               <li>
-                <a href="">
-                  <span>
-                    <AiOutlineHome />
-                  </span>
-                  Home
-                </a>
+                <Link href="/dashboard">
+                  <a>
+                    <span>
+                      <AiOutlineHome />
+                    </span>
+                    Home
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="">
-                  <span>
-                    {" "}
-                    <VscGraph />{" "}
-                  </span>
-                  Avaliações
-                </a>
+                <Link href="/assessment">
+                  <a>
+                    <span>
+                      {" "}
+                      <VscGraph />{" "}
+                    </span>
+                    Avaliações
+                  </a>
+                </Link>
               </li>
             </ul>
             <ul>

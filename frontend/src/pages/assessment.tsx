@@ -1,34 +1,16 @@
 import { GetStaticProps } from "next";
 import { useContext, useEffect, useState } from "react";
 
-import { Card } from "../components/Card/index";
-import { CardHome } from "../components/CardHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { FaFileExport } from "react-icons/fa";
-import { VscTools } from "react-icons/vsc";
-
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { BsGraphUp } from "react-icons/bs"
 import { api } from "../services/api";
 
-import styles from "./home.module.scss";
+import styles from "./styles.module.scss";
 
-interface Avaliation {
-  question: string;
-  requester: string;
-  status: string;
-}
-
-interface HomeProps {
-  allAvaliationOn: Avaliation[];
-  allAvaliationOff: Avaliation[];
-  allAvaliation: number;
-  allUser: number;
-  allSystem: number;
-}
-
-export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvaliation, allUser, allSystem }: HomeProps) {
-  const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
+export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
   const { isOpen } = useContext(SidebarContext);
- 
+
   return (
     <>
       <main
@@ -36,39 +18,17 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
       >
         <div className={styles.pageHeader}>
           <div>
-            <h1>Painel de Controle</h1>
+            <h1>Avaliações</h1>
             <small>
-              Acompanhe tudo sobre as avalições dos sistemas do INSS
+              Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
           </div>
-
-          <div className={styles.headerActions}>
-            <button>
-              <span>
-                <FaFileExport />
-              </span>
-              Export
-            </button>
-            <button>
-              <span>
-                <VscTools />
-              </span>
-              Settings
-            </button>
-          </div>
         </div>
-        <Card 
-          numberAvaliation={allAvaliation}
-          numberUsers={allUser}  
-          numberSystems={allSystem}     
-        />
         <div className={styles.grid}>
-          <CardHome />
           <div className={styles.table}>
             <div className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>Avaliações Recentes</h3>
-                <button>Ver todas</button>
+                <h3>Avaliações Ativas</h3>
               </div>
 
               <div className={styles.cardBody}>
@@ -79,15 +39,56 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
                         <td>Status</td>
+                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
-                      {avaliationList.map((item, key) => {
+                      {allAvaliationOn.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
+                            <td><AiOutlineEdit size={20} color="orange"/></td>
+                            <td><BsGraphUp size={20} color="blue"/></td>
+                            <td><AiOutlineDelete size={20} color="red"/></td> 
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.table}>
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <h3>Avaliações Desativadas</h3>
+              </div>
+
+              <div className={styles.cardBody}>
+                <div className={styles.tableResponsive}>
+                  <table width="100%">
+                    <thead>
+                      <tr>
+                        <td>Título Avaliação</td>
+                        <td>Departamento</td>
+                        <td>Status</td>
+                        <td></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {allAvaliationOff.map((item, key) => {
+                        return (
+                          <tr key={key}>
+                            <td>{item.question}</td>
+                            <td>{item.requester}</td>
+                            <td>{item.status}</td>
+                            <td><AiOutlineEdit size={20} color="orange"/></td>
+                            <td><BsGraphUp size={20} color="blue"/></td>
+                            <td><AiOutlineDelete size={20} color="red"/></td>
                           </tr>
                         );
                       })}
@@ -105,8 +106,6 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/avaliation");
-  const totalUser = await api.get("/user");
-  const totalSystems = await api.get("/system");
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
@@ -126,17 +125,11 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const allAvaliationOn = avaliationOn;
   const allAvaliationOff = avaliationOff;
-  const allAvaliation = data.totalAvaliation;
-  const allUser = totalUser.data.totalUser;
-  const allSystem = totalSystems.data.totalSystems;
 
   return {
     props: {
       allAvaliationOn,
       allAvaliationOff,
-      allAvaliation,
-      allSystem,
-      allUser,
     },
   };
 };
