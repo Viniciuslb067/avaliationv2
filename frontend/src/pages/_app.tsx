@@ -1,7 +1,7 @@
 import "../styles/global.scss";
 
 import { useState } from "react";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
@@ -12,7 +12,8 @@ import styles from "../styles/app.module.scss";
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
-  const showHeaderAndSidebar = router.pathname === '/' ||  router.pathname === '/login' ? false : true;
+  const showHeaderAndSidebar =
+    router.pathname === "/" || router.pathname === "/register" ? false : true;
   const [isOpen, setIsOpen] = useState(false);
 
   function openSidebar() {

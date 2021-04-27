@@ -4,7 +4,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 30rem;
-  height: 26rem;
+  height: 34.5rem;
   background: #fff;
   border-radius: 4px;
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
@@ -84,7 +84,7 @@
 }
 
 .signUpContainer {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   text-align: center;
   color: #666666;
 
@@ -98,17 +98,17 @@
   }
 }
 
-@media only screen and (max-width: 431px) {
+@media only screen and (max-width: 1080px) {
   .container {
-    width: 25rem;
-    height: 28rem;
+    width: 30rem;
+    height: 35.5rem;
   }
 }
 
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 1041px) {
   .container {
-    width: 20rem;
-    height: 26rem;
+    width: 30rem;
+    height: 35.5rem;
   }
 
   .signUpContainer {
@@ -116,12 +116,49 @@
   }
 }
 
-@media only screen and (max-width: 280px) {
+@media only screen and (max-width: 724px) {
+  .container {
+    width: 30rem;
+    height: 35.5rem;
+  }
+}
+
+@media only screen and (max-width: 674px) {
+  .container {
+    width: 30rem;
+    height: 35.5rem;
+  }
+}
+
+@media only screen and (max-width: 446px) {
+  .container {
+    width: 25rem;
+    height: 35.5rem;
+  }
+}
+
+@media only screen and (max-width: 364px) {
+  .container {
+    width: 20rem;
+    height: 35.5rem;
+  }
+}
+
+@media only screen and (max-width: 297px) {
   .container {
     width: 18rem;
-    height: 26rem;
+    height: 36.5rem;
   }
+  .signUpContainer {
+    margin-top: 1rem;
+  }
+}
 
+@media only screen and (max-width: 262px) {
+  .container {
+    width: 15rem;
+    height: 36.5rem;
+  }
   .signUpContainer {
     margin-top: 1rem;
   }

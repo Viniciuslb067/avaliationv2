@@ -1,13 +1,19 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import styles from "./index.module.scss";
+import styles from "./register.module.scss";
 
-export default function Login() {
+export default function Register() {
   return (
     <>
       <div className={styles.container}>
         <div className={styles.form}>
-          <h1>Login</h1>
+          <h1>Cadastro</h1>
+
+          <div className={styles.fields}>
+            <input type="text" required />
+            <span></span>
+            <label htmlFor="">Nome</label>
+          </div>
 
           <div className={styles.fields}>
             <input type="text" required />
@@ -21,13 +27,19 @@ export default function Login() {
             <label htmlFor="">Senha</label>
           </div>
 
-          <button>Login</button>
+          <div className={styles.fields}>
+            <input type="password" required />
+            <span></span>
+            <label htmlFor="">Confirmar Senha</label>
+          </div>
+
+          <button>Cadastrar</button>
 
           <div className={styles.signUpContainer}>
             <p className={styles.signUp}>
-              Não possui conta?
-              <Link href="/register">
-              <a> Cadastrar</a>
+              Já possui conta?
+              <Link href="/">
+                <a> Entrar</a>
               </Link>
             </p>
           </div>
