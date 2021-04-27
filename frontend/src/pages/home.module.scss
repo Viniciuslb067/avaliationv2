@@ -42,3 +42,61 @@
   gap: 3rem;
 }
 
+@media only screen and (max-width: 768px) {
+  .grid {
+    grid-template-columns: 100%;
+  }
+
+  .pageHeader {
+    display: block;
+    div {
+      h1 {
+        font-size: 2rem;
+      }
+
+      small {
+        font-size: 1rem;
+      }
+
+    }
+  }
+
+  .headerActions {
+    display: flex;
+    justify-content: center;
+    text-align: right;
+    button {
+      margin-top: 1.4rem;
+    }
+  }
+}
+
+@media only screen and (max-width: 415px) {
+  .headerActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      margin-top: 1rem;
+    }
+  }
+}
+
+@media only screen and (minimum-width: 1024px) {
+  .grid {
+    grid-template-columns: 50% 50%;
+  }
+
+  .pageHeader {
+    div {
+      h1 {
+        font-size: 3rem;
+      }
+
+      small {
+        font-size: 1rem;
+      }
+
+    }
+  }
+}

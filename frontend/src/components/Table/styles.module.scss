@@ -1,6 +1,7 @@
 .card {
   background: #fff;
   border-radius: 5px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .cardHeader {
@@ -28,6 +29,7 @@
 .cardBody {
   table {
     border-collapse: collapse;
+    overflow-x: auto;
 
     thead {
       tr {
@@ -55,6 +57,16 @@
         background: green;
         margin-right: 1rem;
       }
+
+      .statusOff {
+        display: inline-block;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background: red;
+        margin-right: 1rem;
+      }
+
     }
 
     tr td:last-child {
@@ -65,6 +77,5 @@
 }
 
 .tableResponsive {
-  width: 100%;
   overflow-x: auto;
 }

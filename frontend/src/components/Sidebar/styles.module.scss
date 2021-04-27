@@ -5,15 +5,15 @@
   top: 0;
   height: 100%;
   padding: 1rem 1.5rem;
-  background: var(--color-main);
-  color: #fff;
+  background: #313a46;
+  color: #788596;
   z-index: 20;
   transition: left 300ms;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
 }
 
 .sidebarHide {
   display: none;
-  
 }
 
 .sidebarBrand {
@@ -51,9 +51,8 @@
     }
 
     span {
-      font-size: .8rem;
+      font-size: 0.8rem;
     }
-
   }
 }
 
@@ -63,10 +62,15 @@
 
 .menuHead {
   text-transform: uppercase;
-  color: #8da2fb;
-  font-size: 0.90rem;
+  color: #788596;
+  font-size: 0.9rem;
   font-weight: 500;
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
+
+  span {
+    color: #7e8299;
+  }
+
 }
 
 .sidebarMenu {
@@ -78,19 +82,25 @@
     margin-bottom: 1.35rem;
 
     a {
-      color: #efefef;
+      color: #788596;
       font-size: 1rem;
       display: flex;
       align-items: center;
+
+      &:hover {
+        color: white;
+        width:100%
+      }
 
       span {
         font-size: 1.5rem;
         display: inline-block;
         margin-right: 1rem;
       }
-
     }
-
   }
+}
 
+@media only screen and (max-width: 1124px) {
+ 
 }

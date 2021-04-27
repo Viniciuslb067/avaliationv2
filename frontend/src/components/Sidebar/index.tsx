@@ -1,17 +1,17 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
-import { FaBalanceScale } from "react-icons/fa";
 import {
-  AiFillPieChart,
-  AiOutlineCalendar,
   AiOutlineBell,
+  AiOutlineHome
 } from "react-icons/ai";
 import { HiOutlineUsers } from "react-icons/hi";
 import { FiShoppingCart } from "react-icons/fi";
 import { BsEnvelope } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
+import { VscGraph } from "react-icons/vsc"
+import { RiComputerLine } from "react-icons/ri"
 
 import styles from "./styles.module.scss";
 
@@ -54,56 +54,36 @@ export function Sidebar() {
               <li>
                 <a href="">
                   <span>
-                    <FaBalanceScale />
+                    <AiOutlineHome />
                   </span>
-                  Finance
+                  Home
                 </a>
               </li>
               <li>
                 <a href="">
                   <span>
                     {" "}
-                    <AiFillPieChart />{" "}
+                    <VscGraph />{" "}
                   </span>
-                  Analytics
+                  Avaliações
                 </a>
               </li>
             </ul>
-
-            <div className={styles.menuHead}>
-              <span>Applications</span>
-            </div>
             <ul>
-              <li>
-                <a href="">
-                  <span>
-                    <AiOutlineCalendar />
-                  </span>
-                  Calendar
-                </a>
-              </li>
               <li>
                 <a href="">
                   <span>
                     <HiOutlineUsers />
                   </span>
-                  Contacts
+                  Usuários
                 </a>
               </li>
               <li>
                 <a href="">
                   <span>
-                    <FiShoppingCart />
+                    <RiComputerLine />
                   </span>
-                  Ecommerce
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <span>
-                    <BsEnvelope />
-                  </span>
-                  Mailbox
+                  Sistemas
                 </a>
               </li>
             </ul>

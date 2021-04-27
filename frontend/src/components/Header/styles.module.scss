@@ -1,6 +1,6 @@
 .mainContent {
   margin-left: 280px;
-  transition: margin-left 300ms;
+  transition: all 800ms;
   header {
     height: 70px;
     display: flex;
@@ -12,7 +12,7 @@
     width: calc(100% - 280px);
     top: 0;
     z-index: 20;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
     transition: left 300ms;
   }
@@ -20,7 +20,7 @@
 
 .mainContentHide {
   margin-left: 0;
-  transition: margin-left 300ms;
+  transition: all 300ms;
 
   header {
     height: 70px;
@@ -36,7 +36,6 @@
     background: #fff;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
     transition: left 300ms;
-    margin-bottom: 3rem;
   }
   
 }
@@ -62,5 +61,21 @@
     margin-left: 0.7rem;
     font-size: 1.5rem;
   }
+}
+
+@media only screen and (max-width: 1124px) {
+  .mainContent {
+    margin-left: 0;
+
+    header {
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  .mainContentHide {
+    left: 0;
+  }
+
 }
 
