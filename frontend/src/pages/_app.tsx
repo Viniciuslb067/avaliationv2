@@ -1,14 +1,18 @@
-import "../styles/global.css";
+import "../styles/global.scss";
 
 import { useState } from "react";
+import { useRouter } from "next/router"
 
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
 
-import styles from "../styles/app.module.css";
+import styles from "../styles/app.module.scss";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
+  const showHeaderAndSidebar = router.pathname === '/' ||  router.pathname === '/login' ? false : true;
   const [isOpen, setIsOpen] = useState(false);
 
   function openSidebar() {
@@ -22,9 +26,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
       <div className={styles.wrapper}>
-        <Sidebar />
+        {showHeaderAndSidebar && <Sidebar />}
         <main>
-          <Header />
+          {showHeaderAndSidebar && <Header />}
           <Component {...pageProps} />
         </main>
       </div>

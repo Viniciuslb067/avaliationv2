@@ -13,7 +13,7 @@ interface CardProps {
   icon: {};
 }
 
-export function Card() {
+export function Card({ numberAvaliation, numberUsers, numberSystems }) {
   return (
     <>
       <div className={styles.cards}>
@@ -24,7 +24,7 @@ export function Card() {
                 <span>Avaliaçãoes</span>
                 <small>Número de avaliações</small>
               </div>
-              <h2>150</h2>
+              <h2>{numberAvaliation}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span><GoGraph color="#1d62f0"/></span>
@@ -39,7 +39,7 @@ export function Card() {
                 <span>Usuários</span>
                 <small>Número de usuários</small>
               </div>
-              <h2>30</h2>
+              <h2>{numberUsers}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span><HiOutlineUsers color="#fbad4c"/></span>
@@ -54,7 +54,7 @@ export function Card() {
                 <span>Sistemas</span>
                 <small>Número de sistemas</small>
               </div>
-              <h2>10</h2>
+              <h2>{numberSystems}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span><GrSystem/></span>

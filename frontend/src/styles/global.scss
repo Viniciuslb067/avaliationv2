@@ -7,7 +7,13 @@
 } 
 
 :root {
-  --color-main: #1a202e;
+  --white: #FFF;
+
+  --gray-50: #F7F8FA;
+  --gray-100: #E6E8EB;
+  --gray-200: #AFB2B1;
+  --gray-500: #808080;
+  --gray-800: #494D4B;
  
 }
 
@@ -24,7 +30,7 @@
 }
 
 body {
-  background: var(--gray-50);
+  background: #f1f5f9;
 }
 
 body, input, textarea, button {

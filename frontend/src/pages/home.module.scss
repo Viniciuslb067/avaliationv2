@@ -2,7 +2,7 @@
   margin-left: 280px;
   padding: 1.5rem;
   background: #f1f5f9;
-  min-height: calc(100vh + 70px);
+  height: calc(100vh + 70px);
 }
 
 .mainContainerHide {
@@ -42,6 +42,84 @@
   gap: 3rem;
 }
 
+.card {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+
+  button {
+    outline: none;
+    color: #fff;
+    background: #5850ec;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+}
+
+.cardBody {
+  table {
+    border-collapse: collapse;
+    overflow-x: auto;
+
+    thead {
+      tr {
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 2px solid #f0f0f0;
+      }
+    }
+
+    thead {
+      td {
+        font-weight: 700;
+      }
+    }
+
+    td {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      color: #222;
+
+      .status {
+        display: inline-block;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background: green;
+        margin-right: 1rem;
+      }
+
+      .statusOff {
+        display: inline-block;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background: red;
+        margin-right: 1rem;
+      }
+    }
+
+    tr td:last-child {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.tableResponsive {
+  overflow-x: auto;
+}
+
 @media only screen and (max-width: 768px) {
   .grid {
     grid-template-columns: 100%;
@@ -57,7 +135,6 @@
       small {
         font-size: 1rem;
       }
-
     }
   }
 
@@ -82,7 +159,7 @@
   }
 }
 
-@media only screen and (minimum-width: 1024px) {
+@media only screen and (max-width: 1024px) {
   .grid {
     grid-template-columns: 50% 50%;
   }
@@ -96,7 +173,6 @@
       small {
         font-size: 1rem;
       }
-
     }
   }
 }
