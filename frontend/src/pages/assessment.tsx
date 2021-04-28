@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Router from "next/router";
 import { GetStaticProps } from "next";
-import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useContext } from "react";
 
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -9,13 +11,31 @@ import { IoMdAdd } from "react-icons/io";
 
 import { api } from "../services/api";
 
-import styles from "./styles.module.scss";
+import styles from "./assessment.module.scss";
+
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
   const { isOpen } = useContext(SidebarContext);
 
   async function deleteAssesssment(id) {
-    await api.delete("/avaliation/" + id);
+    await api
+      .delete("/avaliation/" + id)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          Router.push("/assessment");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -33,12 +53,12 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
 
           <div className={styles.headerActions}>
             <Link href="/new/assessment">
-            <button>
-              <span>
-                <IoMdAdd color="white" />
-              </span>
-              <span className={styles.text}>Avaliação</span>
-            </button>
+              <button>
+                <span>
+                  <IoMdAdd color="white" />
+                </span>
+                <span className={styles.text}>Avaliação</span>
+              </button>
             </Link>
           </div>
         </div>
@@ -57,6 +77,8 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
                         <td>Status</td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                       </tr>
                     </thead>
@@ -106,6 +128,8 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
                         <td>Status</td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                       </tr>
                     </thead>

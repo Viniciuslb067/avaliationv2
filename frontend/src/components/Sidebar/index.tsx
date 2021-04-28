@@ -80,12 +80,14 @@ export function Sidebar() {
                 </a>
               </li>
               <li>
+                <Link href="/system">
                 <a>
                   <span>
                     <RiComputerLine />
                   </span>
                   Sistemas
                 </a>
+                </Link>
               </li>
             </ul>
           </div>

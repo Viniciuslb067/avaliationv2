@@ -1,0 +1,81 @@
+import Router from "next/router";
+import { useState } from "react";
+import { toast } from "react-toastify";
+
+import { api } from "../../services/api";
+
+import styles from "./system.module.scss";
+
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
+
+export default function NewSystem() {
+  const [dns, setDns] = useState("");
+  const [name, setName] = useState("");
+  const [area, setArea] = useState("");
+
+  async function handleSubmit() {
+    await api
+      .post("/system", {
+        dns,
+        name,
+        area,
+      })
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          Router.push("/dashboard");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  return (
+    <>
+      <div className={styles.container}>
+        <div className={styles.form}>
+          <h1>Cadastrar Sistema</h1>
+
+          <div className={styles.fields}>
+            <label htmlFor="">DNS</label>
+            <input
+              type="text"
+              required
+              onChange={(e) => setDns(e.target.value)}
+            />
+            <span></span>
+          </div>
+
+          <div className={styles.fields}>
+            <label htmlFor="">Nome</label>
+            <input
+              type="text"
+              required
+              onChange={(e) => setName(e.target.value)}
+            />
+            <span></span>
+          </div>
+
+          <div className={styles.fields}>
+            <label htmlFor="">Departamento</label>
+            <input
+              type="text"
+              required
+              onChange={(e) => setArea(e.target.value)}
+            />
+            <span></span>
+          </div>
+
+          <button onClick={handleSubmit}>Criar</button>
+        </div>
+      </div>
+    </>
+  );
+}
