@@ -23,22 +23,17 @@ export default function System({ system }) {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
-  const [question, setQuestion] = useState("");
-  const [requester, setRequester] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [dns, setDns] = useState("");
+  const [department, setDepartment] = useState("");
 
   async function getData(id) {
     await api
-      .get("/avaliation/" + id)
+      .get("/system/" + id)
       .then((res) => {
-        setQuestion(res.data.question);
-        setRequester(res.data.requester);
-        setStartDate(res.data.startDate);
-        setEndDate(res.data.endDate);
-        setStatus(res.data.status);
-        console.log()
+        setName(res.data.name);
+        setDns(res.data.dns);
+        setDepartment(res.data.area);
       })
       .catch((err) => {
         console.log(err);
@@ -47,21 +42,19 @@ export default function System({ system }) {
 
   async function handleSubmit() {
     const data = {
-      question: question,
-      requester: requester,
-      start_date: startDate,
-      end_date: endDate,
-      status: status,
+      name: name,
+      dns: dns,
+      area: department,
     };
 
     await api
-      .put("/avaliation/" + uuid, data)
+      .put("/system/" + uuid, data)
       .then((res) => {
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
           setIsModalVisible(false)
-          Router.push("/assessment");
+          Router.push("/system");
         } else {
           const notify = () => toast.warning(res.data.error);
           notify();
@@ -116,53 +109,33 @@ export default function System({ system }) {
             cancelText="Cancelar"
           >
             <div className={styles.modalContainer}>
-              <h1>Editar</h1>
+              <h1>Editar Sistema</h1>
               <div className={styles.fields}>
-                <label htmlFor="">Pergunta</label>
+                <label htmlFor="">Nome</label>
                 <input
                   type="text"
                   required
-                  defaultValue={question}
-                  onChange={(e) => setQuestion(e.target.value)}
+                  defaultValue={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className={styles.fields}>
-                <label htmlFor="">Solicitante</label>
+                <label htmlFor="">DNS</label>
                 <input
                   type="text"
                   required
-                  defaultValue={requester}
-                  onChange={(e) => setRequester(e.target.value)}
+                  defaultValue={dns}
+                  onChange={(e) => setDns(e.target.value)}
                 />
               </div>
               <div className={styles.fields}>
-                <label htmlFor="">Data início</label>
+                <label htmlFor="">Departamento</label>
                 <input
-                  type="date"
+                  type="text"
                   required
-                  defaultValue={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  defaultValue={department}
+                  onChange={(e) => setDepartment(e.target.value)}
                 />
-              </div>
-              <div className={styles.fields}>
-                <label htmlFor="">Data fim</label>
-                <input
-                  type="date"
-                  required
-                  defaultValue={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </div>
-              <div className={styles.fields}>
-                <label htmlFor="">Status</label>
-                <select
-                  required
-                  defaultValue={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <option>Ativada</option>
-                  <option>Desativada</option>
-                </select>
               </div>
             </div>
           </Modal>

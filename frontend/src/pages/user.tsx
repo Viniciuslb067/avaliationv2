@@ -1,39 +1,93 @@
 import Link from "next/link";
 import Router from "next/router";
 import { GetStaticProps } from "next";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { toast } from "react-toastify";
+import { Modal } from "antd";
 
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import { IoMdAdd } from "react-icons/io";
-
-import styles from "./system.module.scss";
 
 import { api } from "../services/api";
 
+import styles from "./system.module.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 
 toast.configure();
 
 export default function User({ user }) {
   const { isOpen } = useContext(SidebarContext);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [uuid, setUuid] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [access, setAccess] = useState("");
+
+  async function getData(id) {
+    await api
+      .get("/user/" + id)
+      .then((res) => {
+        setName(res.data.name);
+        setEmail(res.data.email);
+        setRole(res.data.role);
+        setAccess(res.data.access);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  async function handleSubmit() {
+    const data = {
+      name: name,
+      email: email,
+      role: role,
+      access: access,
+    };
+
+    await api
+      .put("/user/" + uuid, data)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          setIsModalVisible(false);
+          Router.push("/user");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function openModalAndGetId(id) {
+    getData(id);
+    setUuid(id);
+    setIsModalVisible(true);
+  }
+
   async function deleteUser(id) {
-    await api.delete("/user/" + id)
-    .then((res) => {
-      if (res.data.status === 1) {
-        const notify = () => toast.success(res.data.success);
-        notify();
-        Router.push("/user");
-      } else {
-        const notify = () => toast.warning(res.data.error);
-        notify();
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    await api
+      .delete("/user/" + id)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          Router.push("/user");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -44,11 +98,67 @@ export default function User({ user }) {
         <div className={styles.pageHeader}>
           <div>
             <h1>Usuários</h1>
-            <small>
-              Aqui você tem acesso a todos os usuários cadastrados.
-            </small>
+            <small>Aqui você tem acesso a todos os usuários cadastrados.</small>
           </div>
 
+          <Modal
+            visible={isModalVisible}
+            onOk={handleSubmit}
+            onCancel={() => setIsModalVisible(false)}
+            okText="Editar"
+            cancelText="Cancelar"
+          >
+            <div className={styles.modalContainer}>
+              <h1>Editar Usuário</h1>
+              <div className={styles.fields}>
+                <label htmlFor="">Nome</label>
+                <input
+                  type="text"
+                  required
+                  defaultValue={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Email</label>
+                <input
+                  type="text"
+                  required
+                  defaultValue={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Função</label>
+                <input
+                  type="text"
+                  required
+                  defaultValue={role}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Status</label>
+                <select
+                  required
+                  defaultValue={access}
+                  onChange={(e) => setAccess(e.target.value)}
+                >
+                  {access === "Pendente" ? (
+                    <>
+                      <option>Pendente</option>
+                      <option>Liberado</option>
+                    </>
+                  ) : (
+                    <>
+                      <option>Liberado</option>
+                      <option>Pendente</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </div>
+          </Modal>
         </div>
         <div className={styles.grid}>
           <div className={styles.table}>
@@ -79,7 +189,7 @@ export default function User({ user }) {
                             <td>{item.role}</td>
                             <td>{item.access}</td>
                             <td>
-                              <span>
+                              <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
@@ -113,8 +223,8 @@ export const getStaticProps: GetStaticProps = async () => {
       access: item.access,
       name: item.name,
       email: item.email,
-    }
-  })
+    };
+  });
 
   return {
     props: {

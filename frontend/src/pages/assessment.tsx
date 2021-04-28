@@ -123,7 +123,7 @@ export default function Assessment({
             cancelText="Cancelar"
           >
             <div className={styles.modalContainer}>
-              <h1>Editar</h1>
+              <h1>Editar Avaliação</h1>
               <div className={styles.fields}>
                 <label htmlFor="">Pergunta</label>
                 <input
@@ -179,8 +179,17 @@ export default function Assessment({
                   defaultValue={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
+                  {status === "Desativada" ?
+                  <> 
+                  <option>Desativada</option>
+                  <option>Ativada</option>
+                  </>
+                  :
+                  <>
                   <option>Ativada</option>
                   <option>Desativada</option>
+                  </>
+                }
                 </select>
               </div>
             </div>
