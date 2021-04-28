@@ -117,3 +117,39 @@
     }
   }
 }
+
+.modalContainer {
+  h1 {
+    text-align: center;
+  }
+}
+
+
+.fields {
+  position: relative;
+  margin: 1rem;
+
+  input {
+    border: 1px solid #666666;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  select {
+    border: 1px solid #666666;
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 0.9rem;
+
+    option {
+      color: #666666;
+      font-family: Inter, sans-serif;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+

@@ -118,6 +118,12 @@
   }
 }
 
+.modalContainer {
+  h1 {
+    text-align: center;
+  }
+}
+
 .fields {
   position: relative;
   margin: 1rem;
@@ -145,8 +151,3 @@
   }
 }
 
-.modalContainer {
-  h1 {
-    text-align: center;
-  }
-}

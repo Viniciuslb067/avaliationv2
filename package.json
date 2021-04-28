@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1"
+  }
+}

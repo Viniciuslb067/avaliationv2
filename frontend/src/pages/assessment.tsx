@@ -2,7 +2,7 @@ import Link from "next/link";
 import Router from "next/router";
 import { GetStaticProps } from "next";
 import { useContext, useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 import { toast } from "react-toastify";
 
 import { SidebarContext } from "../contexts/SidebarContext";
@@ -27,6 +27,7 @@ export default function Assessment({
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [uuid, setUuid] = useState("");
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -35,14 +36,52 @@ export default function Assessment({
   const [status, setStatus] = useState("");
 
   async function getData(id) {
-    await api.get("/avaliation/" + id).then((res) => {
-      setQuestion(res.data.question);
-      setRequester(res.data.requester);
-      setStartDate(res.data.startDate);
-      setEndDate(res.data.endDate);
-      setSystem(res.data.system);
-      setStatus(res.data.status);
-    });
+    await api
+      .get("/avaliation/" + id)
+      .then((res) => {
+        setQuestion(res.data.question);
+        setRequester(res.data.requester);
+        setStartDate(res.data.startDate);
+        setEndDate(res.data.endDate);
+        setSystem(res.data.system);
+        setStatus(res.data.status);
+        console.log()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  async function handleSubmit() {
+    const data = {
+      question: question,
+      requester: requester,
+      start_date: startDate,
+      end_date: endDate,
+      status: status,
+    };
+    await api
+      .put("/avaliation/" + uuid, data)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          setIsModalVisible(false)
+          Router.push("/assessment");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function openModalAndGetId(id) {
+    getData(id);
+    setUuid(id)
+    setIsModalVisible(true);
   }
 
   async function deleteAssesssment(id) {
@@ -78,6 +117,7 @@ export default function Assessment({
 
           <Modal
             visible={isModalVisible}
+            onOk={handleSubmit}
             onCancel={() => setIsModalVisible(false)}
             okText="Editar"
             cancelText="Cancelar"
@@ -89,7 +129,7 @@ export default function Assessment({
                 <input
                   type="text"
                   required
-                  value={question}
+                  defaultValue={question}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
               </div>
@@ -98,7 +138,7 @@ export default function Assessment({
                 <input
                   type="text"
                   required
-                  value={requester}
+                  defaultValue={requester}
                   onChange={(e) => setRequester(e.target.value)}
                 />
               </div>
@@ -107,7 +147,7 @@ export default function Assessment({
                 <input
                   type="date"
                   required
-                  value={startDate}
+                  defaultValue={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
               </div>
@@ -116,7 +156,7 @@ export default function Assessment({
                 <input
                   type="date"
                   required
-                  value={endDate}
+                  defaultValue={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                 />
               </div>
@@ -124,7 +164,7 @@ export default function Assessment({
                 <label htmlFor="">Sistema</label>
                 <select
                   required
-                  value={system}
+                  defaultValue={system}
                   onChange={(e) => setSystem(e.target.value)}
                 >
                   {allSystem.map((val, key) => {
@@ -136,10 +176,11 @@ export default function Assessment({
                 <label htmlFor="">Status</label>
                 <select
                   required
-                  value={status}
-                  onChange={(e) => setSystem(e.target.value)}
+                  defaultValue={status}
+                  onChange={(e) => setStatus(e.target.value)}
                 >
-                  <option>{status}</option>
+                  <option>Ativada</option>
+                  <option>Desativada</option>
                 </select>
               </div>
             </div>
@@ -184,10 +225,7 @@ export default function Assessment({
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                             <td>
-                              <span
-                                onClick={() => getData(item.id)}
-                                onClickCapture={() => setIsModalVisible(true)}
-                              >
+                              <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
@@ -238,10 +276,7 @@ export default function Assessment({
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                             <td>
-                              <span
-                                onClick={() => getData(item.id)}
-                                onClickCapture={() => setIsModalVisible(true)}
-                              >
+                              <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
