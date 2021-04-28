@@ -10,6 +10,7 @@ import { VscTools } from "react-icons/vsc";
 import { api } from "../services/api";
 
 import styles from "./home.module.scss";
+import Link from "next/link";
 
 interface Avaliation {
   question: string;
@@ -25,10 +26,16 @@ interface HomeProps {
   allSystem: number;
 }
 
-export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvaliation, allUser, allSystem }: HomeProps) {
+export default function Dashboard({
+  allAvaliationOn,
+  allAvaliationOff,
+  allAvaliation,
+  allUser,
+  allSystem,
+}: HomeProps) {
   const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
   const { isOpen } = useContext(SidebarContext);
- 
+
   return (
     <>
       <main
@@ -41,12 +48,11 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
               Acompanhe tudo sobre as avalições dos sistemas do INSS
             </small>
           </div>
-          
         </div>
-        <Card 
+        <Card
           numberAvaliation={allAvaliation}
-          numberUsers={allUser}  
-          numberSystems={allSystem}     
+          numberUsers={allUser}
+          numberSystems={allSystem}
         />
         <div className={styles.grid}>
           <CardHome />
@@ -54,7 +60,9 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3>Avaliações Recentes</h3>
-                <button>Ver todas</button>
+                <Link href="/assessment">
+                  <button>Ver todas</button>
+                </Link>
               </div>
 
               <div className={styles.cardBody}>

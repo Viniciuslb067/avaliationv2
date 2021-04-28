@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Router from "next/router";
 import { GetStaticProps } from "next";
+import { useContext, useState } from "react";
+import { Modal, Button } from "antd";
 import { toast } from "react-toastify";
-import { useContext } from "react";
 
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -14,11 +15,35 @@ import { api } from "../services/api";
 import styles from "./assessment.module.scss";
 
 import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 
 toast.configure();
 
-export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
+export default function Assessment({
+  allAvaliationOn,
+  allAvaliationOff,
+  allSystem,
+}) {
   const { isOpen } = useContext(SidebarContext);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [requester, setRequester] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [system, setSystem] = useState("");
+  const [status, setStatus] = useState("");
+
+  async function getData(id) {
+    await api.get("/avaliation/" + id).then((res) => {
+      setQuestion(res.data.question);
+      setRequester(res.data.requester);
+      setStartDate(res.data.startDate);
+      setEndDate(res.data.endDate);
+      setSystem(res.data.system);
+      setStatus(res.data.status);
+    });
+  }
 
   async function deleteAssesssment(id) {
     await api
@@ -50,6 +75,75 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
               Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
           </div>
+
+          <Modal
+            visible={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            okText="Editar"
+            cancelText="Cancelar"
+          >
+            <div className={styles.modalContainer}>
+              <h1>Editar</h1>
+              <div className={styles.fields}>
+                <label htmlFor="">Pergunta</label>
+                <input
+                  type="text"
+                  required
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Solicitante</label>
+                <input
+                  type="text"
+                  required
+                  value={requester}
+                  onChange={(e) => setRequester(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Data início</label>
+                <input
+                  type="date"
+                  required
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Data fim</label>
+                <input
+                  type="date"
+                  required
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Sistema</label>
+                <select
+                  required
+                  value={system}
+                  onChange={(e) => setSystem(e.target.value)}
+                >
+                  {allSystem.map((val, key) => {
+                    return <option key={key}>{val.name}</option>;
+                  })}
+                </select>
+              </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Status</label>
+                <select
+                  required
+                  value={status}
+                  onChange={(e) => setSystem(e.target.value)}
+                >
+                  <option>{status}</option>
+                </select>
+              </div>
+            </div>
+          </Modal>
 
           <div className={styles.headerActions}>
             <Link href="/new/assessment">
@@ -90,7 +184,10 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                             <td>
-                              <span>
+                              <span
+                                onClick={() => getData(item.id)}
+                                onClickCapture={() => setIsModalVisible(true)}
+                              >
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
@@ -141,7 +238,10 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                             <td>
-                              <span>
+                              <span
+                                onClick={() => getData(item.id)}
+                                onClickCapture={() => setIsModalVisible(true)}
+                              >
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
@@ -172,6 +272,7 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/avaliation");
+  const systems = await api.get("/system");
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
@@ -191,13 +292,21 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   });
 
+  const system = systems.data.systems.map((item) => {
+    return {
+      name: item.name,
+    };
+  });
+
   const allAvaliationOn = avaliationOn;
   const allAvaliationOff = avaliationOff;
+  const allSystem = system;
 
   return {
     props: {
       allAvaliationOn,
       allAvaliationOff,
+      allSystem,
     },
   };
 };

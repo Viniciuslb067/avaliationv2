@@ -94,7 +94,7 @@
   button {
     outline: none;
     color: #fff;
-    background: #01a55a;
+    background: #0ab96a;
     border: none;
     padding: 0.5rem 1rem;
     margin-left: 1rem;
@@ -102,7 +102,7 @@
     font-size: 2rem;
 
     &:hover {
-        background: #0ab96a;
+      background: #01a55a;
     }
 
     span {
@@ -115,6 +115,5 @@
       font-size: 1.75rem;
       margin-bottom: 1rem;
     }
-
   }
 }

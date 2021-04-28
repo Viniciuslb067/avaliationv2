@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "antd": "^4.15.3",
     "axios": "^0.21.1",
     "chart.js": "^3.2.0",
     "date-fns": "^2.21.1",
