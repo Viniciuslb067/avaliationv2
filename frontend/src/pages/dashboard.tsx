@@ -41,21 +41,7 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
               Acompanhe tudo sobre as avalições dos sistemas do INSS
             </small>
           </div>
-
-          <div className={styles.headerActions}>
-            <button>
-              <span>
-                <FaFileExport />
-              </span>
-              Export
-            </button>
-            <button>
-              <span>
-                <VscTools />
-              </span>
-              Settings
-            </button>
-          </div>
+          
         </div>
         <Card 
           numberAvaliation={allAvaliation}
@@ -104,7 +90,13 @@ export default function Dashboard({ allAvaliationOn, allAvaliationOff, allAvalia
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await api.get("/avaliation");
+  const { data } = await api.get("/avaliation", {
+    params: {
+      _limit: 10,
+      _sort: "createdAt",
+      _order: "desc",
+    },
+  });
   const totalUser = await api.get("/user");
   const totalSystems = await api.get("/system");
 

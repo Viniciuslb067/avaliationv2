@@ -72,21 +72,23 @@ export function Sidebar() {
             </ul>
             <ul>
               <li>
-                <a href="">
-                  <span>
-                    <HiOutlineUsers />
-                  </span>
-                  Usuários
-                </a>
+                <Link href="/user">
+                  <a>
+                    <span>
+                      <HiOutlineUsers />
+                    </span>
+                    Usuários
+                  </a>
+                </Link>
               </li>
               <li>
                 <Link href="/system">
-                <a>
-                  <span>
-                    <RiComputerLine />
-                  </span>
-                  Sistemas
-                </a>
+                  <a>
+                    <span>
+                      <RiComputerLine />
+                    </span>
+                    Sistemas
+                  </a>
                 </Link>
               </li>
             </ul>

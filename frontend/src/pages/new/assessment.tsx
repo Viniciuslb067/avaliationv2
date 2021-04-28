@@ -1,5 +1,5 @@
 import Router from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { api } from "../../services/api";
@@ -16,6 +16,13 @@ export default function NewAssessment() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [system, setSystem] = useState("");
+  const [systemList, setSystemList] = useState([]);
+
+  useEffect(() => {
+    api.get("/system").then((res) => {
+      setSystemList(res.data.systems);
+    });
+  }, []);
 
   async function handleSubmit() {
     await api
@@ -89,12 +96,11 @@ export default function NewAssessment() {
 
           <div className={styles.fields}>
             <label htmlFor="">Sistema</label>
-            <input
-              type="text"
-              required
-              onChange={(e) => setSystem(e.target.value)}
-            />
-            <span></span>
+            <select required onChange={(e) => setSystem(e.target.value)}>
+            {systemList.map((val, key) => {
+              return <option key={key}>{val.name}</option>;
+            })}
+            </select>
           </div>
           <button onClick={handleSubmit}>Criar</button>
         </div>

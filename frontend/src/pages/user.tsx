@@ -16,16 +16,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 
-export default function System({ system }) {
+export default function User({ user }) {
   const { isOpen } = useContext(SidebarContext);
 
-  async function deleteSystem(id) {
-    await api.delete("/system/" + id)
+  async function deleteUser(id) {
+    await api.delete("/user/" + id)
     .then((res) => {
       if (res.data.status === 1) {
         const notify = () => toast.success(res.data.success);
         notify();
-        Router.push("/system");
+        Router.push("/user");
       } else {
         const notify = () => toast.warning(res.data.error);
         notify();
@@ -43,26 +43,18 @@ export default function System({ system }) {
       >
         <div className={styles.pageHeader}>
           <div>
-            <h1>Sistemas</h1>
+            <h1>Usuários</h1>
             <small>
-              Aqui você tem acesso a todos os sistemas cadastrados.
+              Aqui você tem acesso a todos os usuários cadastrados.
             </small>
           </div>
 
-          <div className={styles.headerActions}>
-            <Link href="/new/system">
-              <button>
-                <span><IoMdAdd color="white" /></span>
-                <span className={styles.text}>Sistema</span>
-              </button>
-            </Link>
-          </div>
         </div>
         <div className={styles.grid}>
           <div className={styles.table}>
             <div className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>Sistemas Cadastrados</h3>
+                <h3>Usuários Cadastrados</h3>
               </div>
 
               <div className={styles.cardBody}>
@@ -71,26 +63,28 @@ export default function System({ system }) {
                     <thead>
                       <tr>
                         <td>Nome</td>
-                        <td>DNS</td>
-                        <td>Departamento</td>
+                        <td>Email</td>
+                        <td>Função</td>
+                        <td>Acesso</td>
                         <td></td>
                         <td></td>
                       </tr>
                     </thead>
                     <tbody>
-                      {system.map((item, key) => {
+                      {user.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.name}</td>
-                            <td>{item.dns}</td>
-                            <td>{item.area}</td>
+                            <td>{item.email}</td>
+                            <td>{item.role}</td>
+                            <td>{item.access}</td>
                             <td>
                               <span>
                                 <AiOutlineEdit size={20} color="orange" />
                               </span>
                             </td>
                             <td>
-                              <span onClick={() => deleteSystem(item.id)}>
+                              <span onClick={() => deleteUser(item.id)}>
                                 <AiOutlineDelete size={20} color="red" />
                               </span>
                             </td>
@@ -110,20 +104,21 @@ export default function System({ system }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await api.get("/system");
+  const { data } = await api.get("/user");
 
-  const system = data.systems.map((item) => {
+  const user = data.users.map((item) => {
     return {
       id: item._id,
-      dns: item.dns,
+      role: item.role,
+      access: item.access,
       name: item.name,
-      area: item.area,
+      email: item.email,
     }
   })
 
   return {
     props: {
-      system,
+      user,
     },
   };
 };
