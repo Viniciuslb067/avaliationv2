@@ -1,15 +1,22 @@
+import Link from "next/link";
 import { GetStaticProps } from "next";
 import { useContext, useEffect, useState } from "react";
 
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import { BsGraphUp } from "react-icons/bs"
+import { BsGraphUp } from "react-icons/bs";
+import { IoMdAdd } from "react-icons/io";
+
 import { api } from "../services/api";
 
 import styles from "./styles.module.scss";
 
 export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
   const { isOpen } = useContext(SidebarContext);
+
+  async function deleteAssesssment(id) {
+    await api.delete("/avaliation/" + id);
+  }
 
   return (
     <>
@@ -22,6 +29,17 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
             <small>
               Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
+          </div>
+
+          <div className={styles.headerActions}>
+            <Link href="/new/assessment">
+            <button>
+              <span>
+                <IoMdAdd color="white" />
+              </span>
+              <span className={styles.text}>Avaliação</span>
+            </button>
+            </Link>
           </div>
         </div>
         <div className={styles.grid}>
@@ -49,9 +67,21 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
-                            <td><AiOutlineEdit size={20} color="orange"/></td>
-                            <td><BsGraphUp size={20} color="blue"/></td>
-                            <td><AiOutlineDelete size={20} color="red"/></td> 
+                            <td>
+                              <span>
+                                <AiOutlineEdit size={20} color="orange" />
+                              </span>
+                            </td>
+                            <td>
+                              <span>
+                                <BsGraphUp size={20} color="blue" />
+                              </span>
+                            </td>
+                            <td>
+                              <span onClick={() => deleteAssesssment(item.id)}>
+                                <AiOutlineDelete size={20} color="red" />
+                              </span>
+                            </td>
                           </tr>
                         );
                       })}
@@ -86,9 +116,21 @@ export default function Assessment({ allAvaliationOn, allAvaliationOff }) {
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
-                            <td><AiOutlineEdit size={20} color="orange"/></td>
-                            <td><BsGraphUp size={20} color="blue"/></td>
-                            <td><AiOutlineDelete size={20} color="red"/></td>
+                            <td>
+                              <span>
+                                <AiOutlineEdit size={20} color="orange" />
+                              </span>
+                            </td>
+                            <td>
+                              <span>
+                                <BsGraphUp size={20} color="blue" />
+                              </span>
+                            </td>
+                            <td>
+                              <span onClick={() => deleteAssesssment(item.id)}>
+                                <AiOutlineDelete size={20} color="red" />
+                              </span>
+                            </td>
                           </tr>
                         );
                       })}
@@ -109,6 +151,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
+      id: item._id,
       question: item.question,
       requester: item.requester,
       status: item.status,
@@ -117,6 +160,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const avaliationOff = data.avaliationOff.map((item) => {
     return {
+      id: item._id,
       question: item.question,
       requester: item.requester,
       status: item.status,

@@ -8,6 +8,7 @@
 .mainContainerHide {
   padding: 1.5rem;
   background: #f1f5f9;
+  margin-left: 0;
   min-height: calc(100vh - 70px);
 }
 
@@ -71,22 +72,10 @@
       font-size: 1rem;
       color: #222;
 
-      .status {
-        display: inline-block;
-        height: 15px;
-        width: 15px;
-        border-radius: 50%;
-        background: green;
-        margin-right: 1rem;
-      }
-
-      .statusOff {
-        display: inline-block;
-        height: 15px;
-        width: 15px;
-        border-radius: 50%;
-        background: red;
-        margin-right: 1rem;
+      span {
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
 
@@ -99,4 +88,33 @@
 
 .tableResponsive {
   overflow-x: auto;
+}
+
+.headerActions {
+  button {
+    outline: none;
+    color: #fff;
+    background: #01a55a;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+    font-size: 2rem;
+
+    &:hover {
+        background: #0ab96a;
+    }
+
+    span {
+      font-size: 1.5rem;
+      margin-right: 0.6rem;
+      margin-top: 2rem;
+    }
+
+    .text {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+  }
 }

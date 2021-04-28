@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
 import { AiOutlineBell, AiOutlineHome } from "react-icons/ai";
@@ -8,6 +8,7 @@ import { BiUser } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
 import { VscGraph } from "react-icons/vsc";
 import { RiComputerLine } from "react-icons/ri";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 import styles from "./styles.module.scss";
 
@@ -79,7 +80,7 @@ export function Sidebar() {
                 </a>
               </li>
               <li>
-                <a href="">
+                <a>
                   <span>
                     <RiComputerLine />
                   </span>
