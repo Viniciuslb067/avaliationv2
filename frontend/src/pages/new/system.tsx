@@ -39,43 +39,45 @@ export default function NewSystem() {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.form}>
-          <h1>Cadastrar Sistema</h1>
+      <main className={styles.mainContainer}>
+        <div className={styles.container}>
+          <div className={styles.form}>
+            <h1>Cadastrar Sistema</h1>
 
-          <div className={styles.fields}>
-            <label htmlFor="">DNS</label>
-            <input
-              type="text"
-              required
-              onChange={(e) => setDns(e.target.value)}
-            />
-            <span></span>
+            <div className={styles.fields}>
+              <label htmlFor="">DNS</label>
+              <input
+                type="text"
+                required
+                onChange={(e) => setDns(e.target.value)}
+              />
+              <span></span>
+            </div>
+
+            <div className={styles.fields}>
+              <label htmlFor="">Nome</label>
+              <input
+                type="text"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+              <span></span>
+            </div>
+
+            <div className={styles.fields}>
+              <label htmlFor="">Departamento</label>
+              <input
+                type="text"
+                required
+                onChange={(e) => setArea(e.target.value)}
+              />
+              <span></span>
+            </div>
+
+            <button onClick={handleSubmit}>Criar</button>
           </div>
-
-          <div className={styles.fields}>
-            <label htmlFor="">Nome</label>
-            <input
-              type="text"
-              required
-              onChange={(e) => setName(e.target.value)}
-            />
-            <span></span>
-          </div>
-
-          <div className={styles.fields}>
-            <label htmlFor="">Departamento</label>
-            <input
-              type="text"
-              required
-              onChange={(e) => setArea(e.target.value)}
-            />
-            <span></span>
-          </div>
-
-          <button onClick={handleSubmit}>Criar</button>
         </div>
-      </div>
+      </main>
     </>
   );
 }
