@@ -1,9 +1,10 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { CardMetrics } from "../../components/CardMetrics";
 import { BarChart, PieChart } from "../../components/ChartMetrics";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { format, parseISO } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 
 import styles from "./assessment.module.scss";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -119,8 +120,12 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     requester: data.data.requester,
     system: data.data.system,
     getStatus: data.data.status,
-    startDate: data.data.start_date,
-    endDate: data.data.end_date,
+    startDate: format(parseISO(data.data.start_date), "d MMMM yyyy", {
+      locale: ptBR,
+    }),
+    endDate: format(parseISO(data.data.end_date), "d MMMM yyyy", {
+      locale: ptBR,
+    }),
     notes: data.notes,
     status: data.status,
     comments: data.comments,
