@@ -16,9 +16,9 @@ export default function MetricsAssessment() {
       >
         <div className={styles.pageHeader}>
           <div>
-            <h1>Painel de Controle</h1>
+            <h1>Métricas</h1>
             <small>
-              Acompanhe tudo sobre as avalições dos sistemas do INSS
+              Aqui você pode acompanhar o andamento de uma avaliação.
             </small>
           </div>
         </div>
