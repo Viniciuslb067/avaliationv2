@@ -1,7 +1,7 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
-import "./styles.module.css";
+import "./styles.module.scss";
 
 export function Chart() {
   const data = {
@@ -35,6 +35,7 @@ export function Chart() {
     <>
       <div className="">
         <Bar
+          type="Bar"
           data={data}
           height={240}
           width={500}
