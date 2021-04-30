@@ -1,13 +1,32 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext } from "react";
-import { Card } from "../../components/Card";
+import { CardMetrics } from "../../components/CardMetrics";
 import { CardHome } from "../../components/CardHome";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
 import styles from "./assessment.module.scss";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { api } from "../../services/api";
 
-export default function MetricsAssessment() {
+interface Assessment {
+  id: string,
+  question: string,
+  requester: string,
+  system: string,
+  startDate: string,
+  endDate: string,
+  notes: [],
+  status: [],
+}
+
+interface AssessmentProps {
+  allData: Assessment;
+}
+
+export default function MetricsAssessment({ allData }: AssessmentProps) {
   const { isOpen } = useContext(SidebarContext);
+  const router = useRouter();
 
   return (
     <>
@@ -17,15 +36,16 @@ export default function MetricsAssessment() {
         <div className={styles.pageHeader}>
           <div>
             <h1>Métricas</h1>
+            <h1>{router.query.slug}</h1>
             <small>
               Aqui você pode acompanhar o andamento de uma avaliação.
             </small>
           </div>
         </div>
-        <Card
-          numberAvaliation={123}
-          numberUsers={123}
-          numberSystems={123}
+        <CardMetrics
+          requester={allData.requester}
+          question={allData.question}
+          system={allData.system}
         />
         <div className={styles.grid}>
           <CardHome />
@@ -60,4 +80,37 @@ export default function MetricsAssessment() {
       </main>
     </>
   );
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking'
+  }
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+
+  const { slug } = ctx.params;
+
+  const { data } = await api.get(`/avaliate/result/${slug}`);
+
+  console.log(data.data.start_date)
+
+  const allData = {
+    id: data.data._id,
+    question: data.data.question,
+    requester: data.data.requester,
+    system: data.data.system,
+    startDate: data.data.start_date,
+    endDate: data.data.end_date,
+    notes: data.notes,
+    status: data.status,
+  }
+
+  return {
+    props: {
+      allData,
+    },
+  }
 }

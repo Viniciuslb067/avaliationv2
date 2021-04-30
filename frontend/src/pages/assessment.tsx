@@ -239,9 +239,11 @@ export default function Assessment({
                               </span>
                             </td>
                             <td>
+                              <Link href={`/metrics/${item.id}`}>
                               <span>
                                 <BsGraphUp size={20} color="blue" />
                               </span>
+                              </Link>
                             </td>
                             <td>
                               <span onClick={() => deleteAssesssment(item.id)}>

@@ -1,19 +1,16 @@
-import { useContext } from "react";
-
-import { HiOutlineUsers } from "react-icons/hi";
-import { GoGraph } from "react-icons/go";
+import { ImUserTie } from "react-icons/im";
+import { FaQuestion } from "react-icons/fa";
 import { GrSystem } from "react-icons/gr";
 
 import styles from "./styles.module.scss";
 
-interface CardProps {
-  title: string;
-  subtitle: string;
-  number: number;
-  icon: {};
+interface CardMetricsProps {
+  requester: string;
+  question: string;
+  system: string;
 }
 
-export function Card({ numberAvaliation, numberUsers, numberSystems }) {
+export function CardMetrics({ requester, question, system }: CardMetricsProps) {
   return (
     <>
       <div className={styles.cards}>
@@ -21,13 +18,14 @@ export function Card({ numberAvaliation, numberUsers, numberSystems }) {
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Avaliaçãoes</span>
-                <small>Número de avaliações</small>
+                <span>Solicitante</span>
               </div>
-              <h2>{numberAvaliation}</h2>
+              <h2>{requester}</h2>
             </div>
             <div className={styles.cardIcon}>
-              <span><GoGraph color="#1d62f0"/></span>
+              <span>
+                <ImUserTie color="#1d62f0" />
+              </span>
             </div>
           </div>
         </div>
@@ -36,13 +34,14 @@ export function Card({ numberAvaliation, numberUsers, numberSystems }) {
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Usuários</span>
-                <small>Número de usuários</small>
+                <span>Pergunta</span>
               </div>
-              <h2>{numberUsers}</h2>
+              <h2>{question}</h2>
             </div>
             <div className={styles.cardIcon}>
-              <span><HiOutlineUsers color="#fbad4c"/></span>
+              <span>
+                <FaQuestion color="red" />
+              </span>
             </div>
           </div>
         </div>
@@ -51,13 +50,14 @@ export function Card({ numberAvaliation, numberUsers, numberSystems }) {
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Sistemas</span>
-                <small>Número de sistemas</small>
+                <span>Sistema</span>
               </div>
-              <h2>{numberSystems}</h2>
+              <h2>{system}</h2>
             </div>
             <div className={styles.cardIcon}>
-              <span><GrSystem/></span>
+              <span>
+                <GrSystem />
+              </span>
             </div>
           </div>
         </div>
