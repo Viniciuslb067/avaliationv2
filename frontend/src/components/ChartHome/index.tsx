@@ -2,7 +2,7 @@ import { Doughnut } from "react-chartjs-2";
 
 import styles from "./styles.module.scss";
 
-export function CardHome() {
+export function ChartHome() {
   const data = {
     labels: ["Visitas"],
     datasets: [

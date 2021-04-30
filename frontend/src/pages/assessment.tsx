@@ -45,7 +45,7 @@ export default function Assessment({
         setEndDate(res.data.endDate);
         setSystem(res.data.system);
         setStatus(res.data.status);
-        console.log()
+        console.log();
       })
       .catch((err) => {
         console.log(err);
@@ -66,7 +66,7 @@ export default function Assessment({
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
-          setIsModalVisible(false)
+          setIsModalVisible(false);
           Router.push("/assessment");
         } else {
           const notify = () => toast.warning(res.data.error);
@@ -80,7 +80,7 @@ export default function Assessment({
 
   function openModalAndGetId(id) {
     getData(id);
-    setUuid(id)
+    setUuid(id);
     setIsModalVisible(true);
   }
 
@@ -179,17 +179,17 @@ export default function Assessment({
                   defaultValue={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  {status === "Desativada" ?
-                  <> 
-                  <option>Desativada</option>
-                  <option>Ativada</option>
-                  </>
-                  :
-                  <>
-                  <option>Ativada</option>
-                  <option>Desativada</option>
-                  </>
-                }
+                  {status === "Desativada" ? (
+                    <>
+                      <option>Desativada</option>
+                      <option>Ativada</option>
+                    </>
+                  ) : (
+                    <>
+                      <option>Ativada</option>
+                      <option>Desativada</option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>
@@ -240,9 +240,9 @@ export default function Assessment({
                             </td>
                             <td>
                               <Link href={`/metrics/${item.id}`}>
-                              <span>
-                                <BsGraphUp size={20} color="blue" />
-                              </span>
+                                <span>
+                                  <BsGraphUp size={20} color="blue" />
+                                </span>
                               </Link>
                             </td>
                             <td>
@@ -292,9 +292,11 @@ export default function Assessment({
                               </span>
                             </td>
                             <td>
-                              <span>
-                                <BsGraphUp size={20} color="blue" />
-                              </span>
+                              <Link href={`/metrics/${item.id}`}>
+                                <span>
+                                  <BsGraphUp size={20} color="blue" />
+                                </span>
+                              </Link>
                             </td>
                             <td>
                               <span onClick={() => deleteAssesssment(item.id)}>

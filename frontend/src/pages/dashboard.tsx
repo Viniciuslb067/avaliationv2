@@ -2,7 +2,7 @@ import { GetStaticProps } from "next";
 import { useContext, useEffect, useState } from "react";
 
 import { Card } from "../components/Card/index";
-import { CardHome } from "../components/CardHome/index";
+import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { FaFileExport } from "react-icons/fa";
 import { VscTools } from "react-icons/vsc";
@@ -55,7 +55,7 @@ export default function Dashboard({
           numberSystems={allSystem}
         />
         <div className={styles.grid}>
-          <CardHome />
+          <ChartHome />
           <div className={styles.table}>
             <div className={styles.card}>
               <div className={styles.cardHeader}>

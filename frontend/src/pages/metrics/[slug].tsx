@@ -2,22 +2,29 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { CardMetrics } from "../../components/CardMetrics";
-import { CardHome } from "../../components/CardHome";
+import { BarChart, PieChart } from "../../components/ChartMetrics";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
 import styles from "./assessment.module.scss";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { api } from "../../services/api";
 
+interface Comments {
+  ip_user: string,
+  comments: string,
+}
+
 interface Assessment {
-  id: string,
-  question: string,
-  requester: string,
-  system: string,
-  startDate: string,
-  endDate: string,
-  notes: [],
-  status: [],
+  id: string;
+  question: string;
+  requester: string;
+  system: string;
+  startDate: string;
+  endDate: string;
+  getStatus: string;
+  notes: [];
+  status: [];
+  comments: Comments[];
 }
 
 interface AssessmentProps {
@@ -36,7 +43,6 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         <div className={styles.pageHeader}>
           <div>
             <h1>Métricas</h1>
-            <h1>{router.query.slug}</h1>
             <small>
               Aqui você pode acompanhar o andamento de uma avaliação.
             </small>
@@ -46,16 +52,15 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
           requester={allData.requester}
           question={allData.question}
           system={allData.system}
+          status={allData.getStatus}
+          startDate={allData.startDate}
+          endDate={allData.endDate}
         />
-        <div className={styles.grid}>
-          <CardHome />
-          <div className={styles.table}>
+        
+        <div className={styles.table}>
             <div className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>Avaliações Recentes</h3>
-                <Link href="/assessment">
-                  <button>Ver todas</button>
-                </Link>
+                <h3>Comentários</h3>
               </div>
 
               <div className={styles.cardBody}>
@@ -63,12 +68,19 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                   <table width="100%">
                     <thead>
                       <tr>
-                        <td>Título Avaliação</td>
-                        <td>Departamento</td>
-                        <td>Status</td>
+                        <td>IP</td>
+                        <td>Comentário</td>
                       </tr>
                     </thead>
                     <tbody>
+                      {allData.comments.map((item, key) => {
+                        return (
+                          <tr key={key}>
+                          <td>{item.ip_user}</td>
+                          <td>{item.comments}</td>
+                          </tr>
+                        )
+                      })}
 
                     </tbody>
                   </table>
@@ -76,6 +88,11 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
               </div>
             </div>
           </div>
+
+        <div className={styles.grid}>
+          <BarChart notes={allData.notes} />
+          <PieChart status={allData.status} />
+
         </div>
       </main>
     </>
@@ -85,32 +102,33 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
-    fallback: 'blocking'
-  }
-}
+    fallback: "blocking",
+  };
+};
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-
   const { slug } = ctx.params;
 
   const { data } = await api.get(`/avaliate/result/${slug}`);
 
-  console.log(data.data.start_date)
+  console.log(data.comments);
 
   const allData = {
     id: data.data._id,
     question: data.data.question,
     requester: data.data.requester,
     system: data.data.system,
+    getStatus: data.data.status,
     startDate: data.data.start_date,
     endDate: data.data.end_date,
     notes: data.notes,
     status: data.status,
-  }
+    comments: data.comments,
+  };
 
   return {
     props: {
       allData,
     },
-  }
-}
+  };
+};
