@@ -21,7 +21,6 @@ export function Sidebar() {
         <div className={styles.sidebarBrand}>
           <div className={styles.brandFlex}>
             <span>
-              <BiUser />
             </span>
             <div className={styles.brandIcons}>
               <span>
@@ -38,8 +37,7 @@ export function Sidebar() {
           <div className={styles.sidebarUser}>
             <img src="/logo.png" alt="Logo INSS" />
             <div>
-              <h3>Vinicius Lima</h3>
-              <span>vinicius@gmail.com</span>
+              <h3>Evaluator</h3>
             </div>
           </div>
 
