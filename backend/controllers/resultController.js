@@ -8,16 +8,18 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        const url = req.headers.origin || req.headers.host
+        var fullUrl = req.protocol + '://' + req.get('host');
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
             (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
         const user = await Result.findOne({ ip_user: ip })
 
+        console.log(fullUrl)
+
         if (!user || user === null) {
-            const avaliation = await Avaliation.findOne({ system: url }, ['_id'])
+            const avaliation = await Avaliation.find({ system: fullUrl }, ['_id']).exec()
                 if (avaliation) {
-                    const avaliate = await Avaliation.find({ _id: avaliation._id }, ['question'])
+                    const avaliate = await Avaliation.find({ _id: avaliation }, ['question'])
                         return res.json(avaliate)
                 } else {
                     return res.json([])

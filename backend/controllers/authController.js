@@ -108,7 +108,7 @@ router.post("/authenticate", async (req, res) => {
     return res.status(200).json({ status: 2, error: "Usuário não encontrado" });
 
   if (!(await bcrypt.compare(password, user.password)))
-    return res.status(200).json({ status: 2, error: "Senha incorreta" });
+    return res.status(200).json({ status: 2, error: "Usuário ou senha incorreto" });
 
   user.password = undefined;
 

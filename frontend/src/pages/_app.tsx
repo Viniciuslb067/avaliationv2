@@ -13,7 +13,11 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   const showHeaderAndSidebar =
-    router.pathname === "/" || router.pathname === "/register" ? false : true;
+    router.pathname === "/" ||
+    router.pathname === "/register" ||
+    router.pathname === "/assess"
+      ? false
+      : true;
   const [isOpen, setIsOpen] = useState(false);
 
   function openSidebar() {

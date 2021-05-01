@@ -11,6 +11,15 @@ import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 
+interface System {
+  name: string;
+  system: [];
+}
+
+interface SystemProps {
+  systemData: System;
+}
+
 export default function NewAssessment({ systemData }) {
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
@@ -92,8 +101,8 @@ export default function NewAssessment({ systemData }) {
             <div className={styles.fields}>
               <label htmlFor="">Sistema</label>
               <select required onChange={(e) => setSystem(e.target.value)}>
-                {systemData.map((val, key) => {
-                  return <option key={key}>{val.name}</option>;
+                {systemData.map((item, key) => {
+                  return <option key={key}>{item.dns}</option>;
                 })}
               </select>
             </div>
@@ -107,9 +116,12 @@ export default function NewAssessment({ systemData }) {
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/system");
 
+  console.log(data.systems)
+
   const systems = data.systems.map((item) => {
     return {
       name: item.name,
+      dns: item.dns,
     };
   });
 
