@@ -56,10 +56,20 @@
 }
 
 .headerIcons {
-  span {
-    display: inline-block;
-    margin-left: 0.7rem;
-    font-size: 1.5rem;
+  button {
+    outline: none;
+    color: #fff;
+    background: #3333;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+    font-size: 1.15rem;
+
+    &:hover {
+      background: #333;
+    }
+
   }
 }
 

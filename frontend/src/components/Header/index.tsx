@@ -26,9 +26,9 @@ export function Header() {
           </div>
 
           <div className={styles.headerIcons}>
-            <span>
-              <AiOutlineUser />
-            </span>
+            <button> 
+              Logout
+            </button>
           </div>
         </header>
       </div>
