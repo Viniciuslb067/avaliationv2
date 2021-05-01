@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Router from "next/router";
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import { useContext, useState } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { toast } from "react-toastify";
@@ -92,6 +93,9 @@ export default function User({ user }) {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Users</title>
+      </Head>
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >

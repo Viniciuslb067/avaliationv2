@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
 import { useState } from "react";
@@ -41,6 +42,9 @@ export default function Register() {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Register</title>
+      </Head>
       <div className={styles.container}>
         <div className={styles.form}>
           <h1>Cadastro</h1>

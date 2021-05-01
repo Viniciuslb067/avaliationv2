@@ -15,6 +15,7 @@ import { api } from "../services/api";
 
 import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/antd.css";
+import Head from "next/head";
 
 toast.configure();
 
@@ -53,7 +54,7 @@ export default function System({ system }) {
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
-          setIsModalVisible(false)
+          setIsModalVisible(false);
           Router.push("/system");
         } else {
           const notify = () => toast.warning(res.data.error);
@@ -67,38 +68,40 @@ export default function System({ system }) {
 
   function openModalAndGetId(id) {
     getData(id);
-    setUuid(id)
+    setUuid(id);
     setIsModalVisible(true);
   }
 
   async function deleteSystem(id) {
-    await api.delete("/system/" + id)
-    .then((res) => {
-      if (res.data.status === 1) {
-        const notify = () => toast.success(res.data.success);
-        notify();
-        Router.push("/system");
-      } else {
-        const notify = () => toast.warning(res.data.error);
-        notify();
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    await api
+      .delete("/system/" + id)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          Router.push("/system");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Systems</title>
+      </Head>
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >
         <div className={styles.pageHeader}>
           <div>
             <h1>Sistemas</h1>
-            <small>
-              Aqui você tem acesso a todos os sistemas cadastrados.
-            </small>
+            <small>Aqui você tem acesso a todos os sistemas cadastrados.</small>
           </div>
 
           <Modal
@@ -143,7 +146,9 @@ export default function System({ system }) {
           <div className={styles.headerActions}>
             <Link href="/new/system">
               <button>
-                <span><IoMdAdd color="white" /></span>
+                <span>
+                  <IoMdAdd color="white" />
+                </span>
                 <span className={styles.text}>Sistema</span>
               </button>
             </Link>
@@ -176,9 +181,9 @@ export default function System({ system }) {
                             <td>{item.dns}</td>
                             <td>{item.area}</td>
                             <td>
-                            <span onClick={() => openModalAndGetId(item.id)}>
+                              <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
-                            </span>
+                              </span>
                             </td>
                             <td>
                               <span onClick={() => deleteSystem(item.id)}>
@@ -209,8 +214,8 @@ export const getStaticProps: GetStaticProps = async () => {
       dns: item.dns,
       name: item.name,
       area: item.area,
-    }
-  })
+    };
+  });
 
   return {
     props: {

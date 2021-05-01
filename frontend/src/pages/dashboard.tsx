@@ -1,16 +1,15 @@
+import Head from "next/head";
+import Link from "next/link";
 import { GetStaticProps } from "next";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 import { Card } from "../components/Card/index";
 import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { FaFileExport } from "react-icons/fa";
-import { VscTools } from "react-icons/vsc";
 
 import { api } from "../services/api";
 
 import styles from "./home.module.scss";
-import Link from "next/link";
 
 interface Avaliation {
   question: string;
@@ -38,6 +37,10 @@ export default function Dashboard({
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Dashboard</title>
+      </Head>
+
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >

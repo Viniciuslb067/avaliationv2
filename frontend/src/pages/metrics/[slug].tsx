@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { CardMetrics } from "../../components/CardMetrics";
@@ -11,8 +12,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { api } from "../../services/api";
 
 interface Comments {
-  ip_user: string,
-  comments: string,
+  ip_user: string;
+  comments: string;
 }
 
 interface Assessment {
@@ -38,6 +39,10 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Metrics</title>
+      </Head>
+      
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >
@@ -57,43 +62,41 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
           startDate={allData.startDate}
           endDate={allData.endDate}
         />
-        
+
         <div className={styles.table}>
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <h3>Comentários</h3>
-              </div>
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h3>Comentários</h3>
+            </div>
 
-              <div className={styles.cardBody}>
-                <div className={styles.tableResponsive}>
-                  <table width="100%">
-                    <thead>
-                      <tr>
-                        <td>IP</td>
-                        <td>Comentário</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {allData.comments.map((item, key) => {
-                        return (
-                          <tr key={key}>
-                          <td>{item.ip_user}</td>
+            <div className={styles.cardBody}>
+              <div className={styles.tableResponsive}>
+                <table width="100%">
+                  <thead>
+                    <tr>
+                      <td>IP</td>
+                      <td>Comentário</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allData.comments.map((item, key) => {
+                      return (
+                        <tr key={key}>
+                          <td>{item.ip_user.split("::ffff:")}</td>
                           <td>{item.comments}</td>
-                          </tr>
-                        )
-                      })}
-
-                    </tbody>
-                  </table>
-                </div>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
+        </div>
 
         <div className={styles.grid}>
           <BarChart notes={allData.notes} />
           <PieChart status={allData.status} />
-
         </div>
       </main>
     </>

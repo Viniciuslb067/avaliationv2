@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Head from "next/head";
 import Router from "next/router";
 import { GetStaticProps } from "next";
 import { useContext, useState } from "react";
@@ -103,6 +104,10 @@ export default function Assessment({
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Assessments</title>
+      </Head>
+
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >

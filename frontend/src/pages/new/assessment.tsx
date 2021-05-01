@@ -1,6 +1,7 @@
+import Head from "next/head";
 import Router from "next/router";
 import { GetStaticProps } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { api } from "../../services/api";
@@ -53,6 +54,10 @@ export default function NewAssessment({ systemData }) {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | New assessment</title>
+      </Head>
+
       <main className={styles.mainContainer}>
         <div className={styles.container}>
           <div className={styles.form}>
@@ -116,7 +121,7 @@ export default function NewAssessment({ systemData }) {
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/system");
 
-  console.log(data.systems)
+  console.log(data.systems);
 
   const systems = data.systems.map((item) => {
     return {

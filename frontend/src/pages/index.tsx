@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Router from "next/router";
+import Head from "next/head";
 import { useState } from "react";
-
 import { toast } from "react-toastify";
 
 import { login } from "../services/auth";
@@ -31,6 +31,9 @@ export default function Login() {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | Login</title>
+      </Head>
       <div className={styles.container}>
         <div className={styles.form}>
           <h1>Login</h1>

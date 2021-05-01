@@ -7,6 +7,7 @@ import { api } from "../../services/api";
 import styles from "./system.module.scss";
 
 import "react-toastify/dist/ReactToastify.css";
+import Head from "next/head";
 
 toast.configure();
 
@@ -39,6 +40,9 @@ export default function NewSystem() {
 
   return (
     <>
+      <Head>
+        <title>Evaluator | New system</title>
+      </Head>
       <main className={styles.mainContainer}>
         <div className={styles.container}>
           <div className={styles.form}>
