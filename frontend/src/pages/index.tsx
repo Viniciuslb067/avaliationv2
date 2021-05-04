@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Router from "next/router";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "react-toastify";
+
+import { AuthContext } from "../contexts/AuthContext";
 
 import { login } from "../services/auth";
 import { api } from "../services/api";
@@ -15,18 +17,31 @@ toast.configure();
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const { signIn } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
+
+  console.log(isAuthenticated)
+
+  // async function handleSubmit() {
+  //   await api.post("/auth/authenticate", { email, password }).then((res) => {
+  //     if (res.data.status === 1) {
+  //       login(res.data.token);
+  //       Router.push("/dashboard");
+  //     } else {
+  //       const notify = () => toast.warning(res.data.error);
+  //       notify();
+  //     }
+  //   });
+  // }
 
   async function handleSubmit() {
-    await api.post("/auth/authenticate", { email, password }).then((res) => {
-      if (res.data.status === 1) {
-        login(res.data.token);
-        Router.push("/dashboard");
-      } else {
-        const notify = () => toast.warning(res.data.error);
-        notify();
-      }
-    });
+    const data = {
+      email,
+      password,
+    };
+
+    await signIn(data);
   }
 
   return (

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
+import { AuthProvider } from "../contexts/AuthContext";
 
 import styles from "../styles/app.module.scss";
 
@@ -29,15 +30,17 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
-      <div className={styles.wrapper}>
-        {showHeaderAndSidebar && <Sidebar />}
-        <main>
-          {showHeaderAndSidebar && <Header />}
-          <Component {...pageProps} />
-        </main>
-      </div>
-    </SidebarContext.Provider>
+    <AuthProvider>
+      <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
+        <div className={styles.wrapper}>
+          {showHeaderAndSidebar && <Sidebar />}
+          <main>
+            {showHeaderAndSidebar && <Header />}
+            <Component {...pageProps} />
+          </main>
+        </div>
+      </SidebarContext.Provider>
+    </AuthProvider>
   );
 }
 

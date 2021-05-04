@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
+import Router from "next/router";
 import { GetStaticProps } from "next";
 import { useContext } from "react";
 
 import { Card } from "../components/Card/index";
 import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 import { api } from "../services/api";
 
@@ -34,6 +36,11 @@ export default function Dashboard({
 }: HomeProps) {
   const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
   const { isOpen } = useContext(SidebarContext);
+  const { isAuthenticated } = useContext(AuthContext);
+
+  if (!isAuthenticated) {
+    return <h1>Loading</h1>;
+  }
 
   return (
     <>
