@@ -21,8 +21,6 @@ export default function Login() {
   const { signIn } = useContext(AuthContext);
   const { isAuthenticated } = useContext(AuthContext);
 
-  console.log(isAuthenticated)
-
   // async function handleSubmit() {
   //   await api.post("/auth/authenticate", { email, password }).then((res) => {
   //     if (res.data.status === 1) {

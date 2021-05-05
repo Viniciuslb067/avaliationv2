@@ -36,11 +36,6 @@ export default function Dashboard({
 }: HomeProps) {
   const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
   const { isOpen } = useContext(SidebarContext);
-  const { isAuthenticated } = useContext(AuthContext);
-
-  if (!isAuthenticated) {
-    return <h1>Loading</h1>;
-  }
 
   return (
     <>

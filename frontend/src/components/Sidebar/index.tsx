@@ -1,19 +1,19 @@
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import { AiOutlineBell, AiOutlineHome } from "react-icons/ai";
 import { HiOutlineUsers } from "react-icons/hi";
-import { BiUser } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
 import { VscGraph } from "react-icons/vsc";
 import { RiComputerLine } from "react-icons/ri";
-import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 import styles from "./styles.module.scss";
 
 export function Sidebar() {
   const { isOpen } = useContext(SidebarContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <>

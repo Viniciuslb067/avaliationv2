@@ -111,9 +111,11 @@ router.post("/authenticate", async (req, res) => {
     return res.status(200).json({ status: 2, error: "Usuário ou senha incorreto" });
 
   user.password = undefined;
+  user.createdAt = undefined;
 
   res.cookie("token", generateToken({ id: user.id }), { httpOnly: true });
   res.status(200).json({
+    name: user.name,
     status: 1,
     auth: true,
     token: generateToken({ id: user.id }),

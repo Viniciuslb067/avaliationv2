@@ -1,8 +1,9 @@
 import { useContext } from "react";
 
 import { BsList } from "react-icons/bs";
-import { AiOutlineUser, AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { signOut } from "../../contexts/AuthContext";
 
 import styles from "./styles.module.scss";
 
@@ -26,9 +27,7 @@ export function Header() {
           </div>
 
           <div className={styles.headerIcons}>
-            <button> 
-              Logout
-            </button>
+            <button onClick={() => signOut()}>Logout</button>
           </div>
         </header>
       </div>

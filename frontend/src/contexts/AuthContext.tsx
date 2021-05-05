@@ -1,12 +1,18 @@
+import { createContext, ReactNode, useState, useEffect } from "react";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 import Router from "next/router";
-import { createContext, ReactNode, useState } from "react";
+
 import { toast } from "react-toastify";
 import { api } from "../services/api";
-import { login, getToken } from "../services/auth";
 
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
+
+interface User {
+  email: string;
+  name: string;
+}
 
 interface SignInCredentials {
   email: string;
@@ -16,6 +22,7 @@ interface SignInCredentials {
 interface AuthContextData {
   signIn(credentials: SignInCredentials): Promise<void>;
   isAuthenticated: boolean;
+  user: User;
 }
 
 interface AuthProvidorProps {
@@ -24,40 +31,49 @@ interface AuthProvidorProps {
 
 export const AuthContext = createContext({} as AuthContextData);
 
+export function signOut() {
+  destroyCookie(undefined, "evaluator.token");
+  Router.push("/");
+}
+
 export function AuthProvider({ children }: AuthProvidorProps) {
-  const [redirect, setRedirect] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User>();
+  const isAuthenticated = !!user;
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      await api.post("/auth/authenticate", { email, password }).then((res) => {
-        if (res.data.status === 1) {
-          login(res.data.token);
-          setIsAuthenticated(true);
-          Router.push("/dashboard");
-        } else {
-          const notify = () => toast.warning(res.data.error);
-          notify();
-        }
+      const response = await api.post("/auth/authenticate", {
+        email,
+        password,
       });
+
+      if (response.data.status === 1) {
+        const { token, name } = response.data;
+
+        setCookie(undefined, "evaluator.token", token, {
+          maxAge: 60 * 60 * 24 * 30,
+          path: "/",
+        });
+
+        setUser({
+          email,
+          name,
+        });
+
+        api.defaults.headers["Authorization"] = `Bearer ${token}`;
+
+        Router.push("/dashboard");
+      } else {
+        const notify = () => toast.warning(response.data.error);
+        notify();
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function verify() {
-    var res = await api.get("/auth/check", { params: { token: getToken() } });
-    if (res.data.status === 200) {
-      setLoading(false);
-      setRedirect(false);
-    } else {
-      setLoading(false);
-      setRedirect(true);
-    }
-  }
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated }}>
+    <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
       {children}
     </AuthContext.Provider>
   );
