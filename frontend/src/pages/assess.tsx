@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
-import { useState, useEffect } from "react";
+import React,{ useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -14,16 +13,14 @@ import "antd/dist/antd.css";
 toast.configure();
 
 export default function Assess({ assess }) {
-  const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
-  const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
-  const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
-
-  console.log(origin, hostname)
+  React.useEffect(() => {
+    console.log(window.location.href);
+  }, []);
 
   async function handleSubmit(id) {
     const data = {
@@ -105,7 +102,7 @@ export default function Assess({ assess }) {
   return <div>{assess.map(renderCard)}</div>;
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (req) => {
   const { data } = await api.get("/avaliate");
 
   const assessData = data.map((item) => {
