@@ -106,6 +106,7 @@ export default function NewAssessment({ systemData }) {
             <div className={styles.fields}>
               <label htmlFor="">Sistema</label>
               <select required onChange={(e) => setSystem(e.target.value)}>
+                <option></option>
                 {systemData.map((item, key) => {
                   return <option key={key}>{item.dns}</option>;
                 })}
@@ -121,8 +122,6 @@ export default function NewAssessment({ systemData }) {
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/system");
 
-  console.log(data.systems);
-
   const systems = data.systems.map((item) => {
     return {
       name: item.name,
@@ -136,5 +135,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       systemData,
     },
+    revalidate: 1,
   };
 };

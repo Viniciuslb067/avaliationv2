@@ -1,5 +1,4 @@
 const express = require("express");
-const authMiddleware = require("../middlewares/auth");
 
 const Avaliation = require("../models/Avaliation");
 const Result = require("../models/Result");
@@ -8,13 +7,15 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        var fullUrl = req.protocol + '://' + req.get('host');
+        var fullUrl = req.protocol + '://' + req.get('origin');
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
             (req.connection.socket ? req.connection.socket.remoteAddress : null);
+        
+            var fullUrls = req.protocol + '://' + req.get('host');  
+
+        console.log(fullUrls)
 
         const user = await Result.findOne({ ip_user: ip })
-
-        console.log(fullUrl)
 
         if (!user || user === null) {
             const avaliation = await Avaliation.find({ system: fullUrl }, ['_id']).exec()
@@ -29,6 +30,7 @@ router.get("/", async (req, res) => {
         }
 
     } catch (err) {
+        console.log(err)
         return res.status(400).send({ error: "Erro ao listar as avaliações" });
     }
 });

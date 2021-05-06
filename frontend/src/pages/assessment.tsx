@@ -41,11 +41,10 @@ export default function Assessment({
       .then((res) => {
         setQuestion(res.data.question);
         setRequester(res.data.requester);
-        setStartDate(res.data.startDate);
-        setEndDate(res.data.endDate);
+        setStartDate(res.data.start_date);
+        setEndDate(res.data.end_date);
         setSystem(res.data.system);
         setStatus(res.data.status);
-        console.log();
       })
       .catch((err) => {
         console.log(err);
@@ -360,5 +359,6 @@ export const getStaticProps: GetStaticProps = async () => {
       allAvaliationOff,
       allSystem,
     },
+    revalidate: 1,
   };
 };

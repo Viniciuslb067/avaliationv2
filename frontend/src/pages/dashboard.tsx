@@ -143,5 +143,6 @@ export const getStaticProps: GetStaticProps = async () => {
       allSystem,
       allUser,
     },
+    revalidate: 1,
   };
 };

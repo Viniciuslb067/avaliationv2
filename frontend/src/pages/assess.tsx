@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -13,10 +14,16 @@ import "antd/dist/antd.css";
 toast.configure();
 
 export default function Assess({ assess }) {
+  const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
+
+  const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
+  const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
+
+  console.log(origin, hostname)
 
   async function handleSubmit(id) {
     const data = {
@@ -114,5 +121,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       assess,
     },
+    revalidate: 1,
   };
 };
