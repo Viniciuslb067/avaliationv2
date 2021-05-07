@@ -1,17 +1,18 @@
+import Head from "next/head";
 import Router from "next/router";
-import { useState } from "react";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { verifyToken } from "../../contexts/AuthContext"
 
 import { api } from "../../services/api";
 
 import styles from "./system.module.scss";
-
 import "react-toastify/dist/ReactToastify.css";
-import Head from "next/head";
 
 toast.configure();
 
 export default function NewSystem() {
+  verifyToken();
   const [dns, setDns] = useState("");
   const [name, setName] = useState("");
   const [area, setArea] = useState("");

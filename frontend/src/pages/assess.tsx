@@ -18,10 +18,6 @@ export default function Assess({ assess }) {
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
-  React.useEffect(() => {
-    console.log(window.location.href);
-  }, []);
-
   async function handleSubmit(id) {
     const data = {
       comments: comment,

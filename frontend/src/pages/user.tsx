@@ -1,11 +1,11 @@
-import Link from "next/link";
 import Router from "next/router";
-import { GetStaticProps } from "next";
 import Head from "next/head";
-import { useContext, useState } from "react";
-import { SidebarContext } from "../contexts/SidebarContext";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
+import { GetStaticProps } from "next";
+import { verifyToken } from "../contexts/AuthContext"
+import { SidebarContext } from "../contexts/SidebarContext";
+import { useContext, useState } from "react";
 
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
@@ -18,6 +18,7 @@ import "antd/dist/antd.css";
 toast.configure();
 
 export default function User({ user }) {
+  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);

@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useContext } from "react";
+import { verifyToken } from "../../contexts/AuthContext"
 import { CardMetrics } from "../../components/CardMetrics";
 import { BarChart, PieChart } from "../../components/ChartMetrics";
 import { SidebarContext } from "../../contexts/SidebarContext";
@@ -34,8 +34,8 @@ interface AssessmentProps {
 }
 
 export default function MetricsAssessment({ allData }: AssessmentProps) {
+  verifyToken();
   const { isOpen } = useContext(SidebarContext);
-  const router = useRouter();
 
   return (
     <>
@@ -112,10 +112,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params;
-
   const { data } = await api.get(`/avaliate/result/${slug}`);
-
-  console.log(data.comments);
 
   const allData = {
     id: data.data._id,

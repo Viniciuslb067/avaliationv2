@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { Card } from "../components/Card/index";
 import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { verifyToken } from "../contexts/AuthContext";
 
 import { api } from "../services/api";
 
@@ -34,6 +34,7 @@ export default function Dashboard({
   allUser,
   allSystem,
 }: HomeProps) {
+  verifyToken();
   const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
   const { isOpen } = useContext(SidebarContext);
 

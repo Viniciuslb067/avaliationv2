@@ -2,6 +2,7 @@ import Link from "next/link";
 import Router from "next/router";
 import { GetStaticProps } from "next";
 import { useContext, useState } from "react";
+import { verifyToken } from "../contexts/AuthContext"
 import { SidebarContext } from "../contexts/SidebarContext";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
@@ -20,6 +21,7 @@ import Head from "next/head";
 toast.configure();
 
 export default function System({ system }) {
+  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -221,5 +223,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       system,
     },
+    revalidate: 1,
   };
 };

@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 
+import { verifyToken } from "../contexts/AuthContext";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { BsGraphUp } from "react-icons/bs";
@@ -24,6 +25,7 @@ export default function Assessment({
   allAvaliationOff,
   allSystem,
 }) {
+  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);

@@ -21,7 +21,6 @@ interface SignInCredentials {
 
 interface AuthContextData {
   signIn(credentials: SignInCredentials): Promise<void>;
-  isAuthenticated: boolean;
   user: User;
 }
 
@@ -36,9 +35,36 @@ export function signOut() {
   Router.push("/");
 }
 
+export function verifyToken() {
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  const { "evaluator.token": token } = parseCookies();
+
+  useEffect(() => {
+    async function verify() {
+      const response = await api.get("/auth/check", {
+        params: { token: token },
+      });
+
+      if (response.data.status === 200) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+
+      if (!isAuthenticated) {
+        await Router.push("/");
+        const notify = () => toast.warning("Faça login primeiro");
+        notify();
+      }
+    }
+
+    verify();
+  }, [isAuthenticated]);
+}
+
 export function AuthProvider({ children }: AuthProvidorProps) {
   const [user, setUser] = useState<User>();
-  const isAuthenticated = !!user;
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -67,13 +93,13 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         const notify = () => toast.warning(response.data.error);
         notify();
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
+    <AuthContext.Provider value={{ signIn, user }}>
       {children}
     </AuthContext.Provider>
   );

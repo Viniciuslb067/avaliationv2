@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Router from "next/router";
+import { verifyToken } from "../../contexts/AuthContext"
 import { GetStaticProps } from "next";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -22,6 +23,7 @@ interface SystemProps {
 }
 
 export default function NewAssessment({ systemData }) {
+  verifyToken();
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");

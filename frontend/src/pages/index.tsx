@@ -1,13 +1,9 @@
 import Link from "next/link";
-import Router from "next/router";
 import Head from "next/head";
 import { useState, useContext } from "react";
 import { toast } from "react-toastify";
 
 import { AuthContext } from "../contexts/AuthContext";
-
-import { login } from "../services/auth";
-import { api } from "../services/api";
 
 import styles from "./index.module.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,19 +15,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const { signIn } = useContext(AuthContext);
-  const { isAuthenticated } = useContext(AuthContext);
-
-  // async function handleSubmit() {
-  //   await api.post("/auth/authenticate", { email, password }).then((res) => {
-  //     if (res.data.status === 1) {
-  //       login(res.data.token);
-  //       Router.push("/dashboard");
-  //     } else {
-  //       const notify = () => toast.warning(res.data.error);
-  //       notify();
-  //     }
-  //   });
-  // }
 
   async function handleSubmit() {
     const data = {
