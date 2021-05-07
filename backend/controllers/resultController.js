@@ -1,4 +1,5 @@
 const express = require("express");
+const url = require('url');
 
 const Avaliation = require("../models/Avaliation");
 const Result = require("../models/Result");
@@ -7,13 +8,13 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        var fullUrl = req.protocol + '://' + req.get('origin');
+        var fullUrl = req.protocol + '://' + req.headers.origin;
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
             (req.connection.socket ? req.connection.socket.remoteAddress : null);
         
-            var fullUrls = req.protocol + '://' + req.get('host');  
+        var fullUrls = req.protocol + '://' + req.get('host'); 
 
-        console.log(fullUrls)
+        console.log(req.headers)
 
         const user = await Result.findOne({ ip_user: ip })
 

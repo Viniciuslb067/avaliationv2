@@ -22,6 +22,7 @@ interface Avaliation {
 interface HomeProps {
   allAvaliationOn: Avaliation[];
   allAvaliationOff: Avaliation[];
+  recentAvaliation: Avaliation[];
   allAvaliation: number;
   allUser: number;
   allSystem: number;
@@ -33,6 +34,7 @@ export default function Dashboard({
   allAvaliation,
   allUser,
   allSystem,
+  recentAvaliation,
 }: HomeProps) {
   verifyToken();
   const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
@@ -82,7 +84,7 @@ export default function Dashboard({
                       </tr>
                     </thead>
                     <tbody>
-                      {avaliationList.map((item, key) => {
+                      {recentAvaliation.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.question}</td>
@@ -135,12 +137,14 @@ export const getStaticProps: GetStaticProps = async () => {
   const allAvaliation = data.totalAvaliation;
   const allUser = totalUser.data.totalUser;
   const allSystem = totalSystems.data.totalSystems;
+  const recentAvaliation = data.recentAvaliations;
 
   return {
     props: {
       allAvaliationOn,
       allAvaliationOff,
       allAvaliation,
+      recentAvaliation,
       allSystem,
       allUser,
     },

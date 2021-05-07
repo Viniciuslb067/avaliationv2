@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     try {
         const avaliationOn = await Avaliation.find().where('status').all(['Ativada'])
         const avaliationOff = await Avaliation.find().where('status').all(['Desativada'])
+        const recentAvaliations = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Ativada']).limit(10)
         const totalAvaliation = await Avaliation.countDocuments();
 
 
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
             }
         }))
 
-        return res.json({ avaliationOn, avaliationOff, totalAvaliation })
+        return res.json({ avaliationOn, avaliationOff, totalAvaliation, recentAvaliations })
     } catch (err) {
         console.log(err)
         return res.status(400).send({ error: "Erro ao listar as avaliações" });

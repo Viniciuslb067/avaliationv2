@@ -3,8 +3,8 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors({credentials: true, origin: true}));
 
 require("./controllers/authController")(app);
 require("./controllers/avaliationController")(app);

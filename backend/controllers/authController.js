@@ -48,6 +48,16 @@ router.get("/logout", async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password, password2 } = req.body;
+    const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const nameRegexp = /^([a-zA-Z ]){2,30}$/;
+
+    if (!nameRegexp.test(name)) {
+      return res.status(200).json({ status: 2, error: "Nome inválido" });
+    }
+
+    if (!emailRegexp.test(email)) {
+      return res.status(200).json({ status: 2, error: "Email inválido" });
+    }
 
     if (!name || !email || !password || !password2) {
       return res
@@ -92,8 +102,11 @@ router.post("/register", async (req, res) => {
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
 
-  if(await User.findOne({ email: email, access: "Pendente" })) {
-    return res.status(200).json({ status: 2, error: "O seu login está pendente, aguardando aprovação" });
+  if (await User.findOne({ email: email, access: "Pendente" })) {
+    return res.status(200).json({
+      status: 2,
+      error: "O seu login está pendente, aguardando aprovação",
+    });
   }
 
   const user = await User.findOne({ email }).select("+password");
@@ -108,7 +121,9 @@ router.post("/authenticate", async (req, res) => {
     return res.status(200).json({ status: 2, error: "Usuário não encontrado" });
 
   if (!(await bcrypt.compare(password, user.password)))
-    return res.status(200).json({ status: 2, error: "Usuário ou senha incorreto" });
+    return res
+      .status(200)
+      .json({ status: 2, error: "Usuário ou senha incorreto" });
 
   user.password = undefined;
   user.createdAt = undefined;
@@ -121,6 +136,5 @@ router.post("/authenticate", async (req, res) => {
     token: generateToken({ id: user.id }),
   });
 });
-
 
 module.exports = (app) => app.use("/auth", router);

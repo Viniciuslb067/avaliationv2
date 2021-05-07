@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -98,7 +98,7 @@ export default function Assess({ assess }) {
   return <div>{assess.map(renderCard)}</div>;
 }
 
-export const getStaticProps: GetStaticProps = async (req) => {
+export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get("/avaliate");
 
   const assessData = data.map((item) => {
