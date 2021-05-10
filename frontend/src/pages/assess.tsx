@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -12,11 +12,18 @@ import "antd/dist/antd.css";
 
 toast.configure();
 
-export default function Assess({ assess }) {
+export default function Assess() {
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [assess, setAssess] = useState([]);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
+
+  useEffect(() => {
+    api.get("/avaliate").then((res) => {
+      setAssess(res.data);
+    })
+  },[])
 
   async function handleSubmit(id) {
     const data = {
@@ -46,7 +53,7 @@ export default function Assess({ assess }) {
         <Modal
           key={index}
           visible={isModalVisible}
-          onOk={() => handleSubmit(card.id)}
+          onOk={() => handleSubmit(card._id)}
           okText="Enviar"
           cancelText="Pular"
           closable={false}
@@ -98,22 +105,29 @@ export default function Assess({ assess }) {
   return <div>{assess.map(renderCard)}</div>;
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await api.get("/avaliate");
+// export const getStaticProps: GetStaticProps = async () => {
+//   const { data } = await api.get("/avaliate", {
+//     headers: {
+//       "user-agent":
+//         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+//         "connection": "keep-alive",
+//         "origin": ""
+//     },
+//   });
 
-  const assessData = data.map((item) => {
-    return {
-      id: item._id,
-      question: item.question,
-    };
-  });
+//   const assessData = data.map((item) => {
+//     return {
+//       id: item._id,
+//       question: item.question,
+//     };
+//   });
 
-  const assess = assessData;
+//   const assess = assessData;
 
-  return {
-    props: {
-      assess,
-    },
-    revalidate: 1,
-  };
-};
+//   return {
+//     props: {
+//       assess,
+//     },
+//     revalidate: 1,
+//   };
+// };
