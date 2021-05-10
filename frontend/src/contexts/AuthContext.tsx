@@ -1,6 +1,7 @@
+import Router from "next/router";
+import { useRouter } from "next/router";
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-import Router from "next/router";
 
 import { toast } from "react-toastify";
 import { api } from "../services/api";
@@ -37,13 +38,13 @@ export function signOut() {
 
 export function verifyToken() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-
+  const router = useRouter();
   const { "evaluator.token": token } = parseCookies();
 
   useEffect(() => {
     async function verify() {
       const response = await api.get("/auth/check", {
-        params: { token: token },
+        params: { token: `Bearer ${token}` },
       });
 
       if (response.data.status === 200) {
@@ -56,7 +57,11 @@ export function verifyToken() {
         await Router.push("/");
         const notify = () => toast.warning("Faça login primeiro");
         notify();
-      }
+      } else if(isAuthenticated){
+        console.log(router.pathname)
+        if(router.pathname === "/" || router.pathname === "/register")
+          await Router.push("/dashboard");
+      } 
     }
 
     verify();
