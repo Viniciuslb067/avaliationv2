@@ -5,7 +5,7 @@ const Result = require("../models/Result");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:system", async (req, res) => {
     try {
         var fullUrl = req.headers.origin;
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
@@ -13,8 +13,10 @@ router.get("/", async (req, res) => {
 
         const user = await Result.findOne({ ip_user: ip })
 
+        console.log(user)
+
         if (!user || user === null) {
-            const avaliation = await Avaliation.find({ system: fullUrl }, ['_id']).exec()
+            const avaliation = await Avaliation.find({ system: req.params.system }, ['_id']).exec()
                 if (avaliation) {
                     const avaliate = await Avaliation.find({ _id: avaliation }, ['question'])
                         return res.json(avaliate)
