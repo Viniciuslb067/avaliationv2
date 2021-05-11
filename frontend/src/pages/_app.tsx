@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   const showHeaderAndSidebar = 
     router.pathname === "/" ||
     router.pathname === "/register" ||
-    router.pathname === "/assess";
+    router.pathname === "/assess/[slug]";
   const [isOpen, setIsOpen] = useState(false);
 
   function openSidebar() {
