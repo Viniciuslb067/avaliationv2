@@ -1,10 +1,11 @@
 import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 
-import { api } from "../services/api";
+import { api } from "../../services/api";
 
 import styles from "./assess.module.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,17 +14,24 @@ import "antd/dist/antd.css";
 toast.configure();
 
 export default function Assess() {
+  const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [assess, setAssess] = useState([]);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
+  var { slug } = router.query;
+
   useEffect(() => {
-    api.get("/avaliate").then((res) => {
-      setAssess(res.data);
-    })
-  },[])
+    async function getData() {
+        console.log(slug)
+      await api.get("/avaliate/" + slug).then((res) => {
+        setAssess(res.data);
+      });
+    }
+    getData();
+  }, [slug]);
 
   async function handleSubmit(id) {
     const data = {
