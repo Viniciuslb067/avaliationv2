@@ -14,7 +14,6 @@ router.get("/", async (req, res) => {
         const recentAvaliations = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Ativada']).limit(10)
         const totalAvaliation = await Avaliation.countDocuments();
 
-
         await Promise.all(avaliationOn.map(async (status) => {
             const data = status.end_date;
             const parsedDate = datefns.parseISO(data);

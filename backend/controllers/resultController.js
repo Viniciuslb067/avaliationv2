@@ -18,13 +18,13 @@ router.get("/:system", async (req, res) => {
         if (!user || user === null) {
             const avaliation = await Avaliation.find({ system: req.params.system }, ['_id']).exec()
                 if (avaliation) {
-                    const avaliate = await Avaliation.find({ _id: avaliation }, ['question'])
-                        return res.json(avaliate)
+                    const assessment = await Avaliation.find({ _id: avaliation }, ['question'])
+                        return res.json([{ assess: false, assessment }])
                 } else {
-                    return res.json([])
+                    return res.json([{ assess: true }])
                 }
             } else {
-                return res.json([])
+                return res.json([{ assess: true }])
         }
 
     } catch (err) {
