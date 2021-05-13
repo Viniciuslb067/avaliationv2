@@ -16,7 +16,8 @@ toast.configure();
 export default function Assess() {
   const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(true);
-  const [assess, setAssess] = useState([]);
+  const [alreadyAssess, setAlreadyAssess] = useState<boolean>();
+  const [assessment, setAssessment] = useState([]);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
@@ -25,9 +26,11 @@ export default function Assess() {
 
   useEffect(() => {
     async function getData() {
-        console.log(slug)
       await api.get("/avaliate/" + slug).then((res) => {
-        setAssess(res.data);
+        res.data.map((item) => {
+          setAlreadyAssess(item.assess)
+          setAssessment(item.assessment)
+        })
       });
     }
     getData();
@@ -55,6 +58,7 @@ export default function Assess() {
       });
   }
 
+
   const renderCard = (card, index) => {
     return (
       <div className={styles.app} key={index}>
@@ -62,18 +66,19 @@ export default function Assess() {
           key={index}
           visible={isModalVisible}
           onOk={() => handleSubmit(card._id)}
+          onCancel={() => setIsModalVisible(false)}
           okText="Enviar"
           cancelText="Pular"
-          closable={false}
+          closable={true}
         >
           <div className={styles.container}>
-            <div className="card-body">
-              <h2 className="card-title text-center">
+            <div>
+              <h2>
                 <p className="">{card.question}</p>
                 {[...Array(5)].map((star, i) => {
                   const ratingValue = i + 1;
                   return (
-                    <label>
+                    <label key={i}>
                       <input
                         type="radio"
                         name="rating"
@@ -108,34 +113,7 @@ export default function Assess() {
         </Modal>
       </div>
     );
-  };
+  }; 
 
-  return <div>{assess.map(renderCard)}</div>;
+  return <div>{ alreadyAssess ? "" : assessment.map(renderCard) } </div>;
 }
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const { data } = await api.get("/avaliate", {
-//     headers: {
-//       "user-agent":
-//         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-//         "connection": "keep-alive",
-//         "origin": ""
-//     },
-//   });
-
-//   const assessData = data.map((item) => {
-//     return {
-//       id: item._id,
-//       question: item.question,
-//     };
-//   });
-
-//   const assess = assessData;
-
-//   return {
-//     props: {
-//       assess,
-//     },
-//     revalidate: 1,
-//   };
-// };
