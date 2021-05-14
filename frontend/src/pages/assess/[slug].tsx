@@ -28,9 +28,9 @@ export default function Assess() {
     async function getData() {
       await api.get("/avaliate/" + slug).then((res) => {
         res.data.map((item) => {
-          setAlreadyAssess(item.assess)
-          setAssessment(item.assessment)
-        })
+          setAlreadyAssess(item.assess);
+          setAssessment(item.assessment);
+        });
       });
     }
     getData();
@@ -47,7 +47,7 @@ export default function Assess() {
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
-          setIsModalVisible(false);
+          alert("OPA")
         } else {
           const notify = () => toast.warning(res.data.error);
           notify();
@@ -58,62 +58,54 @@ export default function Assess() {
       });
   }
 
-
   const renderCard = (card, index) => {
     return (
       <div className={styles.app} key={index}>
-        <Modal
-          key={index}
-          visible={isModalVisible}
-          onOk={() => handleSubmit(card._id)}
-          onCancel={() => setIsModalVisible(false)}
-          okText="Enviar"
-          cancelText="Pular"
-          closable={true}
-        >
-          <div className={styles.container}>
-            <div>
-              <h2>
-                <p className="">{card.question}</p>
-                {[...Array(5)].map((star, i) => {
-                  const ratingValue = i + 1;
-                  return (
-                    <label key={i}>
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={ratingValue}
-                        onClick={() => setRating(ratingValue)}
-                      />
-                      <FaStar
-                        className="star"
-                        color={
-                          ratingValue <= (hover || rating)
-                            ? "#ffc107"
-                            : "#e4e5e9"
-                        }
-                        size={50}
-                        onMouseEnter={() => setHover(ratingValue)}
-                        onMouseLeave={() => setHover(null)}
-                      />
-                    </label>
-                  );
-                })}
-                <input
-                  type="input"
-                  className="input-coment"
-                  placeholder="Comentario"
-                  onChange={(event) => {
-                    setComment(event.target.value);
-                  }}
-                />
-              </h2>
-            </div>
+        <div className={styles.container}>
+          <div>
+            <h2>
+              <p className="">{card.question}</p>
+              {[...Array(5)].map((star, i) => {
+                const ratingValue = i + 1;
+                return (
+                  <label key={i}>
+                    <input
+                      type="radio"
+                      name="rating"
+                      value={ratingValue}
+                      onClick={() => setRating(ratingValue)}
+                    />
+                    <FaStar
+                      className="star"
+                      color={
+                        ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
+                      }
+                      size={50}
+                      onMouseEnter={() => setHover(ratingValue)}
+                      onMouseLeave={() => setHover(null)}
+                    />
+                  </label>
+                );
+              })}
+              <input
+                type="input"
+                className={styles.inputComment}
+                placeholder="Comentario"
+                onChange={(event) => {
+                  setComment(event.target.value);
+                }}
+              />
+            </h2>
           </div>
-        </Modal>
+        </div>
+
+        <div className={styles.buttonContainer}>
+          <button className={styles.buttonSkip} onClick={() => handleSubmit(card._id)} >Pular</button>
+          <button className={styles.buttonSubmit}>Enviar</button>
+        </div>
       </div>
     );
-  }; 
+  };
 
-  return <div>{ alreadyAssess ? "" : assessment.map(renderCard) } </div>;
+  return <div> {alreadyAssess ? "" : assessment.map(renderCard)} </div>;
 }
