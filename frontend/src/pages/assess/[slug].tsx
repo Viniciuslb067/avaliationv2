@@ -47,7 +47,6 @@ export default function Assess() {
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
-          alert("OPA")
         } else {
           const notify = () => toast.warning(res.data.error);
           notify();
@@ -100,12 +99,22 @@ export default function Assess() {
         </div>
 
         <div className={styles.buttonContainer}>
-          <button className={styles.buttonSkip} onClick={() => handleSubmit(card._id)} >Pular</button>
-          <button className={styles.buttonSubmit}>Enviar</button>
+          <button
+            className={styles.buttonSkip}
+            onClick={() => handleSubmit(card._id)}
+            id="buttonSkip"
+          >
+            Pular
+          </button>
+          <button className={styles.buttonSubmit} id="asd">Enviar</button>
         </div>
       </div>
     );
   };
 
-  return <div> {alreadyAssess ? "" : assessment.map(renderCard)} </div>;
+  return (
+    <div>
+        {alreadyAssess ? "" : assessment.map(renderCard)}
+    </div>
+  );
 }
