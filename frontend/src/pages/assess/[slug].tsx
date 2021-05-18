@@ -1,8 +1,6 @@
-import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Modal } from "antd";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 
 import { api } from "../../services/api";
@@ -45,10 +43,14 @@ export default function Assess() {
       .post("/avaliate/" + id, data)
       .then((res) => {
         if (res.data.status === 1) {
-          const notify = () => toast.success(res.data.success);
+          const notify = () => toast.success(res.data.success, {
+            position: toast.POSITION.TOP_LEFT
+          });
           notify();
         } else {
-          const notify = () => toast.warning(res.data.error);
+          const notify = () => toast.warning(res.data.error, {
+            position: toast.POSITION.TOP_LEFT
+          });
           notify();
         }
       })
@@ -56,6 +58,18 @@ export default function Assess() {
         console.log(err);
       });
   }
+
+  <ToastContainer
+    position="bottom-center"
+    autoClose={5000}
+    hideProgressBar={false}
+    newestOnTop
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+  />;
 
   const renderCard = (card, index) => {
     return (
@@ -99,22 +113,18 @@ export default function Assess() {
         </div>
 
         <div className={styles.buttonContainer}>
+          <button className={styles.buttonSkip}>Pular</button>
           <button
-            className={styles.buttonSkip}
+            className={styles.buttonSubmit}
             onClick={() => handleSubmit(card._id)}
-            id="buttonSkip"
+            id="botaoTeste"
           >
-            Pular
+            Enviar
           </button>
-          <button className={styles.buttonSubmit} id="asd">Enviar</button>
         </div>
       </div>
     );
   };
 
-  return (
-    <div>
-        {alreadyAssess ? "" : assessment.map(renderCard)}
-    </div>
-  );
+  return <div>{alreadyAssess ? "" : assessment.map(renderCard)}</div>;
 }
