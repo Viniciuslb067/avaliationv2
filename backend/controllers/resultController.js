@@ -13,8 +13,6 @@ router.get("/:system", async (req, res) => {
 
         const user = await Result.findOne({ ip_user: ip })
 
-        console.log(user)
-
         if (!user || user === null) {
             const avaliation = await Avaliation.find({ system: req.params.system }, ['_id']).exec()
                 if (avaliation) {
