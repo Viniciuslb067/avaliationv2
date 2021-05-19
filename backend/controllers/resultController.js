@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.get("/:system", async (req, res) => {
     try {
-        var fullUrl = req.headers.origin;
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
             (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
@@ -32,7 +31,6 @@ router.get("/:system", async (req, res) => {
 });
 
 router.get("/result/:avaliationId", async (req, res) => {
-
     try {
         const find = await Avaliation.findOne({ _id: req.params.avaliationId }).exec();
 
@@ -52,7 +50,6 @@ router.get("/result/:avaliationId", async (req, res) => {
                 ]
 
                 const data = await Avaliation.findOne({ _id: req.params.avaliationId }).exec();
-
                 const comments = await Result.find({ avaliation: req.params.avaliationId }, ['comments', 'ip_user'])
 
                 res.json({ notes, status, data, comments })
@@ -61,8 +58,6 @@ router.get("/result/:avaliationId", async (req, res) => {
     } catch (err) {
         return res.status(400).send({ error: "Erro ao listar os resultados" });
     }
-
-
 })
 
 router.post("/:avaliationId", async (req, res) => {
@@ -87,7 +82,6 @@ router.post("/:avaliationId", async (req, res) => {
 
             return res.status(200).json({ status: 1, success: "Muito obrigado por responder a avaliação!" });
         }
-
     } catch (err) {
         return res.status(400).send({ error: "Erro ao avaliar" });
     }
