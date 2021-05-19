@@ -1,6 +1,5 @@
 const express = require("express");
 const datefns = require("date-fns")
-const authMiddleware = require("../middlewares/auth");
 
 const Avaliation = require("../models/Avaliation");
 
@@ -88,7 +87,5 @@ router.delete("/:avaliationId", async (req, res) => {
         return res.status(400).send({ error: "Erro ao deletar uma avaliação" });
     }
 });
-
-
 
 module.exports = (app) => app.use("/avaliation", router);
