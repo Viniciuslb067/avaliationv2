@@ -1,8 +1,8 @@
-import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 import { Modal } from "antd";
-import { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import { FaStar } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 import { api } from "../../services/api";
 
@@ -44,6 +44,7 @@ export default function Assess() {
       .post("/avaliate/" + id, data)
       .then((res) => {
         if (res.data.status === 1) {
+          setIsModalVisible(false);
           const notify = () =>
             toast.success(res.data.success, {
               position: toast.POSITION.TOP_LEFT,
@@ -62,6 +63,11 @@ export default function Assess() {
       });
   }
 
+
+  function close () {
+     
+  }
+
   const renderCard = (card, index) => {
     return (
       <Modal
@@ -73,6 +79,7 @@ export default function Assess() {
         okText="Enviar"
         cancelText="Pular"
         closable={true}
+        destroyOnClose={true}
       >
         <div className={styles.app} key={index}>
           <div className={styles.container}>

@@ -64,16 +64,10 @@
   }
 }
 
-.darkbg {
-  position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: rgba(204, 37, 37, 0.75);
+.modalHide {
+  display: none;
 }
+
 
 
 
