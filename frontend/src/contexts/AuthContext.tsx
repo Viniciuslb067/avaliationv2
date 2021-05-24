@@ -58,7 +58,6 @@ export function verifyToken() {
         const notify = () => toast.warning("Faça login primeiro");
         notify();
       } else if(isAuthenticated){
-        console.log(router.pathname)
         if(router.pathname === "/" || router.pathname === "/register")
           await Router.push("/dashboard");
       } 
@@ -82,7 +81,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         const { token, name } = response.data;
 
         setCookie(undefined, "evaluator.token", token, {
-          maxAge: 60 * 60 * 24 * 30,
+          maxAge: 60 * 60 * 24 * 7,
           path: "/",
         });
 
