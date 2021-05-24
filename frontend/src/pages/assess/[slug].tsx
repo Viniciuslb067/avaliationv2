@@ -63,22 +63,18 @@ export default function Assess() {
       });
   }
 
-
-  function close () {
-     
-  }
-
   const renderCard = (card, index) => {
     return (
       <Modal
         key={index}
         visible={isModalVisible}
         onOk={() => handleSubmit(card._id)}
-        onCancel={() => setIsModalVisible(false)}
-        maskStyle={{ background: "rgba(0,0,0,0.75)" }}    
+        onCancel={() => setIsModalVisible(false)} 
         okText="Enviar"
         cancelText="Pular"
-        closable={true}
+        mask={false}
+        closable={false}
+        maskClosable={false}
         destroyOnClose={true}
       >
         <div className={styles.app} key={index}>
