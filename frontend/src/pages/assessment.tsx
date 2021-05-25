@@ -85,6 +85,8 @@ export default function Assessment({
     setIsModalVisible(true);
   }
 
+  console.log(requester)
+
   async function deleteAssesssment(id) {
     await api
       .delete("/avaliation/" + id)

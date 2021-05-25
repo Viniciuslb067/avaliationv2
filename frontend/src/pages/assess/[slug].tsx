@@ -45,15 +45,10 @@ export default function Assess() {
       .then((res) => {
         if (res.data.status === 1) {
           setIsModalVisible(false);
-          const notify = () =>
-            toast.success(res.data.success, {
-              position: toast.POSITION.TOP_LEFT,
-            });
-          notify();
         } else {
           const notify = () =>
-            toast.warning(res.data.error, {
-              position: toast.POSITION.TOP_LEFT,
+            toast.error(res.data.error, {
+              position: toast.POSITION.TOP_CENTER,
             });
           notify();
         }
@@ -62,18 +57,26 @@ export default function Assess() {
         console.log(err);
       });
   }
+  
+  async function handleSkip(id) {
+    setIsModalVisible(false);
+    await api.post("/avaliate/skip/"+id);
+  }
 
   const renderCard = (card, index) => {
     return (
+      <>
       <Modal
         key={index}
         visible={isModalVisible}
         onOk={() => handleSubmit(card._id)}
-        onCancel={() => setIsModalVisible(false)} 
+        onCancel={() => handleSkip(card._id)} 
         okText="Enviar"
         cancelText="Pular"
         mask={false}
         closable={false}
+        keyboard={false}
+        style={{ top: 65 }}
         maskClosable={false}
         destroyOnClose={true}
       >
@@ -119,8 +122,9 @@ export default function Assess() {
           </div>
         </div>
       </Modal>
+      {isModalVisible ? "" : <><h1 className={styles.message}>Muito obrigado pela participação!</h1></>}
+      </>
     );
   };
-
   return <div>{alreadyAssess ? "" : assessment.map(renderCard)}</div>;
 }
