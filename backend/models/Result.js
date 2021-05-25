@@ -12,11 +12,9 @@ const ResultSchema = new mongoose.Schema({
     },
     note: {
         type: Number,
-        required: true,
     },
     comments: {
         type: String,
-        required: true,
     },
     status: {
         type: String,
