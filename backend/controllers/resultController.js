@@ -46,11 +46,10 @@ router.get("/result/:avaliationId", async (req, res) => {
                 ]
                 const status = [
                     await Result.countDocuments({ 'status': "Enviado", 'avaliation': req.params.avaliationId }),
-                    await Result.countDocuments({ 'status': "Ignorou", 'avaliation': req.params.avaliationId }),
+                    await Result.countDocuments({ 'status': "Ignorado", 'avaliation': req.params.avaliationId }),
                 ]
-
                 const data = await Avaliation.findOne({ _id: req.params.avaliationId }).exec();
-                const comments = await Result.find({ avaliation: req.params.avaliationId }, ['comments', 'ip_user'])
+                const comments = await Result.find({ avaliation: req.params.avaliationId }, ['comments', 'ip_user']).where('status').all(['Enviado'])
 
                 res.json({ notes, status, data, comments })
             }
@@ -87,12 +86,24 @@ router.post("/:avaliationId", async (req, res) => {
     }
 });
 
-router.put("/:avaliationId", async (req, res) => {
-    res.json({ user: req.userId });
-});
+router.post("/skip/:avaliationId", async (req, res) => {
+    try {
+        const { avaliationId } = req.params
 
-router.delete("/:avaliationId", async (req, res) => {
-    res.json({ user: req.userId });
-});
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress ||
+        (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+        await Result.create({
+            ip_user: ip,
+            status: "Ignorado",
+            avaliation: avaliationId,
+        })
+
+
+    } catch (err) {
+        console.log(err)
+        return res.status(400).send({ error: "Erro ao pular avaliação" });   
+    }
+})
 
 module.exports = (app) => app.use("/avaliate", router);
