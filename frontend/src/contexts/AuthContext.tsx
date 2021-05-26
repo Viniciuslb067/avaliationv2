@@ -32,14 +32,14 @@ interface AuthProvidorProps {
 export const AuthContext = createContext({} as AuthContextData);
 
 export function signOut() {
-  destroyCookie(undefined, "evaluator.token");
+  destroyCookie(undefined, "feedback.token");
   Router.push("/");
 }
 
 export function verifyToken() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const router = useRouter();
-  const { "evaluator.token": token } = parseCookies();
+  const { "feedback.token": token } = parseCookies();
 
   useEffect(() => {
     async function verify() {
@@ -47,20 +47,11 @@ export function verifyToken() {
         params: { token: `Bearer ${token}` },
       });
 
-      if (response.data.status === 200) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-
-      if (!isAuthenticated) {
-        await Router.push("/");
+      if(!token) {
+        Router.push("/")
         const notify = () => toast.warning("Faça login primeiro");
         notify();
-      } else if(isAuthenticated){
-        if(router.pathname === "/" || router.pathname === "/register")
-          await Router.push("/dashboard");
-      } 
+      }
     }
 
     verify();
@@ -80,7 +71,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
       if (response.data.status === 1) {
         const { token, name } = response.data;
 
-        setCookie(undefined, "evaluator.token", token, {
+        setCookie(undefined, "feedback.token", token, {
           maxAge: 60 * 60 * 24 * 7,
           path: "/",
         });
