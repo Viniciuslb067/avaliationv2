@@ -37,7 +37,6 @@ export default function Dashboard({
   recentAvaliation,
 }: HomeProps) {
   verifyToken();
-  const avaliationList = [...allAvaliationOn, ...allAvaliationOff];
   const { isOpen } = useContext(SidebarContext);
 
   return (
