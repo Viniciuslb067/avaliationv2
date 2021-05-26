@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
 //Listar uma avaliação
 router.get("/:avaliationId", async (req, res) => {
     try {
-        const avaliation = await Avaliation.findById(req.params.avaliationId).where('status').all(['Ativada'])
+        const avaliation = await Avaliation.findById(req.params.avaliationId)
 
         return res.json(avaliation)
     } catch (err) {
