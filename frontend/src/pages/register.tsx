@@ -43,7 +43,7 @@ export default function Register() {
   return (
     <>
       <Head>
-        <title>Evaluator | Register</title>
+        <title>Feedback | Register</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.form}>

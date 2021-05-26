@@ -43,7 +43,7 @@ export default function Dashboard({
   return (
     <>
       <Head>
-        <title>Evaluator | Dashboard</title>
+        <title>Feedback | Dashboard</title>
       </Head>
 
       <main

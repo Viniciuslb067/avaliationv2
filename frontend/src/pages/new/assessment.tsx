@@ -57,7 +57,7 @@ export default function NewAssessment({ systemData }) {
   return (
     <>
       <Head>
-        <title>Evaluator | New assessment</title>
+        <title>Feedback | New assessment</title>
       </Head>
 
       <main className={styles.mainContainer}>

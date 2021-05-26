@@ -57,72 +57,79 @@ export default function Assess() {
         console.log(err);
       });
   }
-  
+
   async function handleSkip(id) {
     setIsModalVisible(false);
-    await api.post("/avaliate/skip/"+id);
+    await api.post("/avaliate/skip/" + id);
   }
 
   const renderCard = (card, index) => {
     return (
       <>
-      <Modal
-        key={index}
-        visible={isModalVisible}
-        onOk={() => handleSubmit(card._id)}
-        onCancel={() => handleSkip(card._id)} 
-        okText="Enviar"
-        cancelText="Pular"
-        mask={false}
-        closable={false}
-        keyboard={false}
-        style={{ top: 65 }}
-        maskClosable={false}
-        destroyOnClose={true}
-      >
-        <div className={styles.app} key={index}>
-          <div className={styles.container}>
-            <div>
-              <h2>
-                <p className="">{card.question}</p>
-                {[...Array(5)].map((star, i) => {
-                  const ratingValue = i + 1;
-                  return (
-                    <label key={i}>
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={ratingValue}
-                        onClick={() => setRating(ratingValue)}
-                      />
-                      <FaStar
-                        className="star"
-                        color={
-                          ratingValue <= (hover || rating)
-                            ? "#ffc107"
-                            : "#e4e5e9"
-                        }
-                        size={50}
-                        onMouseEnter={() => setHover(ratingValue)}
-                        onMouseLeave={() => setHover(null)}
-                      />
-                    </label>
-                  );
-                })}
-                <input
-                  type="input"
-                  className={styles.inputComment}
-                  placeholder="Comentario"
-                  onChange={(event) => {
-                    setComment(event.target.value);
-                  }}
-                />
-              </h2>
+        {isModalVisible ? (
+          <>
+            <div className={styles.app} key={index}>
+              <div className={styles.container}>
+                <div>
+                  <h2>
+                    <p className="">{card.question}</p>
+                    {[...Array(5)].map((star, i) => {
+                      const ratingValue = i + 1;
+                      return (
+                        <label key={i}>
+                          <input
+                            type="radio"
+                            name="rating"
+                            value={ratingValue}
+                            onClick={() => setRating(ratingValue)}
+                          />
+                          <FaStar
+                            className="star"
+                            color={
+                              ratingValue <= (hover || rating)
+                                ? "#ffc107"
+                                : "#e4e5e9"
+                            }
+                            size={50}
+                            onMouseEnter={() => setHover(ratingValue)}
+                            onMouseLeave={() => setHover(null)}
+                          />
+                        </label>
+                      );
+                    })}
+                    <input
+                      type="input"
+                      placeholder="Comentário"
+                      onChange={(event) => {
+                        setComment(event.target.value);
+                      }}
+                    />
+                  </h2>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </Modal>
-      {isModalVisible ? "" : <><h1 className={styles.message}>Muito obrigado pela participação!</h1></>}
+            <div className={styles.modalFooter}>
+              <button
+                onClick={() => handleSkip(card._id)}
+                className={styles.buttonSkip}
+              >
+                <span>Pular</span>
+              </button>
+              <button
+                onClick={() => handleSubmit(card._id)}
+                className={styles.buttonSubmit}
+              >
+                <span>Enviar</span>
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className={styles.message}>
+              Muito obrigado pela participação!
+            </h1>
+          </>
+        )}
       </>
     );
   };

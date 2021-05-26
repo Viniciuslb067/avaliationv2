@@ -28,7 +28,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Evaluator | Login</title>
+        <title>Feedback | Login</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.form}>

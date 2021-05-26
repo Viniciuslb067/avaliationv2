@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
-import { AuthContext } from "../../contexts/AuthContext";
 
 import { AiOutlineBell, AiOutlineHome } from "react-icons/ai";
 import { HiOutlineUsers } from "react-icons/hi";
@@ -13,7 +12,6 @@ import styles from "./styles.module.scss";
 
 export function Sidebar() {
   const { isOpen } = useContext(SidebarContext);
-  const { user } = useContext(AuthContext);
 
   return (
     <>
@@ -37,7 +35,7 @@ export function Sidebar() {
           <div className={styles.sidebarUser}>
             <img src="/logo.png" alt="Logo INSS" />
             <div>
-              <h3>Evaluator</h3>
+              <h3>Feedback</h3>
             </div>
           </div>
 

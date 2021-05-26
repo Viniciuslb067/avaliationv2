@@ -95,7 +95,7 @@ export default function User({ user }) {
   return (
     <>
       <Head>
-        <title>Evaluator | Users</title>
+        <title>Feedback | Users</title>
       </Head>
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}

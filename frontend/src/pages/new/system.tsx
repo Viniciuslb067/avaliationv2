@@ -42,7 +42,7 @@ export default function NewSystem() {
   return (
     <>
       <Head>
-        <title>Evaluator | New system</title>
+        <title>Feedback | New system</title>
       </Head>
       <main className={styles.mainContainer}>
         <div className={styles.container}>

@@ -40,7 +40,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
   return (
     <>
       <Head>
-        <title>Evaluator | Metrics</title>
+        <title>Feedback | Metrics</title>
       </Head>
       
       <main

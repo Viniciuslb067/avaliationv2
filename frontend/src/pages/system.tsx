@@ -95,7 +95,7 @@ export default function System({ system }) {
   return (
     <>
       <Head>
-        <title>Evaluator | Systems</title>
+        <title>Feedback | Systems</title>
       </Head>
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
