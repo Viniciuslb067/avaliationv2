@@ -4,8 +4,6 @@ const authConfig = require("../config/auth.json")
 module.exports = (req, res, next) => {
     const authHeader = req.query.token;
 
-    console.log(authHeader)
-
     if (!authHeader)
         return res.status(401).json({ status: 2, error: "Token não foi informado!" });
 
