@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import { Modal } from "antd";
 import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
