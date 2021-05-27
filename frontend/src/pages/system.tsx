@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Router from "next/router";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useContext, useState } from "react";
 import { verifyToken } from "../contexts/AuthContext"
 import { SidebarContext } from "../contexts/SidebarContext";
@@ -207,7 +207,7 @@ export default function System({ system }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/system");
 
   const system = data.systems.map((item) => {
@@ -222,7 +222,6 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       system,
-    },
-    revalidate: 1,
+    }
   };
 };

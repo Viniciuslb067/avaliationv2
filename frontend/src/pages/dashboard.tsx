@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useContext } from "react";
 
 import { Card } from "../components/Card/index";
@@ -104,7 +104,7 @@ export default function Dashboard({
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/avaliation", {
     params: {
       _limit: 10,
@@ -146,7 +146,6 @@ export const getStaticProps: GetStaticProps = async () => {
       recentAvaliation,
       allSystem,
       allUser,
-    },
-    revalidate: 1,
+    }
   };
 };

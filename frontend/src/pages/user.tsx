@@ -2,7 +2,7 @@ import Router from "next/router";
 import Head from "next/head";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetServerSideProps } from "next";
 import { verifyToken } from "../contexts/AuthContext"
 import { SidebarContext } from "../contexts/SidebarContext";
 import { useContext, useState } from "react";
@@ -218,7 +218,7 @@ export default function User({ user }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/user");
 
   const user = data.users.map((item) => {
@@ -234,7 +234,6 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       user,
-    },
-    revalidate: 1,
+    }
   };
 };

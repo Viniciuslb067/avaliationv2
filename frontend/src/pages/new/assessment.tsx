@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Router from "next/router";
 import { verifyToken } from "../../contexts/AuthContext"
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -121,7 +121,7 @@ export default function NewAssessment({ systemData }) {
     </>
   );
 }
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/system");
 
   const systems = data.systems.map((item) => {
@@ -136,7 +136,6 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       systemData,
-    },
-    revalidate: 1,
+    }
   };
 };

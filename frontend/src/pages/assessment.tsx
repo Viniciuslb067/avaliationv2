@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import Router from "next/router";
-import { GetStaticProps } from "next";
+import { GetStaticProps,GetServerSideProps } from "next";
 import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
@@ -173,7 +173,7 @@ export default function Assessment({
                   onChange={(e) => setSystem(e.target.value)}
                 >
                   {allSystem.map((val, key) => {
-                    return <option key={key}>{val.name}</option>;
+                    return <option key={key}>{val.dns}</option>;
                   })}
                 </select>
               </div>
@@ -323,7 +323,7 @@ export default function Assessment({
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/avaliation");
   const systems = await api.get("/system");
 
@@ -347,7 +347,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const system = systems.data.systems.map((item) => {
     return {
-      name: item.name,
+      dns: item.dns
     };
   });
 
@@ -360,7 +360,6 @@ export const getStaticProps: GetStaticProps = async () => {
       allAvaliationOn,
       allAvaliationOff,
       allSystem,
-    },
-    revalidate: 1,
+    }
   };
 };
