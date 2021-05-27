@@ -6,7 +6,7 @@ let cookies = parseCookies();
 let failedRequestQueue = [];
 
 export const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://10.120.48.53:3001",
   headers: {
     Authorization: `Bearer ${cookies["feedback.token"]}`,
   },
