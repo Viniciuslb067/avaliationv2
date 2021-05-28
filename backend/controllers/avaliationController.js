@@ -8,8 +8,8 @@ const router = express.Router();
 //Listar todas as avaliações
 router.get("/", async (req, res) => {
     try {
-        const avaliationOn = await Avaliation.find().where('status').all(['Ativada'])
-        const avaliationOff = await Avaliation.find().where('status').all(['Desativada'])
+        const avaliationOn = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Ativada'])
+        const avaliationOff = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Desativada'])
         const recentAvaliations = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Ativada']).limit(10)
         const totalAvaliation = await Avaliation.countDocuments();
 
@@ -38,7 +38,6 @@ router.get("/", async (req, res) => {
 router.get("/:avaliationId", async (req, res) => {
     try {
         const avaliation = await Avaliation.findById(req.params.avaliationId)
-
         return res.json(avaliation)
     } catch (err) {
         return res.status(400).send({ error: "Erro ao listar a avaliação" });
@@ -53,11 +52,14 @@ router.post("/", async (req, res) => {
             return res.status(200).json({ status: 2, error: "Preencha todos os campos!" });
         }
 
-        const avaliation = await Avaliation.create({ ...req.body });
+        if(await Avaliation.findOne({ system: system }).where('status').all('Ativada')) {
+            return res.status(200).json({ status: 2, error: "Já existe uma avaliação ativa para este sistema!" });
+        } else {
+            const avaliation = await Avaliation.create({ ...req.body });
+            return res.status(200).json({ status: 1, success: "Avaliação criada com sucesso", avaliation });
+        }
 
-        return res.status(200).json({ status: 1, success: "Avaliação criada com sucesso", avaliation });
     } catch (err) {
-        console.log(err)
         return res.status(400).send({ error: "Erro ao criar uma avaliação" });
     }
 });
