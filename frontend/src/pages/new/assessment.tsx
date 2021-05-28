@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Router from "next/router";
 import { verifyToken } from "../../contexts/AuthContext"
 import { GetServerSideProps } from "next";
@@ -66,7 +67,7 @@ export default function NewAssessment({ systemData }) {
             <h1>Criar Avaliação</h1>
 
             <div className={styles.fields}>
-              <label htmlFor="">Pergunta</label>
+              <label htmlFor="">Título</label>
               <input
                 type="text"
                 required
@@ -115,7 +116,9 @@ export default function NewAssessment({ systemData }) {
                 })}
               </select>
             </div>
-            <button onClick={handleSubmit}>Criar</button>
+            <Link href="/new/assess">
+              <button>Próximo</button>
+            </Link>
           </div>
         </div>
       </main>

@@ -116,7 +116,7 @@ export default function Assessment({
           <div>
             <h1>Avaliações</h1>
             <small>
-              Aqui você tem acesso a todas as avaliações e suas estatísticas. asdasdsd
+              Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
           </div>
 
