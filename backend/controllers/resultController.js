@@ -13,24 +13,32 @@ router.get("/:system", async (req, res) => {
       req.socket.remoteAddress ||
       (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-    const user = await Result.findOne({ ip_user: ip });
+    const sad = await Avaliation.find({ system: req.params.system }, [
+      "_id",
+    ]).exec();
 
-    if (!user || user === null) {
-      const avaliation = await Avaliation.find({ system: req.params.system }, [
-        "_id",
-      ]).exec();
-      if (avaliation) {
-        const assessment = await Avaliation.find({ _id: avaliation }, [
-          "question",
-        ])
-          .sort({ createdAt: "desc" })
-          .where("status")
-          .all(["Ativada"])
-          .limit(1);
-        return res.json([{ assess: false, assessment }]);
-      } else {
-        return res.json([{ assess: true }]);
-      }
+    const user = await Result.findOne({ ip_user: ip, avaliation: sad });
+
+    const voteOne = await Result.findOne({ avaliation: sad });
+
+    if (voteOne) {
+    }
+
+    const avaliation = await Avaliation.find({ system: req.params.system }, [
+      "_id",
+    ])
+      .where("status")
+      .all(["Ativada"]);
+
+    if (avaliation) {
+      const assessment = await Avaliation.find({ _id: avaliation }, [
+        "question",
+      ])
+        .sort({ createdAt: "desc" })
+        .where("status")
+        .all(["Ativada"])
+        .limit(1);
+      return res.json([{ assess: false, assessment }]);
     } else {
       return res.json([{ assess: true }]);
     }
@@ -126,12 +134,10 @@ router.post("/:avaliationId", async (req, res) => {
         avaliation: avaliationId,
       });
 
-      return res
-        .status(200)
-        .json({
-          status: 1,
-          success: "Muito obrigado por responder a avaliação!",
-        });
+      return res.status(200).json({
+        status: 1,
+        success: "Muito obrigado por responder a avaliação!",
+      });
     }
   } catch (err) {
     return res.status(400).send({ error: "Erro ao avaliar" });
