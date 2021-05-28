@@ -11,7 +11,7 @@ import { verifyToken } from "../contexts/AuthContext";
 
 import { api } from "../services/api";
 
-import styles from "./home.module.scss";
+import styles from "./dashboard.module.scss";
 
 interface Avaliation {
   question: string;
