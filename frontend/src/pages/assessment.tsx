@@ -172,9 +172,7 @@ export default function Assessment({
                   defaultValue={system}
                   onChange={(e) => setSystem(e.target.value)}
                 >
-                  {allSystem.map((val, key) => {
-                    return <option key={key}>{val.dns}</option>;
-                  })}
+                  <option>{system}</option>
                 </select>
               </div>
               <div className={styles.fields}>
