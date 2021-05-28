@@ -78,6 +78,7 @@ export default function NewAssessment({ systemData }) {
             <div className={styles.fields}>
               <label htmlFor="">Solicitante</label>
               <input
+                placeholder="Exemplo: DTI"
                 type="text"
                 required
                 onChange={(e) => setRequester(e.target.value)}
