@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 
-import styles from "./system.module.scss";
+import styles from "../styles/system.module.scss";
 
 import { api } from "../services/api";
 

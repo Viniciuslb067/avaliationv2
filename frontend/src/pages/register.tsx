@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 import { api } from "../services/api";
 
-import styles from "./register.module.scss";
+import styles from "../styles/register.module.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
