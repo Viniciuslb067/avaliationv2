@@ -13,35 +13,33 @@ router.get("/:system", async (req, res) => {
       req.socket.remoteAddress ||
       (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-    const sad = await Avaliation.find({ system: req.params.system }, [
-      "_id",
-    ]).exec();
-
-    const user = await Result.findOne({ ip_user: ip, avaliation: sad });
-
-    const voteOne = await Result.findOne({ avaliation: sad });
-
-    if (voteOne) {
-    }
-
-    const avaliation = await Avaliation.find({ system: req.params.system }, [
+    const findOneAssess = await Avaliation.findOne({ system: req.params.system }, [
       "_id",
     ])
       .where("status")
-      .all(["Ativada"]);
+      .all("Ativada");
 
-    if (avaliation) {
-      const assessment = await Avaliation.find({ _id: avaliation }, [
-        "question",
-      ])
-        .sort({ createdAt: "desc" })
-        .where("status")
-        .all(["Ativada"])
-        .limit(1);
-      return res.json([{ assess: false, assessment }]);
-    } else {
+    if(!findOneAssess) {
       return res.json([{ assess: true }]);
+    } else {
+      const verifyAlreadyAssess = await Result.findOne({
+        ip_user: ip,
+        avaliation: findOneAssess,
+      });
+  
+      if (!verifyAlreadyAssess) {
+        const assessment = await Avaliation.find({ _id: findOneAssess }, [
+          "question",
+        ])
+          .sort({ createdAt: "desc" })
+          .where("status")
+          .all("Ativada")
+          .limit(1)
+  
+          return res.json([{ assess: false, assessment }]);
+      }
     }
+
   } catch (err) {
     console.log(err);
     return res.status(400).send({ error: "Erro ao listar as avaliações" });
