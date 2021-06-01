@@ -34,6 +34,8 @@ export default function Assess() {
     getData();
   }, [slug]);
 
+  console.log(alreadyAssess, assessment)
+
   async function handleSubmit(id) {
     const data = {
       comments: comment,
@@ -132,5 +134,5 @@ export default function Assess() {
       </>
     );
   };
-  return <div>{alreadyAssess ? "" : assessment.map(renderCard)}</div>;
+  return <div>{alreadyAssess ? "" : assessment?.map(renderCard)}</div>;
 }
