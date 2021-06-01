@@ -84,6 +84,7 @@ export default function NewAssessment({ systemData }) {
                 required
                 onChange={(e) => setRequester(e.target.value)}
               />
+              <button>ADICIONAR</button>
               <span></span>
             </div>
 
