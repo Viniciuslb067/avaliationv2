@@ -328,12 +328,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
       id: item._id,
-      question: item.question,
       requester: item.requester,
       status: item.status,
     };
   });
-
+  
   const avaliationOff = data.avaliationOff.map((item) => {
     return {
       id: item._id,

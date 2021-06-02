@@ -48,6 +48,8 @@ router.post("/", async (req, res) => {
     try {
         const { question, requester, start_date, end_date, system } = req.body;
 
+        console.log(question)
+
         if (!question || !requester || !start_date || !end_date || !system) {
             return res.status(200).json({ status: 2, error: "Preencha todos os campos!" });
         }
@@ -55,7 +57,7 @@ router.post("/", async (req, res) => {
         if(await Avaliation.findOne({ system: system }).where('status').all('Ativada')) {
             return res.status(200).json({ status: 2, error: "Já existe uma avaliação ativa para este sistema!" });
         } else {
-            const avaliation = await Avaliation.create({ ...req.body });
+            const avaliation = await Avaliation.insertMany({ ...req.body });
             return res.status(200).json({ status: 1, success: "Avaliação criada com sucesso", avaliation });
         }
 
