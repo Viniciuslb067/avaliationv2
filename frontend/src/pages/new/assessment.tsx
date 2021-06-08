@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
+import { format, parseISO } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
@@ -17,7 +19,10 @@ import {
   DatePicker,
   Switch,
   InputNumber,
+  Space,
 } from "antd";
+
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 import { api } from "../../services/api";
 
@@ -84,8 +89,6 @@ export default function NewAssessment({ systemData }) {
         return {
           ...item,
           [event.target.name]: event.target.value,
-
-         
         };
       });
     });
@@ -96,11 +99,11 @@ export default function NewAssessment({ systemData }) {
     setForm((prev) => prev.filter((item) => item !== prev[index]));
   };
 
-
-  async function handleSubmit() {
+  async function handleSubmit(fieldsValue: any) {
+    console.log(fieldsValue.endDate._d.format("d MMMM yyyy"));
     await api
       .post("/avaliation", {
-        question: form,
+        question: fieldsValue,
         requester,
         start_date: startDate,
         end_date: endDate,
@@ -121,8 +124,6 @@ export default function NewAssessment({ systemData }) {
       });
   }
 
-  console.log(form)
-  
   return (
     <>
       <Head>
@@ -134,102 +135,115 @@ export default function NewAssessment({ systemData }) {
           <div className={styles.form}>
             <h1>Criar Avaliação</h1>
 
-            <div className={styles.fields}>
-              <label htmlFor="">Título</label>
-              <Input
-                type="text"
-                required
-                onChange={(e) => setQuestion(e.target.value)}
-              />
-              <span></span>
-            </div>
-
-            {form.map((item, index) => {
-              return (
-                <div
-                key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>
-                    <Input
-                      style={{
-                        width: "100%",
-                        marginBottom: 10,
-                        marginRight: "35rem",
-                      }}
-                      type="text"
-                      className={styles.fields }
-                      name="Question"
-                      placeholder="Pergunta"
-                      value={item.Question}
-                      onChange={(e) => onChange(index, e)}
-                    />
-
-
-                  </div>
-
-                  <Button
-                    style={{ marginBottom: 10 }}
-                    onClick={(e) => handleRemoveField(e, index)}
-                    danger
-                  >
-                    X
-                  </Button>
-                </div>
-              );
-            })}
-
-            <Button onClick={handleAddInput}>Adicionar nova pergunta</Button>
-
-            <div className={styles.fields}>
-              <label htmlFor="">Solicitante</label>
-              <Input
-                placeholder="Exemplo: DTI"
-                type="text"
-                required
-                onChange={(e) => setRequester(e.target.value)}
-              />
-              <span></span>
-            </div>
-
-            <div className={styles.fields}>
-              <label htmlFor="">Data início</label>
-              <input
-                type="date"
-                style={{ width: "100%" }}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <span></span>
-            </div>
-
-            <div className={styles.fields}>
-              <label htmlFor="">Data fim</label>
-              <input
-                type="date"
-                style={{ width: "100%" }}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-              <span></span>
-            </div>
-
-            <div className={styles.fields}>
-              <label htmlFor="">Sistema</label>
-              <select
-                style={{ width: "100%" }}
-                onChange={(e) => setSystem(e.target.value)}
+            <Form
+              name="dynamic_form_nest_item"
+              onFinish={handleSubmit}
+              autoComplete="off"
+            >
+              <Form.Item
+                rules={[{ required: true, message: "Preencha este campo!" }]}
               >
-                <option></option>
-                {systemData.map((item, key) => {
-                  return <option key={key}>{item.dns}</option>;
-                })}
-              </select>
-            </div>
-        
-              <Button onClick={handleSubmit}>Próximo</Button>
+                <Input
+                  type="text"
+                  placeholder="Título"
+                  required
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+              </Form.Item>
+
+              <Form.List name="questions">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "first"]}
+                          fieldKey={[fieldKey, "first"]}
+                          rules={[
+                            { required: true, message: "Preencha este campo!" },
+                          ]}
+                          style={{ width: "100%" }}
+                        >
+                          <Input
+                            style={{ paddingRight: 500 }}
+                            placeholder="Pergunta"
+                          />
+                        </Form.Item>
+
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Adicionar nova pergunta
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+
+              <Form.Item name={["requester"]}>
+                <Input
+                  placeholder="Solicitante, Exemplo: DTI"
+                  type="text"
+                  required
+                  onChange={(e) => setRequester(e.target.value)}
+                />
+              </Form.Item>
+
+              <Form.Item name={["startDate"]}>
+                
+                  <input
+                    type="date"
+                    style={{ width: "100%" }}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                
+              </Form.Item>
+
+              <Form.Item name={["endDate"]}>
+               
+                  <label htmlFor="">Data fim</label>
+                  <input
+                    type="date"
+                    style={{ width: "100%" }}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                
+              </Form.Item>
+
+              <Form.Item>
+                  
+                  <label htmlFor="">Sistema</label>
+                  <select
+                    style={{ width: "100%" }}
+                    onChange={(e) => setSystem(e.target.value)}
+                  >
+                    <option></option>
+                    {systemData.map((item, key) => {
+                      return <option key={key}>{item.dns}</option>;
+                    })}
+                  </select>
+                
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Enviar
+                </Button>
+              </Form.Item>
+            </Form>
+
           </div>
         </div>
       </main>

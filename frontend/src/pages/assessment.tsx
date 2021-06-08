@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import Router from "next/router";
-import { GetStaticProps,GetServerSideProps } from "next";
+import { GetStaticProps, GetServerSideProps } from "next";
 import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
