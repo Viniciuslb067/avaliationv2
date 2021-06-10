@@ -224,12 +224,12 @@ export default function NewAssessment({ systemData }) {
 
               <Form.Item>
                   
-                  <label htmlFor="">Sistema</label>
                   <select
                     style={{ width: "100%" }}
                     onChange={(e) => setSystem(e.target.value)}
+                    placeholder="Sistema"
                   >
-                    <option></option>
+                    <option disabled hidden>Sistema</option>
                     {systemData.map((item, key) => {
                       return <option key={key}>{item.dns}</option>;
                     })}

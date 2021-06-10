@@ -11,12 +11,12 @@ const router = express.Router();
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
-    expiresIn: '7d',
+    expiresIn: "7d",
   });
 }
 
 router.get("/check", async (req, res) => {
-  const token = req.query.token.split(' ')[1];
+  const token = req.query.token.split(" ")[1];
   if (!token) {
     res.json({ status: 301, error: "Token inexistente" });
   } else {
@@ -47,7 +47,8 @@ router.get("/logout", async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password, password2 } = req.body;
-    const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const emailRegexp =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     const nameRegexp = /^([a-zA-Z ]){2,30}$/;
 
     if (!nameRegexp.test(name)) {
@@ -100,6 +101,27 @@ router.post("/register", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
+
+  // bindDN: "dc=gov, dc=br",
+  // strictDN: true,
+  // timeout: 5000,
+  // connectTimeout: 10000,
+
+  function authenticateDN(username, password) {
+    var client = ldap.createClient({
+      url: "ldap://cnsldapdf.prevnet",
+    });
+
+    client.bind(username, password, (err) => {
+      if (err) {
+        console.log(err.message);
+      } else {
+        console.log("Logado com sucesso!");
+      }
+    });
+  }
+
+  authenticateDN("uid=josecarlos.almeida,ou=01.111.1.CGIN,ou=01.111.DTI,ou=01.001.PRES,ou=INSS,dc=gov,dc=br", "Camilla!2");
 
   if (await User.findOne({ email: email, access: "Pendente" })) {
     return res.status(200).json({
