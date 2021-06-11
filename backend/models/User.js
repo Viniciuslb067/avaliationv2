@@ -17,16 +17,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-  role: {
-    type: String,
-    required: true,
-    default: "Técnico",
-  },
-  access: {
-    type: String,
-    required: true,
-    default: "Pendente",
-  },
   createdAt: {
     type: Date,
     default: Date.now,

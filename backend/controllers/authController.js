@@ -87,7 +87,7 @@ router.post("/register", async (req, res) => {
       return res.status(200).json({ status: 2, error: "Email já cadastrado" });
     } else {
       const user = await User.create(req.body);
-
+      
       user.password = undefined;
 
       return res
@@ -101,36 +101,8 @@ router.post("/register", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
-
-  // bindDN: "dc=gov, dc=br",
-  // strictDN: true,
-  // timeout: 5000,
-  // connectTimeout: 10000,
-
-  function authenticateDN(username, password) {
-    var client = ldap.createClient({
-      url: "ldap://cnsldapdf.prevnet",
-    });
-
-    client.bind(username, password, (err) => {
-      if (err) {
-        console.log(err.message);
-      } else {
-        console.log("Logado com sucesso!");
-      }
-    });
-  }
-
-  authenticateDN("uid=josecarlos.almeida,ou=01.111.1.CGIN,ou=01.111.DTI,ou=01.001.PRES,ou=INSS,dc=gov,dc=br", "Camilla!2");
-
-  if (await User.findOne({ email: email, access: "Pendente" })) {
-    return res.status(200).json({
-      status: 2,
-      error: "O seu login está pendente, aguardando aprovação",
-    });
-  }
-
-  const user = await User.findOne({ email }).select("+password");
+  
+  const username = `uid=${email},ou=01.111.1.CGIN,ou=01.111.DTI,ou=01.001.PRES,ou=INSS,dc=gov,dc=br`
 
   if (!email || !password) {
     return res
@@ -138,24 +110,41 @@ router.post("/authenticate", async (req, res) => {
       .json({ status: 2, error: "Preencha todos os campos" });
   }
 
-  if (!user)
-    return res.status(200).json({ status: 2, error: "Usuário não encontrado" });
+  const [mail] = email.split(",", 1);
+  const opts = {
+    filter: `(uid=${mail})`,
+    scope: "sub",
+    attributes: ["cpf", "givenname", "mail"],
+  };
 
-  if (!(await bcrypt.compare(password, user.password)))
-    return res
-      .status(200)
-      .json({ status: 2, error: "Usuário ou senha incorreto" });
-
-  user.password = undefined;
-  user.createdAt = undefined;
-
-  res.cookie("token", generateToken({ id: user.id }), { httpOnly: true });
-  res.status(200).json({
-    name: user.name,
-    status: 1,
-    auth: true,
-    token: generateToken({ id: user.id }),
+  var client = ldap.createClient({
+    url: "ldap://cnsldapdf.prevnet",
   });
+
+  await client.bind(username, password, (err) => {
+    if (err) {
+      return res.status(200).json({ status: 2, error: "Usuário ou senha incorreto" });
+    } else {
+      client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
+        if (err) {
+          return res.status(200).json({ status: 2, error: err });
+        }  else {
+            res.on("searchEntry", (entry) => {
+            console.log(entry.object.cpf, entry.object.givenName, entry.object.mail)
+          });
+        }
+      });
+    }
+
+    res.cookie("token", generateToken({ email }), { httpOnly: true });
+    res.status(200).json({
+      email: mail,
+      status: 1,
+      auth: true,
+      token: generateToken({ email: mail }),
+    });
+  });
+
 });
 
 module.exports = (app) => app.use("/auth", router);
