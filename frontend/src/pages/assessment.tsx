@@ -14,9 +14,9 @@ import { IoMdAdd } from "react-icons/io";
 
 import { api } from "../services/api";
 
-import styles from "./assessment.module.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/antd.css";
+import styles from "../styles/assessment.module.scss";
 
 toast.configure();
 

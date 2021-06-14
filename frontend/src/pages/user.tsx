@@ -11,7 +11,7 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 import { api } from "../services/api";
 
-import styles from "./system.module.scss";
+import styles from "../styles/system.module.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/antd.css";
 
