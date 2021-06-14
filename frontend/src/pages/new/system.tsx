@@ -30,7 +30,7 @@ export default function NewSystem() {
           notify();
           Router.push("/dashboard");
         } else {
-          const notify = () => toast.warning(res.data.error);
+          const notify = () => toast.error(res.data.error);
           notify();
         }
       })
@@ -38,6 +38,13 @@ export default function NewSystem() {
         console.log(err);
       });
   }
+
+  const handleKeypress = (e) => {
+    if (e.charCode === 13) {
+      handleSubmit();
+    }
+  };
+
 
   return (
     <>
@@ -55,6 +62,7 @@ export default function NewSystem() {
                 type="text"
                 required
                 onChange={(e) => setDns(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
@@ -65,6 +73,7 @@ export default function NewSystem() {
                 type="text"
                 required
                 onChange={(e) => setName(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
@@ -75,6 +84,7 @@ export default function NewSystem() {
                 type="text"
                 required
                 onChange={(e) => setArea(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
