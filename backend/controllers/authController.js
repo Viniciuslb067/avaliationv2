@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const ldap = require("ldapjs");
 
@@ -44,65 +43,10 @@ router.get("/logout", async (req, res) => {
     .json({ status: 1, success: "Sessão finalizada com sucesso" });
 });
 
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password, password2 } = req.body;
-    const emailRegexp =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    const nameRegexp = /^([a-zA-Z ]){2,30}$/;
-
-    if (!nameRegexp.test(name)) {
-      return res.status(200).json({ status: 2, error: "Nome inválido" });
-    }
-
-    if (!emailRegexp.test(email)) {
-      return res.status(200).json({ status: 2, error: "Email inválido" });
-    }
-
-    if (!name || !email || !password || !password2) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "Preencha todos os campos" });
-    }
-
-    if (name.length <= 3) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "O nome tem que possuir +3 caracteres " });
-    }
-
-    if (password !== password2) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "As senhas não coincidem!" });
-    }
-
-    if (password.length < 4) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "A senha tem que possuir +4 caracteres" });
-    }
-
-    if (await User.findOne({ email: email })) {
-      return res.status(200).json({ status: 2, error: "Email já cadastrado" });
-    } else {
-      const user = await User.create(req.body);
-      
-      user.password = undefined;
-
-      return res
-        .status(200)
-        .json({ status: 1, success: "Usuário cadastrado com sucesso!" });
-    }
-  } catch (err) {
-    return res.status(400).send({ error: "Erro ao registrar" });
-  }
-});
-
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
-  
-  const username = `uid=${email},ou=01.111.1.CGIN,ou=01.111.DTI,ou=01.001.PRES,ou=INSS,dc=gov,dc=br`
+
+  const username = `uid=${email}@inss.gov.br`;
 
   if (!email || !password) {
     return res
@@ -117,20 +61,28 @@ router.post("/authenticate", async (req, res) => {
     attributes: ["cpf", "givenname", "mail"],
   };
 
-  var client = ldap.createClient({
-    url: "ldap://cnsldapdf.prevnet",
+  const client = ldap.createClient({
+    url: "ldap://ldap.inss.gov.br",
   });
 
-  await client.bind(username, password, (err) => {
+  client.bind(username, password, (err) => {
     if (err) {
-      return res.status(200).json({ status: 2, error: "Usuário ou senha incorreto" });
+      return res
+        .status(200)
+        .json({ status: 2, error: "Usuário ou senha incorreto" });
     } else {
       client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
         if (err) {
           return res.status(200).json({ status: 2, error: err });
-        }  else {
-            res.on("searchEntry", (entry) => {
-            console.log(entry.object.cpf, entry.object.givenName, entry.object.mail)
+        } else {
+          res.on("searchEntry", async (entry) => {
+            if (!(await User.findOne({ cpf: entry.object.cpf }))) {
+              await User.create({
+                name: entry.object.givenName,
+                email: entry.object.mail,
+                cpf: entry.object.cpf,
+              });
+            }
           });
         }
       });
@@ -144,7 +96,6 @@ router.post("/authenticate", async (req, res) => {
       token: generateToken({ email: mail }),
     });
   });
-
 });
 
 module.exports = (app) => app.use("/auth", router);
