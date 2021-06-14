@@ -85,7 +85,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
 
         Router.push("/dashboard");
       } else {
-        const notify = () => toast.warning(response.data.error);
+        const notify = () => toast.error(response.data.error);
         notify();
       }
     } catch (err) {
