@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Router from "next/router";
-import { verifyToken } from "../../contexts/AuthContext"
+import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -12,15 +12,6 @@ import styles from "./assessment.module.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
-
-interface System {
-  name: string;
-  system: [];
-}
-
-interface SystemProps {
-  systemData: System;
-}
 
 export default function NewAssessment({ systemData }) {
   verifyToken();
@@ -54,6 +45,13 @@ export default function NewAssessment({ systemData }) {
       });
   }
 
+  const handleKeypress = (e) => {
+    if (e.charCode === 13) {
+      handleSubmit();
+    }
+    
+  };
+
   return (
     <>
       <Head>
@@ -71,6 +69,7 @@ export default function NewAssessment({ systemData }) {
                 type="text"
                 required
                 onChange={(e) => setQuestion(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
@@ -82,6 +81,7 @@ export default function NewAssessment({ systemData }) {
                 type="text"
                 required
                 onChange={(e) => setRequester(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
@@ -92,6 +92,7 @@ export default function NewAssessment({ systemData }) {
                 type="date"
                 required
                 onChange={(e) => setStartDate(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
@@ -102,13 +103,18 @@ export default function NewAssessment({ systemData }) {
                 type="date"
                 required
                 onChange={(e) => setEndDate(e.target.value)}
+                onKeyPress={handleKeypress}
               />
               <span></span>
             </div>
 
             <div className={styles.fields}>
               <label htmlFor="">Sistema</label>
-              <select required onChange={(e) => setSystem(e.target.value)}>
+              <select
+                required
+                onChange={(e) => setSystem(e.target.value)}
+                onKeyPress={handleKeypress}
+              >
                 <option></option>
                 {systemData.map((item, key) => {
                   return <option key={key}>{item.dns}</option>;
@@ -137,6 +143,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       systemData,
-    }
+    },
   };
 };
