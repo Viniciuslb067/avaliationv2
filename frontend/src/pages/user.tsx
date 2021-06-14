@@ -179,8 +179,6 @@ export default function User({ user }) {
                       <tr>
                         <td>Nome</td>
                         <td>Email</td>
-                        <td>Função</td>
-                        <td>Acesso</td>
                         <td></td>
                         <td></td>
                       </tr>
@@ -191,8 +189,6 @@ export default function User({ user }) {
                           <tr key={key}>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
-                            <td>{item.role}</td>
-                            <td>{item.access}</td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
@@ -224,8 +220,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const user = data.users.map((item) => {
     return {
       id: item._id,
-      role: item.role,
-      access: item.access,
       name: item.name,
       email: item.email,
     };
