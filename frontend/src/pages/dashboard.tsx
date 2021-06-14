@@ -20,8 +20,6 @@ interface Avaliation {
 }
 
 interface HomeProps {
-  allAvaliationOn: Avaliation[];
-  allAvaliationOff: Avaliation[];
   recentAvaliation: Avaliation[];
   allAvaliation: number;
   allUser: number;
@@ -29,8 +27,6 @@ interface HomeProps {
 }
 
 export default function Dashboard({
-  allAvaliationOn,
-  allAvaliationOff,
   allAvaliation,
   allUser,
   allSystem,
@@ -115,24 +111,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const totalUser = await api.get("/user");
   const totalSystems = await api.get("/system");
 
-  const avaliationOn = data.avaliationOn.map((item) => {
-    return {
-      question: item.question,
-      requester: item.requester,
-      status: item.status,
-    };
-  });
-
-  const avaliationOff = data.avaliationOff.map((item) => {
-    return {
-      question: item.question,
-      requester: item.requester,
-      status: item.status,
-    };
-  });
-
-  const allAvaliationOn = avaliationOn;
-  const allAvaliationOff = avaliationOff;
   const allAvaliation = data.totalAvaliation;
   const allUser = totalUser.data.totalUser;
   const allSystem = totalSystems.data.totalSystems;
@@ -140,8 +118,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
-      allAvaliationOn,
-      allAvaliationOff,
       allAvaliation,
       recentAvaliation,
       allSystem,
