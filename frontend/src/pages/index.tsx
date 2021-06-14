@@ -1,6 +1,6 @@
-import Link from "next/link";
 import Head from "next/head";
 import { useState, useContext } from "react";
+import { AiFillHome } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 import { AuthContext } from "../contexts/AuthContext";
@@ -21,24 +21,33 @@ export default function Login() {
       email,
       password,
     };
-
     await signIn(data);
   }
 
+  const handleKeypress = (e) => {
+    if (e.charCode === 13) {
+      handleSubmit();
+    }
+  };
+
   return (
-    <>
+    <div className={styles.contentWrapper}>
       <Head>
-        <title>Feedback | Login</title>
+        <title> Feedback | Login</title>
       </Head>
+
+      <AiFillHome size={60} color="#fff" />
+
       <div className={styles.container}>
         <div className={styles.form}>
-          <h1>Login</h1>
+          <p>Login</p>
 
           <div className={styles.fields}>
             <input
               type="text"
               required
               onChange={(e) => setEmail(e.target.value)}
+              onKeyPress={handleKeypress}
             />
             <span></span>
             <label htmlFor="">Email</label>
@@ -49,22 +58,17 @@ export default function Login() {
               type="password"
               required
               onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeypress}
             />
             <span></span>
             <label htmlFor="">Senha</label>
           </div>
 
-          <button onClick={handleSubmit}>Login</button>
-          <div className={styles.signUpContainer}>
-            <p className={styles.signUp}>
-              Não possui conta?
-              <Link href="/register">
-                <a> Cadastrar</a>
-              </Link>
-            </p>
-          </div>
+          <button onClick={handleSubmit} type="submit">
+            ENTRAR
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
