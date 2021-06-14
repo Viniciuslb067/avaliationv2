@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const ldap = require("ldapjs");
 
@@ -11,12 +10,12 @@ const router = express.Router();
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
-    expiresIn: '7d',
+    expiresIn: "7d",
   });
 }
 
 router.get("/check", async (req, res) => {
-  const token = req.query.token.split(' ')[1];
+  const token = req.query.token.split(" ")[1];
   if (!token) {
     res.json({ status: 301, error: "Token inexistente" });
   } else {
@@ -44,71 +43,10 @@ router.get("/logout", async (req, res) => {
     .json({ status: 1, success: "Sessão finalizada com sucesso" });
 });
 
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password, password2 } = req.body;
-    const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    const nameRegexp = /^([a-zA-Z ]){2,30}$/;
-
-    if (!nameRegexp.test(name)) {
-      return res.status(200).json({ status: 2, error: "Nome inválido" });
-    }
-
-    if (!emailRegexp.test(email)) {
-      return res.status(200).json({ status: 2, error: "Email inválido" });
-    }
-
-    if (!name || !email || !password || !password2) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "Preencha todos os campos" });
-    }
-
-    if (name.length <= 3) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "O nome tem que possuir +3 caracteres " });
-    }
-
-    if (password !== password2) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "As senhas não coincidem!" });
-    }
-
-    if (password.length < 4) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "A senha tem que possuir +4 caracteres" });
-    }
-
-    if (await User.findOne({ email: email })) {
-      return res.status(200).json({ status: 2, error: "Email já cadastrado" });
-    } else {
-      const user = await User.create(req.body);
-
-      user.password = undefined;
-
-      return res
-        .status(200)
-        .json({ status: 1, success: "Usuário cadastrado com sucesso!" });
-    }
-  } catch (err) {
-    return res.status(400).send({ error: "Erro ao registrar" });
-  }
-});
-
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
 
-  if (await User.findOne({ email: email, access: "Pendente" })) {
-    return res.status(200).json({
-      status: 2,
-      error: "O seu login está pendente, aguardando aprovação",
-    });
-  }
-
-  const user = await User.findOne({ email }).select("+password");
+  const username = `uid=${email}@inss.gov.br`;
 
   if (!email || !password) {
     return res
@@ -116,23 +54,47 @@ router.post("/authenticate", async (req, res) => {
       .json({ status: 2, error: "Preencha todos os campos" });
   }
 
-  if (!user)
-    return res.status(200).json({ status: 2, error: "Usuário não encontrado" });
+  const [mail] = email.split(",", 1);
+  const opts = {
+    filter: `(uid=${mail})`,
+    scope: "sub",
+    attributes: ["cpf", "givenname", "mail"],
+  };
 
-  if (!(await bcrypt.compare(password, user.password)))
-    return res
-      .status(200)
-      .json({ status: 2, error: "Usuário ou senha incorreto" });
+  const client = ldap.createClient({
+    url: "ldap://ldap.inss.gov.br",
+  });
 
-  user.password = undefined;
-  user.createdAt = undefined;
+  client.bind(username, password, (err) => {
+    if (err) {
+      return res
+        .status(200)
+        .json({ status: 2, error: "Usuário ou senha incorreto" });
+    } else {
+      client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
+        if (err) {
+          return res.status(200).json({ status: 2, error: err });
+        } else {
+          res.on("searchEntry", async (entry) => {
+            if (!(await User.findOne({ cpf: entry.object.cpf }))) {
+              await User.create({
+                name: entry.object.givenName,
+                email: entry.object.mail,
+                cpf: entry.object.cpf,
+              });
+            }
+          });
+        }
+      });
+    }
 
-  res.cookie("token", generateToken({ id: user.id }), { httpOnly: true });
-  res.status(200).json({
-    name: user.name,
-    status: 1,
-    auth: true,
-    token: generateToken({ id: user.id }),
+    res.cookie("token", generateToken({ email }), { httpOnly: true });
+    res.status(200).json({
+      email: mail,
+      status: 1,
+      auth: true,
+      token: generateToken({ email: mail }),
+    });
   });
 });
 
