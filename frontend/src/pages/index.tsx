@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Router, { useRouter } from "next/router";
+import { parseCookies } from "nookies";
 import { useState, useContext } from "react";
 import { AiFillHome } from "react-icons/ai";
 import { toast } from "react-toastify";
@@ -7,12 +9,15 @@ import { AuthContext } from "../contexts/AuthContext";
 
 import styles from "../styles/index.module.scss";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 toast.configure();
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+  const { "feedback.token": token } = parseCookies();
 
   const { signIn } = useContext(AuthContext);
 
@@ -23,6 +28,15 @@ export default function Login() {
     };
     await signIn(data);
   }
+
+  useEffect(() => {
+    async function verifyIsAuthenticated() {
+      if(token && router.pathname === "/") {
+        Router.push("/dashboard")
+      }
+    }
+    verifyIsAuthenticated();
+  }, []);
 
   const handleKeypress = (e) => {
     if (e.charCode === 13) {
