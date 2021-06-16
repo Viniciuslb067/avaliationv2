@@ -1,5 +1,4 @@
-import Router from "next/router";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 
@@ -52,6 +51,7 @@ export function verifyToken() {
         const notify = () => toast.warning("Faça login primeiro");
         notify();
       }
+
     }
 
     verify();
