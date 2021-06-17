@@ -1,8 +1,11 @@
 const mongoose = require("../database");
 
 const AvaliationSchema = new mongoose.Schema({
-    question: [{
-    }],
+    title: {
+        type: String,
+        required: true,
+    },
+    question: {},
     requester: {
         type: String,
         required: true,

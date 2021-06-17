@@ -46,11 +46,9 @@ router.get("/:avaliationId", async (req, res) => {
 //Criar uma avaliação
 router.post("/", async (req, res) => {
     try {
-        const { question, requester, start_date, end_date, system } = req.body;
+        const { title, question, requester, start_date, end_date, system } = req.body;
 
-        console.log(question)
-
-        if (!question || !requester || !start_date || !end_date || !system) {
+        if (!title || !question || !requester || !start_date || !end_date || !system) {
             return res.status(200).json({ status: 2, error: "Preencha todos os campos!" });
         }
 
@@ -68,9 +66,9 @@ router.post("/", async (req, res) => {
 //Editar uma avaliação
 router.put("/:avaliationId", async (req, res) => {
     try {
-        const { question, requester, start_date, end_date } = req.body;
+        const { title, question, requester, start_date, end_date } = req.body;
 
-        if (!question || !requester || !start_date || !end_date) {
+        if (!title || !question || !requester || !start_date || !end_date) {
             return res.status(200).json({ status: 2, error: "Preencha todos os campos" });
         }
 
