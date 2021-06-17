@@ -31,6 +31,7 @@ export default function Assessment({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
   const [title, setTitle] = useState("");
+  const [type, setType] = useState("");
   const [question, setQuestion] = useState([]);
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -43,7 +44,7 @@ export default function Assessment({
       .get("/avaliation/" + id)
       .then((res) => {
         setTitle(res.data.title);
-        console.log(res.data.question);
+        setType(res.data.type);
         setQuestion(res.data.question);
         setRequester(res.data.requester);
         setStartDate(res.data.start_date);
@@ -52,7 +53,7 @@ export default function Assessment({
         setStatus(res.data.status);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err)
       });
   }
 
@@ -150,6 +151,18 @@ export default function Assessment({
                 />
               </div>
 
+              <div className={styles.fields}>
+                <label htmlFor="">Tipo</label>
+                <select
+                  required
+                  defaultValue={type}
+                  disabled
+                  onChange={(e) => setSystem(e.target.value)}
+                >
+                  <option>{type}</option>
+                </select>
+              </div>
+
               {question.map((item, key) => {
                 return (
                   <div className={styles.fields} key={key}>
@@ -192,6 +205,7 @@ export default function Assessment({
                   onChange={(e) => setEndDate(e.target.value)}
                 />
               </div>
+
               <div className={styles.fields}>
                 <label htmlFor="">Sistema</label>
                 <select
@@ -203,6 +217,7 @@ export default function Assessment({
                   <option>{system}</option>
                 </select>
               </div>
+
               <div className={styles.fields}>
                 <label htmlFor="">Status</label>
                 <select

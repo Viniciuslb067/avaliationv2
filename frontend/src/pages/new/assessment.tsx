@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
-import { format, parseISO } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { MdShortText } from "react-icons/md";
+
 import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
@@ -32,26 +32,38 @@ import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 
-interface System {
-  name: string;
-  system: [];
-}
-
 export default function NewAssessment({ systemData }) {
   verifyToken();
-  const [form, setForm] = useState([]);
+  const { Option } = Select;
+  const [type, setType] = useState("");
   const [title, setTitle] = useState("");
-  const [question, setQuestion] = useState("");
+  const [value, setValue] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [system, setSystem] = useState("");
 
+  const onChange = (e) => {
+    setType(e.target.value);
+  };
+
+  function onChangeSelect(value) {
+    setSystem(value);
+  }
+
+  function onChangeDate(dates, dateStrings) {
+    setStartDate(dateStrings)
+  }
+
+  function onChangeDateEnd(dates, dateStrings) {
+    setEndDate(dateStrings)
+  }
+
   async function handleSubmit(fieldsValue: any) {
-    console.log(fieldsValue.questions);
     await api
       .post("/avaliation", {
         title,
+        type: type,
         question: fieldsValue.questions,
         requester,
         start_date: startDate,
@@ -93,12 +105,24 @@ export default function NewAssessment({ systemData }) {
                 rules={[{ required: true, message: "Preencha este campo!" }]}
               >
                 <Input
-                  type="text"
                   placeholder="Título"
-                  required
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Item>
+
+              <Radio.Group
+                value={type}
+                onChange={onChange}
+                style={{
+                  marginBottom: "1.75rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Radio value="shortAnswer">Resposta curta</Radio>
+                <Radio value="Star">Estrela</Radio>
+              </Radio.Group>
 
               <Form.List name="questions">
                 {(fields, { add, remove }) => (
@@ -114,26 +138,17 @@ export default function NewAssessment({ systemData }) {
                           name={[name, "question"]}
                           fieldKey={[fieldKey, "first"]}
                           rules={[
-                            { required: true, message: "Preencha este campo!" },
+                            {
+                              required: true,
+                              message: "Preencha este campo!",
+                            },
                           ]}
-                          style={{ width: "100%" }}
                         >
-                          <div className={styles.assddds} >
-
+                          <div>
                             <Input
-                              style={{ width: "50%", marginRight: "10px" }}
+                              style={{ width: "43vw", marginRight: "10px" }}
                               placeholder="Pergunta"
                             />
-
-                            <select
-                              style={{ width: "50%" }}
-                              onChange={(e) => setSystem(e.target.value)}
-                              placeholder="Sistema"
-                            >
-                              <option disabled hidden>
-                                Sistema
-                              </option>
-                            </select>
                           </div>
                         </Form.Item>
 
@@ -154,42 +169,53 @@ export default function NewAssessment({ systemData }) {
                 )}
               </Form.List>
 
-              <input
-                placeholder="Solicitante"
-                type="text"
-                required
-                onChange={(e) => setRequester(e.target.value)}
-              />
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Preencha este campo!",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Solicitante"
+                  style={{ marginBottom: "1.75rem" }}
+                  onChange={(e) => setRequester(e.target.value)}
+                />
+              </Form.Item>
 
               <div>
-                <input
-                  type="date"
-                  style={{ width: "33%",  }}
-                  onChange={(e) => setStartDate(e.target.value)}
+                <DatePicker
+                  style={{ width: "33%" }}
+                  format={"DD/MM/YYYY"}
+                  placeholder="Data início"
+                  onChange={onChangeDate}
+                />
+                <DatePicker
+                  style={{ width: "33%" }}
+                  format={"DD/MM/YYYY"}
+                  placeholder="Data fim"
+                  onChange={onChangeDateEnd}
                 />
 
-                
-                <input
-                  type="date"
-                  style={{ width: "33%" }}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-
-                <select
-                  style={{ width: "33%" }}
-                  onChange={(e) => setSystem(e.target.value)}
+                <Select
+                  style={{ width: "32%" }}
+                  onChange={onChangeSelect}
                   placeholder="Sistema"
                 >
-                  <option disabled hidden>
-                    Sistema
-                  </option>
                   {systemData.map((item, key) => {
-                    return <option key={key}>{item.dns}</option>;
+                    return (
+                      <>
+                        <Option key={key} value={item.dns}>
+                          {item.dns}
+                        </Option>
+                      </>
+                    );
                   })}
-                </select>
+                </Select>
               </div>
 
-              <Form.Item>
+              <Form.Item style={{ marginTop: "1.75rem" }}>
                 <Button type="primary" htmlType="submit">
                   Enviar
                 </Button>
