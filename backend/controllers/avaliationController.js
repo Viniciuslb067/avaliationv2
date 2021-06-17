@@ -46,9 +46,9 @@ router.get("/:avaliationId", async (req, res) => {
 //Criar uma avaliação
 router.post("/", async (req, res) => {
     try {
-        const { title, question, requester, start_date, end_date, system } = req.body;
+        const { title, type, question, requester, start_date, end_date, system } = req.body;
 
-        if (!title || !question || !requester || !start_date || !end_date || !system) {
+        if (!title || !type || !question || !requester || !start_date || !end_date || !system) {
             return res.status(200).json({ status: 2, error: "Preencha todos os campos!" });
         }
 
