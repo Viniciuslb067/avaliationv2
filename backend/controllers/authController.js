@@ -45,8 +45,14 @@ router.get("/logout", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
-
   const username = `uid=${email}@inss.gov.br`;
+
+  if (await User.findOne({ email: `${email}@inss.gov.br`, access: false })) {
+    return res.status(200).json({
+      status: 2,
+      error: "O seu login está pendente, aguardando aprovação",
+    });
+  }
 
   if (!email || !password) {
     return res
