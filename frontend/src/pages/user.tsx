@@ -47,10 +47,12 @@ export default function User({ user }) {
       name: name,
       email: email,
       role: role,
-      access: access,
+      access: access === "Liberado" || access === "Pendente" ? true : false
     };
 
-    await api
+    console.log(access)
+
+    await api 
       .put("/user/" + uuid, data)
       .then((res) => {
         if (res.data.status === 1) {
@@ -130,20 +132,12 @@ export default function User({ user }) {
                   type="text"
                   required
                   defaultValue={email}
+                  disabled
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className={styles.fields}>
-                <label htmlFor="">Função</label>
-                <input
-                  type="text"
-                  required
-                  defaultValue={role}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-              </div>
-              <div className={styles.fields}>
-                <label htmlFor="">Status</label>
+                <label htmlFor="">Acesso</label>
                 <select
                   required
                   defaultValue={access}
@@ -179,7 +173,7 @@ export default function User({ user }) {
                       <tr>
                         <td>Nome</td>
                         <td>Email</td>
-                        <td></td>
+                        <td>Acesso</td>
                         <td></td>
                       </tr>
                     </thead>
@@ -189,6 +183,7 @@ export default function User({ user }) {
                           <tr key={key}>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
+                            <td>{item.access}</td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
@@ -222,7 +217,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       id: item._id,
       name: item.name,
       email: item.email,
-      
+      access: item.access ? "Liberado" : "Pendente",
     };
   });
 

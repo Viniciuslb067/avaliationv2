@@ -18,6 +18,7 @@ interface Comments {
 
 interface Assessment {
   id: string;
+  title: string;
   question: string;
   requester: string;
   system: string;
@@ -56,7 +57,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         </div>
         <CardMetrics
           requester={allData.requester}
-          question={allData.question}
+          question={allData.title}
           system={allData.system}
           status={allData.getStatus}
           startDate={allData.startDate}
@@ -116,7 +117,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const allData = {
     id: data.data._id,
-    question: data.data.question,
+    title: data.data.title,
     requester: data.data.requester,
     system: data.data.system,
     getStatus: data.data.status,

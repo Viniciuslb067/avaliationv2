@@ -30,7 +30,8 @@ export default function Assessment({
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
-  const [question, setQuestion] = useState("");
+  const [title, setTitle] = useState("");
+  const [question, setQuestion] = useState([]);
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -41,6 +42,8 @@ export default function Assessment({
     await api
       .get("/avaliation/" + id)
       .then((res) => {
+        setTitle(res.data.title);
+        console.log(res.data.question);
         setQuestion(res.data.question);
         setRequester(res.data.requester);
         setStartDate(res.data.start_date);
@@ -55,6 +58,7 @@ export default function Assessment({
 
   async function handleSubmit() {
     const data = {
+      title: title,
       question: question,
       requester: requester,
       start_date: startDate,
@@ -103,6 +107,13 @@ export default function Assessment({
       });
   }
 
+  const hanldeInputChange = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...question];
+    list[index][name] = value;
+    setQuestion(list)
+  }
+
   return (
     <>
       <Head>
@@ -130,14 +141,30 @@ export default function Assessment({
             <div className={styles.modalContainer}>
               <h1>Editar Avaliação</h1>
               <div className={styles.fields}>
-                <label htmlFor="">Pergunta</label>
+                <label htmlFor="">Título</label>
                 <input
                   type="text"
                   required
-                  defaultValue={question}
-                  onChange={(e) => setQuestion(e.target.value)}
+                  defaultValue={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
+
+              {question.map((item, key) => {
+                return (
+                  <div className={styles.fields} key={key}>
+                    <label htmlFor="">Pergunta {key + 1}</label>
+                    <input
+                      name="question"
+                      type="text"
+                      required
+                      defaultValue={item.question}
+                      onChange={(e) => hanldeInputChange(e, key)}
+                    />
+                  </div>
+                );
+              })}
+
               <div className={styles.fields}>
                 <label htmlFor="">Solicitante</label>
                 <input
@@ -170,6 +197,7 @@ export default function Assessment({
                 <select
                   required
                   defaultValue={system}
+                  disabled
                   onChange={(e) => setSystem(e.target.value)}
                 >
                   <option>{system}</option>
@@ -233,7 +261,7 @@ export default function Assessment({
                       {allAvaliationOn.map((item, key) => {
                         return (
                           <tr key={key}>
-                            <td>{item.question}</td>
+                            <td>{item.title}</td>
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                             <td>
@@ -328,11 +356,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
       id: item._id,
+      title: item.title,
       requester: item.requester,
       status: item.status,
     };
   });
-  
+
   const avaliationOff = data.avaliationOff.map((item) => {
     return {
       id: item._id,
@@ -344,7 +373,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const system = systems.data.systems.map((item) => {
     return {
-      dns: item.dns
+      dns: item.dns,
     };
   });
 
@@ -357,6 +386,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       allAvaliationOn,
       allAvaliationOff,
       allSystem,
-    }
+    },
   };
 };

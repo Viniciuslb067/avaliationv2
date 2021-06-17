@@ -86,7 +86,7 @@ export default function Dashboard({
                       {recentAvaliation.map((item, key) => {
                         return (
                           <tr key={key}>
-                            <td>{item.question}</td>
+                            <td></td>
                             <td>{item.requester}</td>
                             <td>{item.status}</td>
                           </tr>
@@ -117,7 +117,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
-      question: item.question,
+      
       requester: item.requester,
       status: item.status,
     };
@@ -125,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const avaliationOff = data.avaliationOff.map((item) => {
     return {
-      question: item.question,
+      
       requester: item.requester,
       status: item.status,
     };

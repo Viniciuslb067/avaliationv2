@@ -61,6 +61,17 @@ export function verifyToken() {
 export function AuthProvider({ children }: AuthProvidorProps) {
   const [user, setUser] = useState<User>();
 
+  // useEffect(() => {
+  //   const { "feedback.token": token } = parseCookies();
+
+  //   if(token) {
+  //     api.get("").then(response => {
+  //       const {  } = response.data
+  //     }).catch(() => { signOut() })
+  //   }
+
+  // }, [])
+
   async function signIn({ email, password }: SignInCredentials) {
     try {
       const response = await api.post("/auth/authenticate", {
@@ -80,6 +91,8 @@ export function AuthProvider({ children }: AuthProvidorProps) {
           email,
           name,
         });
+
+        console.log(user)
 
         api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
