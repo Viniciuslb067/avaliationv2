@@ -35,6 +35,16 @@
 .form {
   padding: 0 4rem;
   box-sizing: border-box;
+
+  div {
+    display: flex;
+
+    input:nth-child(1n) {
+      margin-right: 10px;
+    }
+
+  }
+
 }
 
 .error {

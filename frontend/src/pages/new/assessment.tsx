@@ -40,70 +40,19 @@ interface System {
 export default function NewAssessment({ systemData }) {
   verifyToken();
   const [form, setForm] = useState([]);
+  const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [system, setSystem] = useState("");
 
-  const prevIsValid = () => {
-    if (form.length === 0) {
-      return true;
-    }
-
-    const someEmpty = form.some((item) => item.Question === "");
-
-    if (someEmpty) {
-      form.map((item, index) => {
-        const allPrev = [...form];
-
-        if (form[index].Question === "") {
-          allPrev[index].errors.Question = "Preencha o campo de pergunta";
-        }
-
-        setForm(allPrev);
-      });
-    }
-    return !someEmpty;
-  };
-
-  const handleAddInput = (event) => {
-    event.preventDefault();
-    const inputState = {
-      Question: "",
-    };
-    if (prevIsValid()) {
-      setForm((prev) => [...prev, inputState]);
-    }
-  };
-
-  const onChange = (index, event) => {
-    event.preventDefault();
-    event.persist();
-
-    setForm((prev) => {
-      return prev.map((item, i) => {
-        if (i !== index) {
-          return item;
-        }
-        return {
-          ...item,
-          [event.target.name]: event.target.value,
-        };
-      });
-    });
-  };
-
-  const handleRemoveField = (e, index) => {
-    e.preventDefault();
-    setForm((prev) => prev.filter((item) => item !== prev[index]));
-  };
-
   async function handleSubmit(fieldsValue: any) {
-    console.log(fieldsValue.endDate._d.format("d MMMM yyyy"));
+    console.log(fieldsValue.questions);
     await api
       .post("/avaliation", {
-        question: fieldsValue,
+        title,
+        question: fieldsValue.questions,
         requester,
         start_date: startDate,
         end_date: endDate,
@@ -113,7 +62,7 @@ export default function NewAssessment({ systemData }) {
         if (res.data.status === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
-          Router.push("/dashboard");
+          Router.push("/assessment");
         } else {
           const notify = () => toast.warning(res.data.error);
           notify();
@@ -147,7 +96,7 @@ export default function NewAssessment({ systemData }) {
                   type="text"
                   placeholder="Título"
                   required
-                  onChange={(e) => setQuestion(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Item>
 
@@ -162,17 +111,30 @@ export default function NewAssessment({ systemData }) {
                       >
                         <Form.Item
                           {...restField}
-                          name={[name, "first"]}
+                          name={[name, "question"]}
                           fieldKey={[fieldKey, "first"]}
                           rules={[
                             { required: true, message: "Preencha este campo!" },
                           ]}
                           style={{ width: "100%" }}
                         >
-                          <Input
-                            style={{ paddingRight: 500 }}
-                            placeholder="Pergunta"
-                          />
+                          <div className={styles.assddds} >
+
+                            <Input
+                              style={{ width: "50%", marginRight: "10px" }}
+                              placeholder="Pergunta"
+                            />
+
+                            <select
+                              style={{ width: "50%" }}
+                              onChange={(e) => setSystem(e.target.value)}
+                              placeholder="Sistema"
+                            >
+                              <option disabled hidden>
+                                Sistema
+                              </option>
+                            </select>
+                          </div>
                         </Form.Item>
 
                         <MinusCircleOutlined onClick={() => remove(name)} />
@@ -192,50 +154,40 @@ export default function NewAssessment({ systemData }) {
                 )}
               </Form.List>
 
-              <Form.Item name={["requester"]}>
-                <Input
-                  placeholder="Solicitante, Exemplo: DTI"
-                  type="text"
-                  required
-                  onChange={(e) => setRequester(e.target.value)}
+              <input
+                placeholder="Solicitante"
+                type="text"
+                required
+                onChange={(e) => setRequester(e.target.value)}
+              />
+
+              <div>
+                <input
+                  type="date"
+                  style={{ width: "33%",  }}
+                  onChange={(e) => setStartDate(e.target.value)}
                 />
-              </Form.Item>
 
-              <Form.Item name={["startDate"]}>
                 
-                  <input
-                    type="date"
-                    style={{ width: "100%" }}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                
-              </Form.Item>
+                <input
+                  type="date"
+                  style={{ width: "33%" }}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
 
-              <Form.Item name={["endDate"]}>
-               
-                  <label htmlFor="">Data fim</label>
-                  <input
-                    type="date"
-                    style={{ width: "100%" }}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                
-              </Form.Item>
-
-              <Form.Item>
-                  
-                  <select
-                    style={{ width: "100%" }}
-                    onChange={(e) => setSystem(e.target.value)}
-                    placeholder="Sistema"
-                  >
-                    <option disabled hidden>Sistema</option>
-                    {systemData.map((item, key) => {
-                      return <option key={key}>{item.dns}</option>;
-                    })}
-                  </select>
-                
-              </Form.Item>
+                <select
+                  style={{ width: "33%" }}
+                  onChange={(e) => setSystem(e.target.value)}
+                  placeholder="Sistema"
+                >
+                  <option disabled hidden>
+                    Sistema
+                  </option>
+                  {systemData.map((item, key) => {
+                    return <option key={key}>{item.dns}</option>;
+                  })}
+                </select>
+              </div>
 
               <Form.Item>
                 <Button type="primary" htmlType="submit">
@@ -243,7 +195,6 @@ export default function NewAssessment({ systemData }) {
                 </Button>
               </Form.Item>
             </Form>
-
           </div>
         </div>
       </main>
