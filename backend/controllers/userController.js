@@ -24,9 +24,9 @@ router.get('/:userId', async (req, res) => {
 //Editar um usuário
 router.put("/:userId", async (req, res) => {
   try {
-    const { name, role, access } = req.body;
+    const { name, access } = req.body;
 
-    if (!name || !role || !access) {
+    if (!name || !access) {
       return res.status(200).json({ status: 2, error: "Preencha todos os campos" });
     }
 
