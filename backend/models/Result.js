@@ -10,8 +10,8 @@ const ResultSchema = new mongoose.Schema({
         ref: 'Avaliation',
         required: true,
     },
-    note: {
-        type: Number,
+    note:{
+        
     },
     comments: {
         type: String,

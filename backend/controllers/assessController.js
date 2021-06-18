@@ -13,33 +13,33 @@ router.get("/:system", async (req, res) => {
       req.socket.remoteAddress ||
       (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-    const findOneAssess = await Avaliation.findOne({ system: req.params.system }, [
-      "_id",
-    ])
+    const findOneAssess = await Avaliation.findOne(
+      { system: req.params.system },
+      ["_id"]
+    )
       .where("status")
       .all("Ativada");
 
-    if(!findOneAssess) {
+    if (!findOneAssess) {
       return res.json([{ assess: true }]);
     } else {
-      const verifyAlreadyAssess = await Result.findOne({
-        ip_user: ip,
-        avaliation: findOneAssess,
-      });
-  
-      if (!verifyAlreadyAssess) {
+      // const verifyAlreadyAssess = await Result.findOne({
+      //   ip_user: ip,
+      //   avaliation: findOneAssess,
+      // });
+
+      // if (!verifyAlreadyAssess) {
         const assessment = await Avaliation.find({ _id: findOneAssess }, [
           "question",
         ])
           .sort({ createdAt: "desc" })
           .where("status")
           .all("Ativada")
-          .limit(1)
-  
-          return res.json([{ assess: false, assessment }]);
-      }
-    }
+          .limit(1);
 
+        return res.json([{ assess: false, assessment }]);
+      // }
+    }
   } catch (err) {
     console.log(err);
     return res.status(400).send({ error: "Erro ao listar as avaliações" });
@@ -124,20 +124,42 @@ router.post("/:avaliationId", async (req, res) => {
         .status(200)
         .json({ status: 2, error: "Antes de Enviar avalie o sistema!" });
     } else {
+      const avaliation = await Avaliation.findOne(
+        { _id: req.params.avaliationId },
+        ["question"]
+      );
+      
+      const arrayQuestions = await Promise.all(
+        avaliation.question.map(async (question, index) => {
+          return {
+            question,
+            index
+          }
+        })
+      );
+
+      const ad = arrayQuestions.question
+
       await Result.create({
         ip_user: ip,
-        note,
+        note: [{
+          question: ad,
+        }],
         comments,
         status: "Enviado",
         avaliation: avaliationId,
       });
 
+
+
       return res.status(200).json({
         status: 1,
         success: "Muito obrigado por responder a avaliação!",
       });
+      
     }
   } catch (err) {
+    console.log(err);
     return res.status(400).send({ error: "Erro ao avaliar" });
   }
 });

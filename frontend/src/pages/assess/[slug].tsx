@@ -34,7 +34,7 @@ export default function Assess() {
     getData();
   }, [slug]);
 
-  console.log(alreadyAssess, assessment)
+  console.log(assessment)
 
   async function handleSubmit(id) {
     const data = {
@@ -73,7 +73,13 @@ export default function Assess() {
               <div className={styles.container}>
                 <div>
                   <h2>
-                    <p className="">{card.question}</p>
+                    <p className="">{card.question.map((item, index) => {
+                      return (
+                        <p>
+                          {item.question}
+                          </p>
+                      )
+                    })}</p>
                     {[...Array(5)].map((star, i) => {
                       const ratingValue = i + 1;
                       return (
@@ -120,7 +126,7 @@ export default function Assess() {
                 onClick={() => handleSubmit(card._id)}
                 className={styles.buttonSubmit}
               >
-                <span>Enviar</span>
+                <span>{card.question.length != 1 ? "Próxima" : "Enviar"}</span>
               </button>
             </div>
           </>

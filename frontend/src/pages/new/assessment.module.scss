@@ -38,11 +38,8 @@
 
   div {
     display: flex;
-
-    input:nth-child(1n) {
-      margin-right: 10px;
-    }
-
+    justify-content: space-around;
+    
   }
 
 }

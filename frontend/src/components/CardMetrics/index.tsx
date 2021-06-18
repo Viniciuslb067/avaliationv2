@@ -8,7 +8,7 @@ import styles from "./styles.module.scss";
 
 interface CardMetricsProps {
   requester: string;
-  question: string;
+  title: string;
   system: string;
   status: string;
   startDate: string;
@@ -17,7 +17,7 @@ interface CardMetricsProps {
 
 export function CardMetrics({
   requester,
-  question,
+  title,
   system,
   status,
   startDate,
@@ -46,9 +46,9 @@ export function CardMetrics({
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Pergunta</span>
+                <span>Título</span>
               </div>
-              <h2>{question}</h2>
+              <h2>{title}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span>

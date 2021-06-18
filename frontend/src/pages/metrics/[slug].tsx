@@ -57,7 +57,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         </div>
         <CardMetrics
           requester={allData.requester}
-          question={allData.title}
+          title={allData.title}
           system={allData.system}
           status={allData.getStatus}
           startDate={allData.startDate}
@@ -121,12 +121,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     requester: data.data.requester,
     system: data.data.system,
     getStatus: data.data.status,
-    startDate: format(parseISO(data.data.start_date), "d MMMM yyyy", {
-      locale: ptBR,
-    }),
-    endDate: format(parseISO(data.data.end_date), "d MMMM yyyy", {
-      locale: ptBR,
-    }),
+    startDate: data.data.start_date,
+    endDate: data.data.end_date,
     notes: data.notes,
     status: data.status,
     comments: data.comments,

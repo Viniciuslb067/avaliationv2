@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
 import { MdShortText } from "react-icons/md";
+import { BsStarFill } from "react-icons/bs";
 
 import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
@@ -42,6 +43,7 @@ export default function NewAssessment({ systemData }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [system, setSystem] = useState("");
+  const [press, setPress] = useState<boolean>();
 
   const onChange = (e) => {
     setType(e.target.value);
@@ -87,6 +89,7 @@ export default function NewAssessment({ systemData }) {
 
   return (
     <>
+    
       <Head>
         <title> Feedback | Criar nova Avaliação </title>
       </Head>
@@ -109,7 +112,7 @@ export default function NewAssessment({ systemData }) {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Item>
-
+{/* 
               <Radio.Group
                 value={type}
                 onChange={onChange}
@@ -122,52 +125,9 @@ export default function NewAssessment({ systemData }) {
               >
                 <Radio value="shortAnswer">Resposta curta</Radio>
                 <Radio value="Star">Estrela</Radio>
-              </Radio.Group>
+              </Radio.Group> */}
 
-              <Form.List name="questions">
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "question"]}
-                          fieldKey={[fieldKey, "first"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Preencha este campo!",
-                            },
-                          ]}
-                        >
-                          <div>
-                            <Input
-                              style={{ width: "43vw", marginRight: "10px" }}
-                              placeholder="Pergunta"
-                            />
-                          </div>
-                        </Form.Item>
 
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        Adicionar nova pergunta
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
 
               <Form.Item
                 rules={[
@@ -179,7 +139,6 @@ export default function NewAssessment({ systemData }) {
               >
                 <Input
                   placeholder="Solicitante"
-                  style={{ marginBottom: "1.75rem" }}
                   onChange={(e) => setRequester(e.target.value)}
                 />
               </Form.Item>
@@ -214,6 +173,60 @@ export default function NewAssessment({ systemData }) {
                   })}
                 </Select>
               </div>
+                
+              {}
+              <Form.List name="questions">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8, marginTop: 25, }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "question"]}
+                          fieldKey={[fieldKey, "first"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Preencha este campo!",
+                            },
+                          ]}
+                        >
+                            <Input
+                              style={{ width: "28vw", marginRight: "10px" }}
+                              placeholder="Pergunta"
+                            />
+                        </Form.Item>
+                        
+                        <Form.Item>
+                          <Select
+                            style={{ width: "15rem" }}
+                            placeholder="Tipo"
+                          >
+                            <Option value="shortAnswer"> <MdShortText size={20}/> Reposta curta</Option>
+                            <Option value="Star"> <BsStarFill size={17}/> Estrelas</Option>
+                          </Select>
+                        </Form.Item>
+
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Adicionar nova pergunta
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
 
               <Form.Item style={{ marginTop: "1.75rem" }}>
                 <Button type="primary" htmlType="submit">

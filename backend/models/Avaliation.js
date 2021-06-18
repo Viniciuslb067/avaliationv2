@@ -9,7 +9,6 @@ const AvaliationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  question: {},
   requester: {
     type: String,
     required: true,
