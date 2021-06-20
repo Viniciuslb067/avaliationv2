@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 import { MdShortText } from "react-icons/md";
 import { BsStarFill } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
@@ -39,26 +40,56 @@ export default function NewAssessment({ systemData }) {
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+  const [optionShow, setOptionShow] = useState<boolean>(false);
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [system, setSystem] = useState("");
   const [press, setPress] = useState<boolean>();
 
-  const onChange = (e) => {
-    setType(e.target.value);
-  };
+  const [shortAnswerType, setShortAnswerType] = useState<boolean>(false);
+  const [starType, setStarType] = useState<boolean>(false);
+  const [multipleChoiceType, setMultipleChoiceType] = useState<boolean>(false);
+
+  function handleSelect(value) {
+    switch (value) {
+      case "shortAnswer": {
+        setShortAnswerType(true);
+        setStarType(false);
+        setMultipleChoiceType(false);
+        break;
+      }
+
+      case "star": {
+        setStarType(true);
+        setShortAnswerType(false);
+        setMultipleChoiceType(false);
+        break;
+      }
+
+      case "multipleChoice": {
+        setMultipleChoiceType(true);
+        setShortAnswerType(false);
+        setStarType(false);
+        break;
+      }
+    }
+
+    setOptionShow(true);
+  }
+
+  console.log(optionShow);
 
   function onChangeSelect(value) {
     setSystem(value);
   }
 
   function onChangeDate(dates, dateStrings) {
-    setStartDate(dateStrings)
+    setStartDate(dateStrings);
   }
 
   function onChangeDateEnd(dates, dateStrings) {
-    setEndDate(dateStrings)
+    setEndDate(dateStrings);
   }
 
   async function handleSubmit(fieldsValue: any) {
@@ -89,7 +120,6 @@ export default function NewAssessment({ systemData }) {
 
   return (
     <>
-    
       <Head>
         <title> Feedback | Criar nova Avaliação </title>
       </Head>
@@ -112,22 +142,6 @@ export default function NewAssessment({ systemData }) {
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Item>
-{/* 
-              <Radio.Group
-                value={type}
-                onChange={onChange}
-                style={{
-                  marginBottom: "1.75rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Radio value="shortAnswer">Resposta curta</Radio>
-                <Radio value="Star">Estrela</Radio>
-              </Radio.Group> */}
-
-
 
               <Form.Item
                 rules={[
@@ -143,7 +157,7 @@ export default function NewAssessment({ systemData }) {
                 />
               </Form.Item>
 
-              <div>
+              <div style={{ marginBottom: "1rem" }}>
                 <DatePicker
                   style={{ width: "33%" }}
                   format={"DD/MM/YYYY"}
@@ -173,46 +187,105 @@ export default function NewAssessment({ systemData }) {
                   })}
                 </Select>
               </div>
-                
+
               {}
               <Form.List name="questions">
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8, marginTop: 25, }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "question"]}
-                          fieldKey={[fieldKey, "first"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Preencha este campo!",
-                            },
-                          ]}
+                      <>
+                        <Space
+                          key={key}
+                          style={{
+                            marginBottom: 8,
+                            marginTop: 8,
+                          }}
+                          align="baseline"
                         >
+                          <Form.Item
+                            {...restField}
+                            name={[name, "question"]}
+                            fieldKey={[fieldKey, "first"]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Preencha este campo!",
+                              },
+                            ]}
+                          >
                             <Input
                               style={{ width: "28vw", marginRight: "10px" }}
                               placeholder="Pergunta"
                             />
-                        </Form.Item>
-                        
-                        <Form.Item>
-                          <Select
-                            style={{ width: "15rem" }}
-                            placeholder="Tipo"
-                          >
-                            <Option value="shortAnswer"> <MdShortText size={20}/> Reposta curta</Option>
-                            <Option value="Star"> <BsStarFill size={17}/> Estrelas</Option>
-                          </Select>
-                        </Form.Item>
+                          </Form.Item>
 
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
+                          <Form.Item>
+                            <Select
+                              style={{ width: "15rem" }}
+                              placeholder="Tipo"
+                              onChange={handleSelect}
+                            >
+                              <Option value="shortAnswer">
+                                {" "}
+                                <MdShortText size={20} /> Reposta curta
+                              </Option>
+                              <Option value="star">
+                                {" "}
+                                <BsStarFill size={15} /> Estrelas
+                              </Option>
+                              <Option value="multipleChoice">
+                                {" "}
+                                <AiFillCheckCircle size={15} /> Multipla Escolha
+                              </Option>
+                            </Select>
+                          </Form.Item>
+
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                        </Space>
+
+                        {multipleChoiceType ? (
+                          <Form.Item>
+                            <Radio.Group>
+                              <Space direction="vertical">
+                                <Radio value={1}>Option A</Radio>
+                                <Radio value={2}>Option B</Radio>
+                                <Radio value={3}>Option C</Radio>
+                                <Radio value={4}>Option D</Radio>
+                                <Radio value={4}>Option D</Radio>
+                              </Space>
+                            </Radio.Group>
+                          </Form.Item>
+                        ) : (
+                          ""
+                        )}
+
+                        {starType ? (
+                          <Form.Item>
+                            <Radio.Group>
+                              <Space direction="vertical">
+                                <Radio value={1}>Ruim</Radio>
+                                <Radio value={2}>Regular</Radio>
+                                <Radio value={3}>Bom</Radio>
+                                <Radio value={4}>Muito Bom</Radio>
+                                <Radio value={5}>Excelente</Radio>
+                              </Space>
+                            </Radio.Group>
+                          </Form.Item>
+                        ) : (
+                          ""
+                        )}
+
+                        {shortAnswerType ? (
+                          <Form.Item>
+                            <Input
+                              disabled
+                              placeholder="Texto de resposta curta"
+                            />
+                          </Form.Item>
+                        ) : (
+                          ""
+                        )}
+                      </>
                     ))}
                     <Form.Item>
                       <Button
