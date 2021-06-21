@@ -73,10 +73,10 @@ router.post("/", async (req, res) => {
     const { title, type, question, requester, start_date, end_date, system } =
       req.body;
 
+      console.log(req.body)
+
     if (
       !title ||
-      !type ||
-      !question ||
       !requester ||
       !start_date ||
       !end_date ||
