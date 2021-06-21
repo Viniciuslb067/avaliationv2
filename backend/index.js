@@ -8,6 +8,7 @@ app.use(express.json());
 
 require("./controllers/authController")(app);
 require("./controllers/avaliationController")(app);
+require("./controllers/questionController")(app);
 require("./controllers/assessController")(app);
 require("./controllers/systemController")(app);
 require("./controllers/userController")(app);

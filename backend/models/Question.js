@@ -5,11 +5,11 @@ const QuestionSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    assessment: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Avaliation',
-      required: true,
-    },
+    // assessment: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Avaliation',
+    //   required: true,
+    // },
 });
 
 const Question = mongoose.model("Question", QuestionSchema);
