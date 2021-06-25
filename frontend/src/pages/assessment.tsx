@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import Router from "next/router";
-import { GetStaticProps,GetServerSideProps } from "next";
+import { GetServerSideProps } from "next";
 import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
@@ -20,11 +20,26 @@ import styles from "../styles/assessment.module.scss";
 
 toast.configure();
 
+type System = {
+  dns: string;
+};
+
+type Avaliation = {
+  id: string;
+  question: string;
+  requester: string;
+  status: string;
+};
+
+type AssessmentProps = {
+  allAvaliationOn: Avaliation[];
+  allAvaliationOff: Avaliation[];
+};
+
 export default function Assessment({
   allAvaliationOn,
   allAvaliationOff,
-  allSystem,
-}) {
+}: AssessmentProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
@@ -49,7 +64,7 @@ export default function Assessment({
         setStatus(res.data.status);
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -75,32 +90,33 @@ export default function Assessment({
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
+  
+  async function deleteAssesssment(id) {
+    await api
+    .delete("/avaliation/" + id)
+    .then((res) => {
+      if (res.data.status === 1) {
+        const notify = () => toast.success(res.data.success);
+        notify();
+        Router.push("/assessment");
+      } else {
+        const notify = () => toast.warning(res.data.error);
+        notify();
+      }
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+  }
+  
   function openModalAndGetId(id) {
     getData(id);
     setUuid(id);
     setIsModalVisible(true);
-  }
-
-  async function deleteAssesssment(id) {
-    await api
-      .delete("/avaliation/" + id)
-      .then((res) => {
-        if (res.data.status === 1) {
-          const notify = () => toast.success(res.data.success);
-          notify();
-          Router.push("/assessment");
-        } else {
-          const notify = () => toast.warning(res.data.error);
-          notify();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   return (
@@ -345,7 +361,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const system = systems.data.systems.map((item) => {
     return {
-      dns: item.dns
+      dns: item.dns,
     };
   });
 
@@ -358,6 +374,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       allAvaliationOn,
       allAvaliationOff,
       allSystem,
-    }
+    },
   };
 };

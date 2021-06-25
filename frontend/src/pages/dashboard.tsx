@@ -11,17 +11,15 @@ import { verifyToken } from "../contexts/AuthContext";
 
 import { api } from "../services/api";
 
-
-
 import styles from "../styles/dashboard.module.scss";
 
-interface Avaliation {
+type Avaliation =  {
   question: string;
   requester: string;
   status: string;
 }
 
-interface HomeProps {
+type HomeProps = {
   recentAvaliation: Avaliation[];
   allAvaliation: number;
   allUser: number;

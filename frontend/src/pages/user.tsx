@@ -17,16 +17,26 @@ import "antd/dist/antd.css";
 
 toast.configure();
 
-export default function User({ user }) {
+type User = {
+  id: string,
+  name: string,
+  email: string,
+}
+
+type UserProps = {
+  user: User[];
+}
+
+export default function User({ user }: UserProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [uuid, setUuid] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [access, setAccess] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [uuid, setUuid] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [role, setRole] = useState<string>("");
+  const [access, setAccess] = useState<string>("");
 
   async function getData(id) {
     await api
@@ -38,7 +48,7 @@ export default function User({ user }) {
         setAccess(res.data.access);
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -64,7 +74,7 @@ export default function User({ user }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -88,7 +98,7 @@ export default function User({ user }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 

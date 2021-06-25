@@ -20,15 +20,26 @@ import Head from "next/head";
 
 toast.configure();
 
-export default function System({ system }) {
+type System = {
+  id: string;
+  dns: string;
+  name: string;
+  area: string;
+}
+
+type SystemProps = {
+  system: System[];
+}
+
+export default function System({ system }: SystemProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [uuid, setUuid] = useState("");
-  const [name, setName] = useState("");
-  const [dns, setDns] = useState("");
-  const [department, setDepartment] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [uuid, setUuid] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [dns, setDns] = useState<string>("");
+  const [department, setDepartment] = useState<string>("");
 
   async function getData(id) {
     await api
@@ -39,7 +50,7 @@ export default function System({ system }) {
         setDepartment(res.data.area);
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -64,7 +75,7 @@ export default function System({ system }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -88,7 +99,7 @@ export default function System({ system }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 

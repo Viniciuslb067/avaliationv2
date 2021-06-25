@@ -14,11 +14,11 @@ import { useEffect } from "react";
 toast.configure();
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { "feedback.token": token } = parseCookies();
-
+  
   const { signIn } = useContext(AuthContext);
 
   async function handleSubmit() {
