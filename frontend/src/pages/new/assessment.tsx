@@ -48,8 +48,7 @@ export default function NewAssessment({ systemData }) {
   const handleKeypress = (e) => {
     if (e.charCode === 13) {
       handleSubmit();
-    }
-    
+    } 
   };
 
   return (

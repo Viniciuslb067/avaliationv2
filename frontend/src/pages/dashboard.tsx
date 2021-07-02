@@ -101,13 +101,7 @@ export default function Dashboard({
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/avaliation", {
-    params: {
-      _limit: 10,
-      _sort: "createdAt",
-      _order: "desc",
-    },
-  });
+  const { data } = await api.get("/avaliation");
   const totalUser = await api.get("/user");
   const totalSystems = await api.get("/system");
 

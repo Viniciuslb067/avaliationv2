@@ -132,6 +132,7 @@ export default function User({ user }: UserProps) {
                   required
                   defaultValue={name}
                   onChange={(e) => setName(e.target.value)}
+                  disabled
                 />
               </div>
               <div className={styles.fields}>
@@ -141,15 +142,7 @@ export default function User({ user }: UserProps) {
                   required
                   defaultValue={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className={styles.fields}>
-                <label htmlFor="">Função</label>
-                <input
-                  type="text"
-                  required
-                  defaultValue={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  disabled
                 />
               </div>
               <div className={styles.fields}>

@@ -28,7 +28,7 @@ type Avaliation = {
   id: string;
   question: string;
   requester: string;
-  status: string;
+  system: string;
 };
 
 type AssessmentProps = {
@@ -112,6 +112,12 @@ export default function Assessment({
       throw new Error(err);
     });
   }
+
+  const handleKeyPress = (e) => {
+    if (e.charCode === 13) {
+      handleSubmit();
+    } 
+  };
   
   function openModalAndGetId(id) {
     getData(id);
@@ -152,6 +158,7 @@ export default function Assessment({
                   required
                   defaultValue={question}
                   onChange={(e) => setQuestion(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <div className={styles.fields}>
@@ -161,6 +168,7 @@ export default function Assessment({
                   required
                   defaultValue={requester}
                   onChange={(e) => setRequester(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <div className={styles.fields}>
@@ -170,6 +178,7 @@ export default function Assessment({
                   required
                   defaultValue={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <div className={styles.fields}>
@@ -179,6 +188,7 @@ export default function Assessment({
                   required
                   defaultValue={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <div className={styles.fields}>
@@ -187,6 +197,8 @@ export default function Assessment({
                   required
                   defaultValue={system}
                   onChange={(e) => setSystem(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  disabled
                 >
                   <option>{system}</option>
                 </select>
@@ -197,6 +209,7 @@ export default function Assessment({
                   required
                   defaultValue={status}
                   onChange={(e) => setStatus(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 >
                   {status === "Desativada" ? (
                     <>
@@ -239,7 +252,7 @@ export default function Assessment({
                       <tr>
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
-                        <td>Status</td>
+                        <td>Sistema</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -251,7 +264,7 @@ export default function Assessment({
                           <tr key={key}>
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
-                            <td>{item.status}</td>
+                            <td>{item.system}</td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
@@ -292,7 +305,7 @@ export default function Assessment({
                       <tr>
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
-                        <td>Status</td>
+                        <td>Sistema</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -304,7 +317,7 @@ export default function Assessment({
                           <tr key={key}>
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
-                            <td>{item.status}</td>
+                            <td>{item.system}</td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
@@ -341,12 +354,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/avaliation");
   const systems = await api.get("/system");
 
+  console.log(data.avaliationOn)
+
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
       id: item._id,
       question: item.question,
       requester: item.requester,
-      status: item.status,
+      system: item.system,
     };
   });
 
@@ -355,7 +370,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       id: item._id,
       question: item.question,
       requester: item.requester,
-      status: item.status,
+      system: item.system,
     };
   });
 

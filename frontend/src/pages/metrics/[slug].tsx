@@ -14,6 +14,7 @@ import { api } from "../../services/api";
 interface Comments {
   ip_user: string;
   comments: string;
+  createdAt?: string;
 }
 
 interface Assessment {
@@ -27,6 +28,7 @@ interface Assessment {
   notes: [];
   status: [];
   comments: Comments[];
+  commentsTotal: number;
 }
 
 interface AssessmentProps {
@@ -40,7 +42,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
   return (
     <>
       <Head>
-        <title>Feedback | Metrics</title>
+        <title>Feedback | Dashboard</title>
       </Head>
       
       <main
@@ -48,7 +50,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
       >
         <div className={styles.pageHeader}>
           <div>
-            <h1>Métricas</h1>
+            <h1>Dashboard</h1>
             <small>
               Aqui você pode acompanhar o andamento de uma avaliação.
             </small>
@@ -58,11 +60,15 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
           requester={allData.requester}
           question={allData.question}
           system={allData.system}
-          status={allData.getStatus}
+          status={allData.commentsTotal}
           startDate={allData.startDate}
           endDate={allData.endDate}
         />
 
+        <div className={styles.grid}>
+          <BarChart notes={allData.notes} />
+          <PieChart status={allData.status} />
+        </div>
 
         <div className={styles.table}>
           <div className={styles.card}>
@@ -77,6 +83,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                     <tr>
                       <td>IP</td>
                       <td>Comentário</td>
+                      <td>Data</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -85,6 +92,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                         <tr key={key}>
                           <td>{item.ip_user.split("::ffff:")}</td>
                           <td>{item.comments}</td>
+                          <td>{format(parseISO(item.createdAt), "dd/MM/yy 'às' HH:mm")}</td>
                         </tr>
                       );
                     })}
@@ -95,10 +103,6 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
           </div>
         </div>
 
-        <div className={styles.grid}>
-          <BarChart notes={allData.notes} />
-          <PieChart status={allData.status} />
-        </div>
       </main>
     </>
   );
@@ -130,6 +134,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     notes: data.notes,
     status: data.status,
     comments: data.comments,
+    commentsTotal: data.commentsTotal,
+    
   };
 
   return {

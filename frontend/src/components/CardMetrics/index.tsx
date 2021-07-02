@@ -1,7 +1,7 @@
 import { ImUserTie } from "react-icons/im";
 import { FaQuestion } from "react-icons/fa";
 import { GrSystem } from "react-icons/gr";
-import { AiOutlinePoweroff } from "react-icons/ai";
+import { RiNumbersLine } from "react-icons/ri";
 import { BsCalendar } from "react-icons/bs";
 
 import styles from "./styles.module.scss";
@@ -10,7 +10,7 @@ interface CardMetricsProps {
   requester: string;
   question: string;
   system: string;
-  status: string;
+  status: number;
   startDate: string;
   endDate: string;
 }
@@ -46,7 +46,7 @@ export function CardMetrics({
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Pergunta</span>
+                <span>Pesquisa</span>
               </div>
               <h2>{question}</h2>
             </div>
@@ -78,13 +78,13 @@ export function CardMetrics({
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Status</span>
+                <span>Participações</span>
               </div>
               <h2>{status}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span>
-                <AiOutlinePoweroff />
+                <RiNumbersLine />
               </span>
             </div>
           </div>
@@ -94,7 +94,7 @@ export function CardMetrics({
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Data Inicio</span>
+                <span>Recusados</span>
               </div>
               <h2>{startDate}</h2>
             </div>
@@ -110,7 +110,7 @@ export function CardMetrics({
           <div className={styles.cardFlex}>
             <div className={styles.cardInfo}>
               <div className={styles.cardHead}>
-                <span>Data fim</span>
+                <span>Comentários</span>
               </div>
               <h2>{endDate}</h2>
             </div>
