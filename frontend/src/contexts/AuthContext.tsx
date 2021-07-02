@@ -55,7 +55,7 @@ export function verifyToken() {
     }
 
     verify();
-  }, [isAuthenticated]);
+  }, [token]);
 }
 
 export function AuthProvider({ children }: AuthProvidorProps) {
@@ -81,15 +81,13 @@ export function AuthProvider({ children }: AuthProvidorProps) {
           name,
         });
 
-        api.defaults.headers["Authorization"] = `Bearer ${token}`;
-
         Router.push("/dashboard");
       } else {
         const notify = () => toast.error(response.data.error);
         notify();
       }
     } catch (err) {
-      console.log(err);
+      throw new Error("Erro ao fazer login")
     }
   }
 

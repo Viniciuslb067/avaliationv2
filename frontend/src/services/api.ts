@@ -1,23 +1,17 @@
 import Router from "next/router";
 import axios, { AxiosError } from "axios";
-import { parseCookies } from "nookies";
-
-let cookies = parseCookies();
-let failedRequestQueue = [];
 
 export const api = axios.create({
-  baseURL: "http://10.120.48.53:3001",
-  headers: {
-    Authorization: `Bearer ${cookies["feedback.token"]}`,
-  },
+  baseURL: "https://10.120.49.181:3001",
 });
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error: AxiosError) => {
-    if (error.response.status === 301) {
-      Router.push("/");
+    if (error.response.status === 401) {
+      Router.push("/"); 
     }
   }
 );
+

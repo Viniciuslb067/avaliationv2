@@ -16,12 +16,13 @@ function generateToken(params = {}) {
 
 router.get("/check", async (req, res) => {
   const token = req.query.token.split(" ")[1];
+  console.log(req.query.token)
   if (!token) {
-    res.json({ status: 301, error: "Token inexistente" });
+    res.json({ status: 401, error: "Token inexistente" });
   } else {
     jwt.verify(token, authConfig.secret, (err, decoded) => {
       if (err) {
-        return res.status(301).json({ status: 2, error: "Token inválido" });
+        return res.status(401).json({ status: 2, error: "Token inválido" });
       } else {
         return res.json({ status: 200 });
       }
