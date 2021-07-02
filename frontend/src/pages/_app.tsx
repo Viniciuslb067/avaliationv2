@@ -3,12 +3,19 @@ import "../styles/global.scss";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+import axios from "axios";
+import https from "https";
+
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AuthProvider } from "../contexts/AuthContext";
 
 import styles from "../styles/app.module.scss";
+
+axios.defaults.httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+})
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
