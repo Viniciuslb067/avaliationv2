@@ -94,12 +94,15 @@ router.get("/result/:avaliationId", async (req, res) => {
         }).exec();
         const comments = await Result.find(
           { avaliation: req.params.avaliationId },
-          ["comments", "ip_user"]
+          ["comments", "ip_user", "createdAt"]
         )
           .where("status")
           .all(["Enviado"]);
+        const commentsTotal = await Result.countDocuments({
+          avaliation: req.params.avaliationId
+        })
 
-        res.json({ notes, status, data, comments });
+        res.json({ notes, status, data, comments, commentsTotal });
       }
     }
   } catch (err) {

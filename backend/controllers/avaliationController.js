@@ -1,9 +1,11 @@
 const express = require("express");
 const datefns = require("date-fns")
+const authMiddleware = require("../middlewares/auth");
 
 const Avaliation = require("../models/Avaliation");
 
 const router = express.Router();
+// router.use(authMiddleware);
 
 //Listar todas as avaliações
 router.get("/", async (req, res) => {
