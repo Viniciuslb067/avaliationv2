@@ -1,4 +1,6 @@
 const express = require("express");
+const fs = require("fs");
+const https = require("https");
 const cors = require("cors");
 
 const app = express();
@@ -12,6 +14,13 @@ require("./controllers/assessController")(app);
 require("./controllers/systemController")(app);
 require("./controllers/userController")(app);
 
-app.listen(3001, () => {
-  console.log("Servidor iniciado!");
-});
+https
+  .createServer(
+    {
+      key: fs.readFileSync("key.pem"),
+      cert: fs.readFileSync("cert.pem"),
+    },
+    app
+  ).listen(3001, () => {
+    console.log("Servidor iniciado!");
+  });
