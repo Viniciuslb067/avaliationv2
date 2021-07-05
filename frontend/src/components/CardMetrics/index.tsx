@@ -2,7 +2,9 @@ import { ImUserTie } from "react-icons/im";
 import { FaQuestion } from "react-icons/fa";
 import { GrSystem } from "react-icons/gr";
 import { RiNumbersLine } from "react-icons/ri";
-import { BsCalendar } from "react-icons/bs";
+import { MdDone } from "react-icons/md";
+import { BsChatSquareDots } from "react-icons/bs";
+import { TiCancel } from "react-icons/ti";
 
 import styles from "./styles.module.scss";
 
@@ -10,9 +12,9 @@ interface CardMetricsProps {
   requester: string;
   question: string;
   system: string;
-  status: number;
-  startDate: string;
-  endDate: string;
+  status: number[];
+  startDate: number[];
+  endDate: number;
 }
 
 export function CardMetrics({
@@ -36,7 +38,7 @@ export function CardMetrics({
             </div>
             <div className={styles.cardIcon}>
               <span>
-                <ImUserTie color="#1d62f0" />
+                <ImUserTie color="black"/>
               </span>
             </div>
           </div>
@@ -80,11 +82,11 @@ export function CardMetrics({
               <div className={styles.cardHead}>
                 <span>Participações</span>
               </div>
-              <h2>{status}</h2>
+              <h2>{status[0]}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span>
-                <RiNumbersLine />
+                <MdDone color="green"/>
               </span>
             </div>
           </div>
@@ -96,11 +98,11 @@ export function CardMetrics({
               <div className={styles.cardHead}>
                 <span>Recusados</span>
               </div>
-              <h2>{startDate}</h2>
+              <h2>{startDate[1]}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span>
-                <BsCalendar />
+                <TiCancel color="red" />
               </span>
             </div>
           </div>
@@ -116,7 +118,7 @@ export function CardMetrics({
             </div>
             <div className={styles.cardIcon}>
               <span>
-                <BsCalendar />
+                <BsChatSquareDots />
               </span>
             </div>
           </div>

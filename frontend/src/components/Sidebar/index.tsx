@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
-import { AiOutlineBell, AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 import { HiOutlineUsers } from "react-icons/hi";
-import { FaUserCircle } from "react-icons/fa";
 import { VscGraph } from "react-icons/vsc";
 import { RiComputerLine } from "react-icons/ri";
 
@@ -12,6 +12,7 @@ import styles from "./styles.module.scss";
 
 export function Sidebar() {
   const { isOpen } = useContext(SidebarContext);
+  const { user } = useContext(AuthContext)
 
   return (
     <>
@@ -22,10 +23,8 @@ export function Sidebar() {
             </span>
             <div className={styles.brandIcons}>
               <span>
-                <AiOutlineBell />
               </span>
               <span>
-                <FaUserCircle />
               </span>
             </div>
           </div>
@@ -35,7 +34,7 @@ export function Sidebar() {
           <div className={styles.sidebarUser}>
             <img src="/logo.png" alt="Logo INSS" />
             <div>
-              <h3>Feedback</h3>
+              <h3>{user?.name.split(".")[0]} 😃 </h3>
             </div>
           </div>
 

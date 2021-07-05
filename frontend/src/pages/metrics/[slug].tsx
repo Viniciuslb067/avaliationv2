@@ -39,6 +39,8 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
+  console.log(allData.status)
+
   return (
     <>
       <Head>
@@ -60,9 +62,9 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
           requester={allData.requester}
           question={allData.question}
           system={allData.system}
-          status={allData.commentsTotal}
-          startDate={allData.startDate}
-          endDate={allData.endDate}
+          status={allData.status}
+          startDate={allData.status}
+          endDate={allData.commentsTotal}
         />
 
         <div className={styles.grid}>
