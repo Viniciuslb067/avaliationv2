@@ -41,7 +41,6 @@ router.get("/:system", async (req, res) => {
     }
 
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ error: "Erro ao listar as avaliações" });
   }
 });
@@ -161,7 +160,6 @@ router.post("/skip/:avaliationId", async (req, res) => {
       avaliation: avaliationId,
     });
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ error: "Erro ao pular avaliação" });
   }
 });

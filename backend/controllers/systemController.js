@@ -21,7 +21,6 @@ router.get("/:systemId", async (req, res) => {
         const system = await System.findById(req.params.systemId);
         return res.json(system);
     } catch (err) {
-        console.log(err);
         return res.status(400).send({ error: "Erro ao listar um sistema" });
     }
 });
@@ -43,7 +42,6 @@ router.post("/", async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err)
         return res.status(400).send({ error: "Erro ao cadastrar o sistema" });
     }
 });
