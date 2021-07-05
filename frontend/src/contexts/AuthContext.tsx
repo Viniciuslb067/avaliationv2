@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 
 interface User {
-  email: string;
   name: string;
 }
 
@@ -37,8 +36,6 @@ export function signOut() {
 }
 
 export function verifyToken() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const router = useRouter();
   const { "feedback.token": token } = parseCookies();
 
   useEffect(() => {
@@ -69,17 +66,16 @@ export function AuthProvider({ children }: AuthProvidorProps) {
       });
 
       if (response.data.status === 1) {
-        const { token, name } = response.data;
+        const { token, email } = response.data;
+
+        console.log(response.data)
 
         setCookie(undefined, "feedback.token", token, {
           maxAge: 60 * 60 * 24 * 7,
           path: "/",
         });
 
-        setUser({
-          email,
-          name,
-        });
+        setUser({name: email});
 
         Router.push("/dashboard");
       } else {
