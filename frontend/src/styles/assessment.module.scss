@@ -80,7 +80,6 @@
     }
 
     tr td:last-child {
-      display: flex;
       align-items: center;
     }
   }
@@ -129,24 +128,44 @@
   margin: 1rem;
 
   input {
-    border: 1px solid #666666;
+    border: 1px solid #d9d9d9;
     outline: none;
+    color: #000000d9;
+    background-color: #fff;
     width: 100%;
     height: 40px;
-    font-size: 0.9rem;
+    font-size: 14px;
+    line-height: 1.5715;
+    padding: 4px 11px;
+
+    &:hover {
+      border-color: #1890ff;
+      transition: all 0.5s ease-out;
+    }
+
   }
 
   select {
-    border: 1px solid #666666;
+    border: 1px solid #d9d9d9;
     width: 100%;
-    padding: 0 5px;
+    padding: 4px 11px;
     height: 40px;
     font-size: 0.9rem;
 
+    &:hover {
+      border-color: #1890ff;
+      transition: all 0.5s ease-out;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      border: 1px solid #d9d9d9;
+    }
+
     option {
-      color: #666666;
       font-family: Inter, sans-serif;
       font-size: 0.9rem;
+      border: 1px solid #d9d9d9;
     }
   }
 }
