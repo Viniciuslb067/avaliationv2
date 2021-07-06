@@ -211,15 +211,15 @@ export default function Assessment({
                   onChange={(e) => setStatus(e.target.value)}
                   onKeyPress={handleKeyPress}
                 >
-                  {status === "Desativada" ? (
+                  {status == "Desativada" ? (
                     <>
-                      <option>Desativada</option>
-                      <option>Ativada</option>
+                      <option value={status}>{() => setStatus("Desativada")}</option>
+                      <option value={status}>{() => setStatus("Ativada")}</option>
                     </>
                   ) : (
                     <>
-                      <option>Ativada</option>
-                      <option>Desativada</option>
+                      <option value={status}>Ativada</option>
+                      <option value={status}>Desativada</option>
                     </>
                   )}
                 </select>

@@ -68,7 +68,7 @@
     }
 
     td {
-      padding: 0.5rem .75rem;
+      padding: 0.5rem 0.75rem;
       font-size: 1rem;
       color: #222;
 
@@ -142,7 +142,6 @@
       border-color: #1890ff;
       transition: all 0.5s ease-out;
     }
-
   }
 
   select {
@@ -166,6 +165,7 @@
       font-family: Inter, sans-serif;
       font-size: 0.9rem;
       border: 1px solid #d9d9d9;
+
     }
   }
 }
@@ -173,4 +173,3 @@
 .hide {
   display: none;
 }
-
