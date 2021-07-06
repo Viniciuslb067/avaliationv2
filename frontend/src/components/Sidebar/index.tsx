@@ -12,7 +12,7 @@ import styles from "./styles.module.scss";
 
 export function Sidebar() {
   const { isOpen } = useContext(SidebarContext);
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   return (
     <>

@@ -44,8 +44,8 @@ export function verifyToken() {
         params: { token: `Bearer ${token}` },
       });
 
-      if(!token) {
-        Router.push("/")
+      if (!token) {
+        Router.push("/");
         const notify = () => toast.warning("Faça login primeiro");
         notify();
       }
@@ -68,14 +68,14 @@ export function AuthProvider({ children }: AuthProvidorProps) {
       if (response.data.status === 1) {
         const { token, email } = response.data;
 
-        console.log(response.data)
-
         setCookie(undefined, "feedback.token", token, {
           maxAge: 60 * 60 * 24 * 7,
           path: "/",
         });
 
-        setUser({name: email});
+        setUser({ name: email });
+
+        api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
         Router.push("/dashboard");
       } else {
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         notify();
       }
     } catch (err) {
-      throw new Error("Erro ao fazer login")
+      console.log(err);
     }
   }
 
