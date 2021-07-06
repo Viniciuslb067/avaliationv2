@@ -86,16 +86,21 @@ router.post("/authenticate", async (req, res) => {
           });
         }
       });
-    }
 
-    res.cookie("token", generateToken({ email }), { httpOnly: true });
-    res.status(200).json({
-      email: mail,
-      status: 1,
-      auth: true,
-      token: generateToken({ email: mail }),
-    });
+      res.cookie("token", generateToken({ email }), { httpOnly: true });
+      res.status(200).json({
+        email: mail,
+        status: 1,
+        auth: true,
+        token: generateToken({ email: mail }),
+      });
+    }
   });
+
+  if (await User.findOne({ email: `${email}@inss.gov.br`, access: "Bloqueado" })) {
+    return res.status(200).json({ status: 2, error: "Acesso bloqueado, aguardando a aprovação" });
+  }
+  
 });
 
 module.exports = (app) => app.use("/auth", router);

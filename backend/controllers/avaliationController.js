@@ -5,7 +5,6 @@ const authMiddleware = require("../middlewares/auth");
 const Avaliation = require("../models/Avaliation");
 
 const router = express.Router();
-// router.use(authMiddleware);
 
 //Listar todas as avaliações
 router.get("/", async (req, res) => {

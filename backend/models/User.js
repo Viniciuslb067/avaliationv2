@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  access: {
+    type: String,
+    default: "Bloqueado",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
