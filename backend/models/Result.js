@@ -5,6 +5,10 @@ const ResultSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    info: {
+        type: String,
+        required: true,
+    },
     avaliation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Avaliation',

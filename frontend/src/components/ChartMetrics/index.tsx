@@ -60,7 +60,7 @@ export function PieChart({ status }) {
           <Pie
           type="Pie"
             data={{
-              labels: ["Enviados", "Ignorado"],
+              labels: ["Enviados", "Recusados"],
               datasets: [
                 {
                   label: "Estrelas",

@@ -13,8 +13,10 @@ import { api } from "../../services/api";
 
 interface Comments {
   ip_user: string;
+  info: string;
   comments: string;
-  createdAt?: string;
+  createdAt: string;
+  note: number;
 }
 
 interface Assessment {
@@ -86,6 +88,8 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                       <td>IP</td>
                       <td>Comentário</td>
                       <td>Data</td>
+                      <td>Nota</td>
+                      <td>Informações</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -95,6 +99,8 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                           <td>{item.ip_user.split("::ffff:")}</td>
                           <td>{item.comments}</td>
                           <td>{format(parseISO(item.createdAt), "dd/MM/yy 'às' HH:mm")}</td>
+                          <td>{item.note} Estrelas</td>
+                          <td>{item.info}</td>
                         </tr>
                       );
                     })}

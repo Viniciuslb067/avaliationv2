@@ -207,19 +207,19 @@ export default function Assessment({
                 <label htmlFor="">Status</label>
                 <select
                   required
-                  defaultValue={status}
+
                   onChange={(e) => setStatus(e.target.value)}
                   onKeyPress={handleKeyPress}
                 >
-                  {status == "Desativada" ? (
+                  {status === "Desativada" ? (
                     <>
-                      <option value={status}>{() => setStatus("Desativada")}</option>
-                      <option value={status}>{() => setStatus("Ativada")}</option>
+                      <option>Desativada</option>
+                      <option>Ativada</option>
                     </>
                   ) : (
                     <>
-                      <option value={status}>Ativada</option>
-                      <option value={status}>Desativada</option>
+                      <option>Ativada</option>
+                      <option>Desativada</option>
                     </>
                   )}
                 </select>
@@ -353,8 +353,6 @@ export default function Assessment({
 export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await api.get("/avaliation");
   const systems = await api.get("/system");
-
-  console.log(data.avaliationOn)
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {

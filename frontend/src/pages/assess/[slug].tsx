@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { browserName, browserVersion, osName, osVersion } from "react-device-detect";
 
 import { api } from "../../services/api";
 
@@ -34,12 +35,13 @@ export default function Assess() {
     getData();
   }, [slug]);
 
-  console.log(alreadyAssess, assessment)
+  console.log(browserName, browserVersion, osName, osVersion)
 
   async function handleSubmit(id) {
     const data = {
       comments: comment,
       note: rating,
+      info: `${browserName} ${browserVersion}  ${osName}  ${osVersion}`,
     };
     await api
       .post("/avaliate/" + id, data)
