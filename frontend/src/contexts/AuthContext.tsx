@@ -75,8 +75,6 @@ export function AuthProvider({ children }: AuthProvidorProps) {
 
         setUser({ name: email });
 
-        api.defaults.headers["Authorization"] = `Bearer ${token}`;
-
         Router.push("/dashboard");
       } else {
         const notify = () => toast.error(response.data.error);

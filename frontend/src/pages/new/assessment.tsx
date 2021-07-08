@@ -48,7 +48,7 @@ export default function NewAssessment({ systemData }) {
   const handleKeypress = (e) => {
     if (e.charCode === 13) {
       handleSubmit();
-    } 
+    }
   };
 
   return (
@@ -63,52 +63,47 @@ export default function NewAssessment({ systemData }) {
             <h1>Criar Avaliação</h1>
 
             <div className={styles.fields}>
-              <label htmlFor="">Pergunta</label>
+              <span>Pergunta :</span>
               <input
                 type="text"
                 required
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Solicitante</label>
+              <span>Solicitante :</span>
               <input
-                placeholder="Exemplo: DTI"
                 type="text"
                 required
                 onChange={(e) => setRequester(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Data início</label>
+              <span>Data início :</span>
               <input
                 type="date"
                 required
                 onChange={(e) => setStartDate(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Data fim</label>
+              <span>Data fim :</span>
               <input
                 type="date"
                 required
                 onChange={(e) => setEndDate(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Sistema</label>
+              <span>Sistema :</span>
               <select
                 required
                 onChange={(e) => setSystem(e.target.value)}
@@ -120,7 +115,9 @@ export default function NewAssessment({ systemData }) {
                 })}
               </select>
             </div>
-            <button onClick={handleSubmit}>Criar</button>
+            <div className={styles.buttonContainer}>
+              <button onClick={handleSubmit}>Enviar</button>
+            </div>
           </div>
         </div>
       </main>

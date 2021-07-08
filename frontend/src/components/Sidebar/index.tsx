@@ -19,48 +19,40 @@ export function Sidebar() {
       <div className={isOpen ? styles.sidebar : styles.sidebarHide}>
         <div className={styles.sidebarBrand}>
           <div className={styles.brandFlex}>
-            <span>
-            </span>
+            <span></span>
             <div className={styles.brandIcons}>
-              <span>
-              </span>
-              <span>
-              </span>
+              <span></span>
+              <span></span>
             </div>
           </div>
         </div>
 
         <div className={styles.sidebarMain}>
           <div className={styles.sidebarUser}>
-            <img src="/logo.png" alt="Logo INSS" />
+             <img src="/logo.png" alt="Logo INSS" className={isOpen ? styles.imgOpen: styles.imgClose }/> 
             <div>
-              <h3>{user?.name.split(".")[0]} 😃 </h3>
+              <h3>{user?.name.split(".")[0]}  {isOpen ? "😃" : ""} </h3>
             </div>
           </div>
 
           <div className={styles.sidebarMenu}>
             <div className={styles.menuHead}>
-              <span>Dashboard</span>
+              <span>{isOpen ? "Dashboard" : ""}</span>
             </div>
             <ul>
               <li>
                 <Link href="/dashboard">
                   <a>
-                    <span>
-                      <AiOutlineHome />
-                    </span>
-                    Home
+                    <span>{isOpen ? <AiOutlineHome /> : ""}</span>
+                    {isOpen ? "Home" : ""}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/assessment">
                   <a>
-                    <span>
-                      {" "}
-                      <VscGraph />{" "}
-                    </span>
-                    Avaliações
+                    <span> {isOpen ? <VscGraph /> : ""}</span>
+                    {isOpen ? "Avaliações" : ""}
                   </a>
                 </Link>
               </li>
@@ -69,20 +61,16 @@ export function Sidebar() {
               <li>
                 <Link href="/user">
                   <a>
-                    <span>
-                      <HiOutlineUsers />
-                    </span>
-                    Usuários
+                    <span>{isOpen ? <HiOutlineUsers /> : ""}</span>
+                    {isOpen ? "Usuários" : ""}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/system">
                   <a>
-                    <span>
-                      <RiComputerLine />
-                    </span>
-                    Sistemas
+                    <span>{isOpen ? <RiComputerLine /> : ""}</span>
+                    {isOpen ? "Sistemas" : ""}
                   </a>
                 </Link>
               </li>

@@ -41,8 +41,6 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
-  console.log(allData.status)
-
   return (
     <>
       <Head>

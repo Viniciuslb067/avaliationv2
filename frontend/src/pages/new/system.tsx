@@ -2,7 +2,7 @@ import Head from "next/head";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { verifyToken } from "../../contexts/AuthContext"
+import { verifyToken } from "../../contexts/AuthContext";
 
 import { api } from "../../services/api";
 
@@ -45,7 +45,6 @@ export default function NewSystem() {
     }
   };
 
-
   return (
     <>
       <Head>
@@ -57,39 +56,37 @@ export default function NewSystem() {
             <h1>Cadastrar Sistema</h1>
 
             <div className={styles.fields}>
-              <label htmlFor="">DNS</label>
+              <span>DNS</span>
               <input
                 type="text"
                 required
                 onChange={(e) => setDns(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Nome</label>
+              <span>Nome</span>
               <input
                 type="text"
                 required
                 onChange={(e) => setName(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
 
             <div className={styles.fields}>
-              <label htmlFor="">Departamento</label>
+              <span>Departamento</span>
               <input
                 type="text"
                 required
                 onChange={(e) => setArea(e.target.value)}
                 onKeyPress={handleKeypress}
               />
-              <span></span>
             </div>
-
-            <button onClick={handleSubmit}>Criar</button>
+            <div className={styles.buttonContainer}>
+              <button onClick={handleSubmit}>Enviar</button>
+            </div>
           </div>
         </div>
       </main>
