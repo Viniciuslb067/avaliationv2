@@ -3,12 +3,15 @@
   padding: 1.5rem;
   background: #f1f5f9;
   min-height: calc(100vh + 70px);
+  transition: all 500ms ease-in-out;
 }
 
 .mainContainerHide {
+  margin-left: 0;
   padding: 1.5rem;
   background: #f1f5f9;
   min-height: calc(100vh + 70px);
+  transition: all 500ms ease-in-out;
 }
 
 .pageHeader {

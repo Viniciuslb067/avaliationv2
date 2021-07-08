@@ -9,7 +9,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 40rem;
-  height: 32rem;
+  height: 34rem;
   background: #fff;
   border-radius: 4px;
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
@@ -23,18 +23,27 @@
 .form {
   padding: 0 4rem;
   box-sizing: border-box;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   button {
-    width: 100%;
+    width: 50%;
     height: 2.5rem;
     border: 1px solid;
-    background: #3c8dbc;
+    background: #1B66CA;
     color: white;
     outline: none;
+    font-family: Lexend;
+    font-size: 1.0875rem;
+    font-weight: 500;
 
     &:hover {
-      transition: 0.2s;
-      background: #1f75a7;
+      transition: 0.5s ease-out;
+      filter: brightness(0.9);
     }
   }
 }
@@ -43,12 +52,28 @@
   position: relative;
   margin: 30px 0;
 
+  span {
+    font-size: 0.95rem;
+    line-height: 2;
+    font-weight: bold;
+    font-family: Lexend, sans-serif;
+  }
+
   input {
-    border: 1px solid #666666;
+    border: 1px solid #d9d9d9;
+    outline: none;
+    color: #000000d9;
+    background-color: #fff;
     width: 100%;
-    padding: 0 5px;
     height: 40px;
-    font-size: 0.9rem;
+    font-size: 14px;
+    line-height: 1.5715;
+    padding: 4px 11px;
+
+    &:hover {
+      border-color: #1890ff;
+      transition: all 0.5s ease-out;
+    }
   }
 }
 

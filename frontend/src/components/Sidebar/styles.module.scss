@@ -8,13 +8,21 @@
   background: #313a46;
   color: #788596;
   z-index: 20;
-  transition: left 300ms;
+  transition: all 500ms ease-in-out;
   box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
 }
 
 .sidebarHide {
-  display: none;
-  transition: right 300ms;
+  width: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #313a46;
+  color: #788596;
+  z-index: 20;
+  transition: all 500ms ease-in-out;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
 }
 
 .sidebarBrand {
@@ -98,6 +106,17 @@
       }
     }
   }
+}
+
+
+.imgOpen {
+  opacity: 100;
+  transition: all 900ms ease-in-out;
+}
+
+.imgClose {
+  opacity: 0;
+  transition: all 300ms ease-in-out;
 }
 
 @media only screen and (max-width: 1124px) {
