@@ -117,8 +117,6 @@ router.post("/:avaliationId", async (req, res) => {
 
     const { note, comments, info } = req.body;
 
-    console.log(info)
-
     const ip =
       req.headers["x-forwarded-for"] ||
       req.connection.remoteAddress ||
