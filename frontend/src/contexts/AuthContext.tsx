@@ -1,5 +1,4 @@
 import Router from "next/router";
-import { useRouter } from "next/router";
 import { createContext, ReactNode, useState, useEffect } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 
@@ -58,6 +57,17 @@ export function verifyToken() {
 export function AuthProvider({ children }: AuthProvidorProps) {
   const [user, setUser] = useState<User>();
 
+  useEffect(() => {
+    const { "feedback.token": token } = parseCookies();
+
+    if (token) {
+      api.get("/auth/me/" + token).then((response) => {
+        const { name } = response.data.user;
+        setUser({ name: name });
+      });
+    }
+  }, []);
+
   async function signIn({ email, password }: SignInCredentials) {
     try {
       const response = await api.post("/auth/authenticate", {
@@ -69,19 +79,19 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         const { token, email } = response.data;
 
         setCookie(undefined, "feedback.token", token, {
-          maxAge: 60 * 60 * 24 * 7,
+          maxAge: 60 * 60 * 24 * 7, // 7 dias
           path: "/",
         });
 
-        setUser({ name: email });
-
         Router.push("/dashboard");
+
+        setUser({ name: email });
       } else {
         const notify = () => toast.error(response.data.error);
         notify();
       }
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
     }
   }
 

@@ -29,9 +29,15 @@ export function Sidebar() {
 
         <div className={styles.sidebarMain}>
           <div className={styles.sidebarUser}>
-             <img src="/logo.png" alt="Logo INSS" className={isOpen ? styles.imgOpen: styles.imgClose }/> 
+            <img
+              src="/logo.png"
+              alt="Logo INSS"
+              className={isOpen ? styles.imgOpen : styles.imgClose}
+            />
             <div>
-              <h3>{user?.name.split(".")[0]}  {isOpen ? "😃" : ""} </h3>
+              <h3>
+                {isOpen ? user?.name : ""} {isOpen ? "😃" : ""}{" "}
+              </h3>
             </div>
           </div>
 

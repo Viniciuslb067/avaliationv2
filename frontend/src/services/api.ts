@@ -1,17 +1,16 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
 
-let cookies = parseCookies();
+const { "feedback.token": token } = parseCookies();
 
 export const api = axios.create({
   baseURL: "http://10.120.49.181:3001",
-  headers: {
-    authorization: `Bearer ${cookies["feedback.token"]}`,
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
 });
 
-api.defaults.headers.common[
-  "authorization"
-] = `Bearer ${cookies["feedback.token"]}`;
+api.interceptors.request.use(
+  (config) => {
+    config.headers.common["Authorization"] = `Bearer ${token}`;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
