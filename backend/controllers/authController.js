@@ -14,6 +14,22 @@ function generateToken(params = {}) {
   });
 }
 
+router.get("/me/:token", async (req, res) => {
+  var userEmail;
+
+  jwt.verify(req.params.token, authConfig.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ status: 2, error: "Token inválido" });
+    }
+
+    userEmail = decoded.email;
+  });
+
+  const user = await User.findOne({ email: `${userEmail}@inss.gov.br` });
+
+  return res.status(200).json({ user });
+});
+
 router.get("/check", async (req, res) => {
   const token = req.query.token.split(" ")[1];
   if (!token) {
@@ -45,6 +61,8 @@ router.get("/logout", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
+
+  var info;
 
   const username = `uid=${email}@inss.gov.br`;
 
@@ -87,12 +105,12 @@ router.post("/authenticate", async (req, res) => {
         }
       });
 
-      res.cookie("token", generateToken({ email }), { httpOnly: true });
+      res.cookie("token", generateToken({ email }));
       res.status(200).json({
         email: mail.split(".")[0],
         status: 1,
         auth: true,
-        token: generateToken({ email: mail.split(".")[0] }),
+        token: generateToken({ email: mail }),
       });
     }
   });
@@ -100,7 +118,6 @@ router.post("/authenticate", async (req, res) => {
   // if (await User.findOne({ email: `${email}@inss.gov.br`, access: "Bloqueado" })) {
   //   return res.status(200).json({ status: 2, error: "Acesso bloqueado, aguardando a aprovação" });
   // }
-  
 });
 
 module.exports = (app) => app.use("/auth", router);
