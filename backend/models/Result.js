@@ -5,7 +5,11 @@ const ResultSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    info: {
+    browser: {
+        type: String,
+        required: true,
+    },
+    system: {
         type: String,
         required: true,
     },

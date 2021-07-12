@@ -78,6 +78,7 @@ router.get("/result/:avaliationId", async (req, res) => {
             avaliation: req.params.avaliationId,
           }),
         ];
+
         const status = [
           await Result.countDocuments({
             status: "Enviado",
@@ -88,9 +89,11 @@ router.get("/result/:avaliationId", async (req, res) => {
             avaliation: req.params.avaliationId,
           }),
         ];
+
         const data = await Avaliation.findOne({
           _id: req.params.avaliationId,
         }).exec();
+
         const comments = await Result.find(
           { avaliation: req.params.avaliationId, comments: { $gt: "" } },
           ["comments", "ip_user", "createdAt", "note", "info"]
@@ -98,16 +101,24 @@ router.get("/result/:avaliationId", async (req, res) => {
           .where("status")
           .all(["Enviado"]);
         const commentsTotal = await Result.countDocuments({
-          avaliation: req.params.avaliationId, comments: { $gt: "" }
+          avaliation: req.params.avaliationId,
+          comments: { $gt: "" },
         });
+
+        const browserName = await Result.findOne({ avaliation: req.params.avaliationId }, "browser")
+
+        console.log(browserName.browser)
+
+        const browser = await Result.countDocuments({ browser: browserName.browser})
+
+        console.log(browser)
 
         res.json({ notes, status, data, comments, commentsTotal });
       }
     }
   } catch (err) {
-    return res
-      .status(400)
-      .send({ error: "Erro ao listar os resultados: " + err });
+    return res.status(400).send({ error: "Erro ao listar os resultados: " + err });
+    console.log(err)
   }
 });
 
@@ -115,7 +126,7 @@ router.post("/:avaliationId", async (req, res) => {
   try {
     const { avaliationId } = req.params;
 
-    const { note, comments, info } = req.body;
+    const { note, comments, browser, system } = req.body;
 
     const ip =
       req.headers["x-forwarded-for"] ||
@@ -126,11 +137,12 @@ router.post("/:avaliationId", async (req, res) => {
     if (!note) {
       return res
         .status(200)
-        .json({ status: 2, error: "Antes de Enviar avalie o sistema!" });
+        .json({ status: 2, error: "Antes de enviar avalie o sistema!" });
     } else {
       await Result.create({
         ip_user: ip,
-        info,
+        browser,
+        system,
         note,
         comments,
         status: "Enviado",
@@ -150,6 +162,7 @@ router.post("/:avaliationId", async (req, res) => {
 router.post("/skip/:avaliationId", async (req, res) => {
   try {
     const { avaliationId } = req.params;
+    const { browser, system } = req.body;
 
     const ip =
       req.headers["x-forwarded-for"] ||
@@ -159,11 +172,14 @@ router.post("/skip/:avaliationId", async (req, res) => {
 
     await Result.create({
       ip_user: ip,
+      browser,
+      system,
       status: "Ignorado",
       avaliation: avaliationId,
     });
   } catch (err) {
-    return res.status(400).send({ error: "Erro ao pular avaliação" });
+    console.log(err);
+    return res.status(400).send({ error: "Erro ao pular avaliação: " + err });
   }
 });
 
