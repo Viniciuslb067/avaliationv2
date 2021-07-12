@@ -35,13 +35,12 @@ export default function Assess() {
     getData();
   }, [slug]);
 
-  console.log(browserName, browserVersion, osName, osVersion)
-
   async function handleSubmit(id) {
     const data = {
       comments: comment,
       note: rating,
-      info: `${browserName} ${browserVersion}  ${osName}  ${osVersion}`,
+      browser: `${browserName} ${browserVersion}`,
+      system: `${osName}  ${osVersion}`,
     };
     await api
       .post("/avaliate/" + id, data)
@@ -62,8 +61,12 @@ export default function Assess() {
   }
 
   async function handleSkip(id) {
+    const data = {
+      browser: `${browserName} ${browserVersion}`,
+      system: `${osName}  ${osVersion}`,
+    };
     setIsModalVisible(false);
-    await api.post("/avaliate/skip/" + id);
+    await api.post("/avaliate/skip/" + id, data);
   }
 
   const renderCard = (card, index) => {
@@ -129,7 +132,7 @@ export default function Assess() {
         ) : (
           <>
             <h1 className={styles.message}>
-              Muito obrigado pela participação!
+              Muito obrigado pela sua participação!
             </h1>
           </>
         )}
