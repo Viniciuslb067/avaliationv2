@@ -1,4 +1,4 @@
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Pie, PolarArea } from "react-chartjs-2";
 
 import styles from "./styles.module.scss";
 
@@ -65,6 +65,65 @@ export function PieChart({ status }) {
                 {
                   label: "Estrelas",
                   data: status,
+                  backgroundColor: [
+                    "rgb(54, 162, 235)",
+                    "rgb(246, 46, 89)",
+                  ],
+                  borderWidth: 0.9,
+                  borderColor: "#FFFFFF",
+                },
+              ],
+            }}
+            height={100}
+            width={100}
+            options={{
+              title: {
+                display: true,
+                text: "Enviados/Pulados",
+                position: "top",
+                fontSize: 50,
+                fontColor: "#000000",
+                padding: 20,
+              },
+              animation: {
+                animateScale: true,
+                animateRotate: true,
+              },
+              tooltips: {
+                enabled: true,
+              },
+              maintainAspectRatio: true,
+              responsive: true,
+              legend: {
+                labels: {
+                  fontSize: 15,
+                },
+              },
+            }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function PolarAreaChart({  }) {
+  return (
+    <>
+      <div className={styles.analyticsCard}>
+        <div className={styles.analyticsHead}>
+          <h3>Estrelas</h3>
+        </div>
+
+        <div className={styles.analyticsChart}>
+          <PolarArea
+          type="Polar"
+            data={{
+              labels: ["Enviados", "Recusados"],
+              datasets: [
+                {
+                  label: "Estrelas",
+                  data: [1, 5],
                   backgroundColor: [
                     "rgb(54, 162, 235)",
                     "rgb(246, 46, 89)",

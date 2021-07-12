@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useContext } from "react";
 import { verifyToken } from "../../contexts/AuthContext"
 import { CardMetrics } from "../../components/CardMetrics";
-import { BarChart, PieChart } from "../../components/ChartMetrics";
+import { BarChart, PieChart, PolarAreaChart} from "../../components/ChartMetrics";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -70,6 +70,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         <div className={styles.grid}>
           <BarChart notes={allData.notes} />
           <PieChart status={allData.status} />
+          <PolarAreaChart />
         </div>
 
         <div className={styles.table}>
