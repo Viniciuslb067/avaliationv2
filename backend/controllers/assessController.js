@@ -105,20 +105,32 @@ router.get("/result/:avaliationId", async (req, res) => {
           comments: { $gt: "" },
         });
 
-        const browserName = await Result.findOne({ avaliation: req.params.avaliationId }, "browser")
+        const browserName = await Result.find(
+          { avaliation: req.params.avaliationId },
+          "browser"
+        );
 
-        console.log(browserName.browser)
+        const browserInfo = await Promise.all(
+          browserName.map(async (browser) => {
+            const total = await Result.countDocuments({
+              browser: browser.browser,
+            });
 
-        const browser = await Result.countDocuments({ browser: browserName.browser})
+            return {
+              browserName: browser.browser,
+              total: total,
+            };
+          })
+        );
 
-        console.log(browser)
-
-        res.json({ notes, status, data, comments, commentsTotal });
+        res.json({ notes, status, data, comments, commentsTotal, browserInfo });
       }
     }
   } catch (err) {
-    return res.status(400).send({ error: "Erro ao listar os resultados: " + err });
-    console.log(err)
+    return res
+      .status(400)
+      .send({ error: "Erro ao listar os resultados: " + err });
+    console.log(err);
   }
 });
 

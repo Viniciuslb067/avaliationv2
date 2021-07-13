@@ -79,7 +79,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         const { token, email } = response.data;
 
         setCookie(undefined, "feedback.token", token, {
-          maxAge: 60 * 60 * 24 * 7, // 7 dias
+          maxAge: 60 * 60 * 24 * 1, // 1 dia
           path: "/",
         });
 

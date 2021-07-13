@@ -6,6 +6,10 @@ import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
 
+import { parseCookies } from "nookies";
+
+const { "feedback.token": token } = parseCookies();
+
 import { verifyToken } from "../contexts/AuthContext";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -19,10 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/antd.css";
 
 toast.configure();
-
-type System = {
-  dns: string;
-};
 
 type Avaliation = {
   id: string;
@@ -42,6 +42,8 @@ export default function Assessment({
 }: AssessmentProps) {
   verifyToken();
   const { isOpen } = useContext(SidebarContext);
+
+  console.log(token)
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
@@ -140,6 +142,7 @@ export default function Assessment({
             <small>
               Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
+            <small>{token}</small>
           </div>
 
           <Modal

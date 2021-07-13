@@ -31,6 +31,10 @@ interface Assessment {
   status: [];
   comments: Comments[];
   commentsTotal: number;
+  browserInfo: {
+    browserName: string;
+    browserTotal: number;
+  },
 }
 
 interface AssessmentProps {
@@ -70,7 +74,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         <div className={styles.grid}>
           <BarChart notes={allData.notes} />
           <PieChart status={allData.status} />
-          <PolarAreaChart />
+          <PolarAreaChart browserInfo={allData.browserInfo}  />
         </div>
 
         <div className={styles.table}>
@@ -142,6 +146,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     status: data.status,
     comments: data.comments,
     commentsTotal: data.commentsTotal,
+    browserInfo: data.browserInfo
     
   };
 

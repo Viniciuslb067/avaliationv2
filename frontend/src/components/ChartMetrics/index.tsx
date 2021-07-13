@@ -107,7 +107,16 @@ export function PieChart({ status }) {
   );
 }
 
-export function PolarAreaChart({  }) {
+export function PolarAreaChart({ browserInfo }) {
+
+  const abc = browserInfo.map(item => {
+    return {
+      browserName: item.browserName
+    }
+  })
+
+  console.log(abc)
+
   return (
     <>
       <div className={styles.analyticsCard}>
@@ -119,11 +128,11 @@ export function PolarAreaChart({  }) {
           <PolarArea
           type="Polar"
             data={{
-              labels: ["Enviados", "Recusados"],
+              labels: [abc.browserName],
               datasets: [
                 {
                   label: "Estrelas",
-                  data: [1, 5],
+                  data: [browserInfo[0].total, 5, 8 , 10 ,5],
                   backgroundColor: [
                     "rgb(54, 162, 235)",
                     "rgb(246, 46, 89)",
