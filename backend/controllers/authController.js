@@ -30,21 +30,6 @@ router.get("/me/:token", async (req, res) => {
   return res.status(200).json({ user });
 });
 
-router.get("/check", async (req, res) => {
-  const token = req.query.token.split(" ")[1];
-  if (!token) {
-    res.json({ status: 401, error: "Token inexistente" });
-  } else {
-    jwt.verify(token, authConfig.secret, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ status: 2, error: "Token inválido" });
-      } else {
-        return res.json({ status: 200 });
-      }
-    });
-  }
-});
-
 router.get("/logout", async (req, res) => {
   const token = req.headers.token;
 
@@ -61,8 +46,6 @@ router.get("/logout", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
-
-  var info;
 
   const username = `uid=${email}@inss.gov.br`;
 
@@ -83,18 +66,24 @@ router.post("/authenticate", async (req, res) => {
     url: "ldap://ldap.inss.gov.br",
   });
 
-  client.bind(username, password, (err) => {
+  client.bind(username, password, async (err) => {
     if (err) {
       return res
         .status(200)
         .json({ status: 2, error: "Usuário ou senha incorreto" });
-    } else {
-      client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
-        if (err) {
-          return res.status(200).json({ status: 2, error: err });
-        } else {
+    }
+
+    let search = function () {
+      const items = [];
+      return new Promise((resolve, reject) => {
+        client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
+          if (err) {
+            return res.status(200).json({ status: 2, error: err });
+          }
           res.on("searchEntry", async (entry) => {
-            if (!(await User.findOne({ cpf: entry.object.cpf }))) {
+            items.push(entry.object);
+            var user = await User.findOne({ cpf: entry.object.cpf });
+            if (!user) {
               await User.create({
                 name: entry.object.givenName,
                 email: entry.object.mail,
@@ -102,17 +91,28 @@ router.post("/authenticate", async (req, res) => {
               });
             }
           });
-        }
+          res.on('error', function (err) {
+            console.error('error: ' + err.message);
+            reject( error )
+          });
+          res.on("end", function (result) {
+            resolve(items);
+          });
+        });
       });
+    };
 
-      res.cookie("token", generateToken({ email }));
-      res.status(200).json({
-        email: mail,
-        status: 1,
-        auth: true,
-        token: generateToken({ email: mail }),
-      });
-    }
+    const userData = await search();
+
+    console.log(userData);
+
+    res.cookie("token", generateToken({ email }));
+    res.status(200).json({
+      name: userData[0].givenName,
+      email: mail,
+      status: 1,
+      token: generateToken({ email: mail }),
+    });
   });
 
   // if (await User.findOne({ email: `${email}@inss.gov.br`, access: "Bloqueado" })) {

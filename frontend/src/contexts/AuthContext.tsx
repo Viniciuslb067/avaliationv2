@@ -11,6 +11,7 @@ toast.configure();
 
 interface User {
   name: string;
+  email?: string;
 }
 
 interface SignInCredentials {
@@ -55,8 +56,10 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         password,
       });
 
+      console.log(response.data)
+
       if (response.data.status === 1) {
-        const { token, email } = response.data;
+        const { token, name } = response.data;
 
         setCookie(undefined, "feedback.token", token, {
           maxAge: 60 * 60 * 24 * 1, // 1 dia
@@ -65,7 +68,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
 
         api.defaults.headers['Authorization'] = `Bearer ${token}`
 
-        setUser({ name: email });
+        setUser({ name: name });
         
         Router.push("/dashboard");
 
