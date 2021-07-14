@@ -4,21 +4,26 @@ const authConfig = require("../config/auth.json");
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  console.log(req.headers)
+  if (!authHeader)
+    return res
+      .status(401)
+      .json({ status: 2, error: "Token não foi informado!" });
 
-  // if (!authHeader)
-  //   return res
-  //     .status(401)
-  //     .json({ status: 2, error: "Token não foi informado!" });
+  const parts = authHeader.split(" ");
 
-  // jwt.verify(authHeader, authConfig.secret, (err, decoded) => {
-  //   if (err)
-  //     return res.status(401).json({ status: 2, error: "Token inválido" });
+  if (!parts.length === 2)
+    return res.status(401).json({ status: 2, error: "Erro no token" });
 
-  //   req.userId = decoded.id;
-  //   return next();
-  // });
+  const [scheme, token] = parts;
 
-  return next();
+  if (!/^Bearer$/i.test(scheme))
+    return res.status(401).json({ status: 2, error: "Token fora do padrão" });
 
+  jwt.verify(token, authConfig.secret, (err, decoded) => {
+    if (err)
+      return res.status(401).json({ status: 2, error: "Token inválido" });
+
+    req.userEmail = decoded.email;
+    return next();
+  });
 };
