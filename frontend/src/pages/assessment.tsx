@@ -5,24 +5,17 @@ import { GetServerSideProps } from "next";
 import { useContext, useState } from "react";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
-
 import { parseCookies } from "nookies";
 
-const { "feedback.token": token } = parseCookies();
-
-import { verifyToken } from "../contexts/AuthContext";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { BsGraphUp } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
 
 import { api } from "../services/api";
+import { getAPIClient } from "../services/axios";
 
 import styles from "../styles/assessment.module.scss";
-import "react-toastify/dist/ReactToastify.css";
-import "antd/dist/antd.css";
-
-toast.configure();
 
 type Avaliation = {
   id: string;
@@ -40,10 +33,7 @@ export default function Assessment({
   allAvaliationOn,
   allAvaliationOff,
 }: AssessmentProps) {
-  verifyToken();
   const { isOpen } = useContext(SidebarContext);
-
-  console.log(token)
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
@@ -96,31 +86,30 @@ export default function Assessment({
       });
   }
 
-  
   async function deleteAssesssment(id) {
     await api
-    .delete("/avaliation/" + id)
-    .then((res) => {
-      if (res.data.status === 1) {
-        const notify = () => toast.success(res.data.success);
-        notify();
-        Router.push("/assessment");
-      } else {
-        const notify = () => toast.warning(res.data.error);
-        notify();
-      }
-    })
-    .catch((err) => {
-      throw new Error(err);
-    });
+      .delete("/avaliation/" + id)
+      .then((res) => {
+        if (res.data.status === 1) {
+          const notify = () => toast.success(res.data.success);
+          notify();
+          Router.push("/assessment");
+        } else {
+          const notify = () => toast.warning(res.data.error);
+          notify();
+        }
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   const handleKeyPress = (e) => {
     if (e.charCode === 13) {
       handleSubmit();
-    } 
+    }
   };
-  
+
   function openModalAndGetId(id) {
     getData(id);
     setUuid(id);
@@ -142,7 +131,6 @@ export default function Assessment({
             <small>
               Aqui você tem acesso a todas as avaliações e suas estatísticas.
             </small>
-            <small>{token}</small>
           </div>
 
           <Modal
@@ -210,7 +198,6 @@ export default function Assessment({
                 <label htmlFor="">Status</label>
                 <select
                   required
-
                   onChange={(e) => setStatus(e.target.value)}
                   onKeyPress={handleKeyPress}
                 >
@@ -353,9 +340,20 @@ export default function Assessment({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/avaliation");
-  const systems = await api.get("/system");
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { data } = await apiClient.get("/avaliation");
+  const systems = await apiClient.get("/system");
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {

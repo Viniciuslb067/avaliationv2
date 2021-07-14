@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Router from "next/router";
-import { verifyToken } from "../../contexts/AuthContext";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -10,11 +9,13 @@ import { api } from "../../services/api";
 import styles from "./assessment.module.scss";
 
 import "react-toastify/dist/ReactToastify.css";
+import { parseCookies } from "nookies";
+import { getAPIClient } from "../../services/axios";
 
 toast.configure();
 
 export default function NewAssessment({ systemData }) {
-  verifyToken();
+  
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -36,7 +37,7 @@ export default function NewAssessment({ systemData }) {
           notify();
           Router.push("/dashboard");
         } else {
-          const notify = () => toast.warning(res.data.error);
+          const notify = () => toast.error(res.data.error);
           notify();
         }
       })
@@ -124,8 +125,19 @@ export default function NewAssessment({ systemData }) {
     </>
   );
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/system");
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { data } = await apiClient.get("/system");
 
   const systems = data.systems.map((item) => {
     return {

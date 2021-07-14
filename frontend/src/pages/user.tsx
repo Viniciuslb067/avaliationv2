@@ -2,33 +2,29 @@ import Router from "next/router";
 import Head from "next/head";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
-import { GetStaticProps, GetServerSideProps } from "next";
-import { verifyToken } from "../contexts/AuthContext"
+import { GetServerSideProps } from "next";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { useContext, useState } from "react";
 
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 import { api } from "../services/api";
+import { parseCookies } from "nookies";
+import { getAPIClient } from "../services/axios";
 
 import styles from "../styles/system.module.scss";
-import "react-toastify/dist/ReactToastify.css";
-import "antd/dist/antd.css";
-
-toast.configure();
 
 type User = {
-  id: string,
-  name: string,
-  email: string,
-}
+  id: string;
+  name: string;
+  email: string;
+};
 
 type UserProps = {
   user: User[];
-}
+};
 
 export default function User({ user }: UserProps) {
-  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -217,8 +213,20 @@ export default function User({ user }: UserProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/user");
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const { data } = await apiClient.get("/user");
 
   const user = data.users.map((item) => {
     return {
@@ -231,6 +239,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       user,
-    }
+    },
   };
 };

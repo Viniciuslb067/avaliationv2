@@ -1,8 +1,8 @@
 import Link from "next/link";
+import Head from "next/head";
 import Router from "next/router";
 import { GetServerSideProps } from "next";
 import { useContext, useState } from "react";
-import { verifyToken } from "../contexts/AuthContext"
 import { SidebarContext } from "../contexts/SidebarContext";
 import { Modal } from "antd";
 import { toast } from "react-toastify";
@@ -10,29 +10,24 @@ import { toast } from "react-toastify";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 
-import styles from "../styles/system.module.scss";
-
 import { api } from "../services/api";
+import { parseCookies } from "nookies";
+import { getAPIClient } from "../services/axios";
 
-import "react-toastify/dist/ReactToastify.css";
-import "antd/dist/antd.css";
-import Head from "next/head";
-
-toast.configure();
+import styles from "../styles/system.module.scss";
 
 type System = {
   id: string;
   dns: string;
   name: string;
   area: string;
-}
+};
 
 type SystemProps = {
   system: System[];
-}
+};
 
 export default function System({ system }: SystemProps) {
-  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -218,8 +213,19 @@ export default function System({ system }: SystemProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/system");
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { data } = await apiClient.get("/system");
 
   const system = data.systems.map((item) => {
     return {
@@ -233,6 +239,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       system,
-    }
+    },
   };
 };

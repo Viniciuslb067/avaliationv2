@@ -4,13 +4,10 @@ import { useEffect } from "react";
 import { parseCookies } from "nookies";
 import { useState, useContext } from "react";
 import { AiFillHome } from "react-icons/ai";
-import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
 
 import styles from "../styles/index.module.scss";
-import "react-toastify/dist/ReactToastify.css";
-
-toast.configure();
+import { GetServerSideProps } from "next";
 
 export default function Login() {
   const router = useRouter();
@@ -85,3 +82,21 @@ export default function Login() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const apiClient = getAPIClient(ctx); Requisição lado servidor next
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (token) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

@@ -2,17 +2,15 @@ import Head from "next/head";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { verifyToken } from "../../contexts/AuthContext";
+import { GetServerSideProps } from "next";
 
+import { parseCookies } from "nookies";
 import { api } from "../../services/api";
+// import { getAPIClient } from "../../services/axios";
 
 import styles from "./system.module.scss";
-import "react-toastify/dist/ReactToastify.css";
-
-toast.configure();
 
 export default function NewSystem() {
-  verifyToken();
   const [dns, setDns] = useState("");
   const [name, setName] = useState("");
   const [area, setArea] = useState("");
@@ -93,3 +91,21 @@ export default function NewSystem() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const apiClient = getAPIClient(ctx); Requisição lado servidor next
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

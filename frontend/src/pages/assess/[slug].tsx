@@ -2,15 +2,16 @@ import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { browserName, browserVersion, osName, osVersion } from "react-device-detect";
+import {
+  browserName,
+  browserVersion,
+  osName,
+  osVersion,
+} from "react-device-detect";
 
 import { api } from "../../services/api";
-
 import styles from "./assess.module.scss";
-import "react-toastify/dist/ReactToastify.css";
-import "antd/dist/antd.css";
-
-toast.configure();
+import { GetServerSideProps } from "next";
 
 export default function Assess() {
   const router = useRouter();
@@ -141,3 +142,11 @@ export default function Assess() {
   };
   return <div>{alreadyAssess ? "" : assessment?.map(renderCard)}</div>;
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const apiClient = getAPIClient(ctx); Requisição lado servidor next
+
+  return {
+    props: {},
+  };
+};

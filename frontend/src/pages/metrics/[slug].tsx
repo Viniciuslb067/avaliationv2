@@ -1,15 +1,18 @@
 import Head from "next/head";
 import { useContext } from "react";
-import { verifyToken } from "../../contexts/AuthContext"
 import { CardMetrics } from "../../components/CardMetrics";
-import { BarChart, PieChart, PolarAreaChart} from "../../components/ChartMetrics";
+import {
+  BarChart,
+  PieChart,
+  PolarAreaChart,
+} from "../../components/ChartMetrics";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 
+import { getAPIClient } from "../../services/axios";
 import styles from "./assessment.module.scss";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { api } from "../../services/api";
 
 interface Comments {
   ip_user: string;
@@ -34,7 +37,7 @@ interface Assessment {
   browserInfo: {
     browserName: string;
     browserTotal: number;
-  },
+  };
 }
 
 interface AssessmentProps {
@@ -42,7 +45,6 @@ interface AssessmentProps {
 }
 
 export default function MetricsAssessment({ allData }: AssessmentProps) {
-  verifyToken();
   const { isOpen } = useContext(SidebarContext);
 
   return (
@@ -50,7 +52,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
       <Head>
         <title>Feedback | Dashboard</title>
       </Head>
-      
+
       <main
         className={isOpen ? styles.mainContainer : styles.mainContainerHide}
       >
@@ -74,7 +76,7 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         <div className={styles.grid}>
           <BarChart notes={allData.notes} />
           <PieChart status={allData.status} />
-          <PolarAreaChart browserInfo={allData.browserInfo}  />
+          <PolarAreaChart browserInfo={allData.browserInfo} />
         </div>
 
         <div className={styles.table}>
@@ -101,7 +103,12 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                         <tr key={key}>
                           <td>{item.ip_user.split("::ffff:")}</td>
                           <td>{item.comments}</td>
-                          <td>{format(parseISO(item.createdAt), "dd/MM/yy 'às' HH:mm")}</td>
+                          <td>
+                            {format(
+                              parseISO(item.createdAt),
+                              "dd/MM/yy 'às' HH:mm"
+                            )}
+                          </td>
                           <td>{item.note} Estrelas</td>
                           <td>{item.info}</td>
                         </tr>
@@ -113,7 +120,6 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
             </div>
           </div>
         </div>
-
       </main>
     </>
   );
@@ -127,8 +133,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
   const { slug } = ctx.params;
-  const { data } = await api.get(`/avaliate/result/${slug}`);
+  const { data } = await apiClient.get(`/avaliate/result/${slug}`);
 
   const allData = {
     id: data.data._id,
@@ -146,8 +153,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     status: data.status,
     comments: data.comments,
     commentsTotal: data.commentsTotal,
-    browserInfo: data.browserInfo
-    
+    browserInfo: data.browserInfo,
   };
 
   return {

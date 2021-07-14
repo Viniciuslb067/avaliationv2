@@ -1,30 +1,28 @@
 import Head from "next/head";
 import Link from "next/link";
-import Router from "next/router";
 import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 import { useContext } from "react";
 
 import { Card } from "../components/Card/index";
 import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { verifyToken } from "../contexts/AuthContext";
 
-import { api } from "../services/api";
-
+import { getAPIClient } from "../services/axios";
 import styles from "../styles/dashboard.module.scss";
 
-type Avaliation =  {
+type Avaliation = {
   question: string;
   requester: string;
   status: string;
-}
+};
 
 type HomeProps = {
   recentAvaliation: Avaliation[];
   allAvaliation: number;
   allUser: number;
   allSystem: number;
-}
+};
 
 export default function Dashboard({
   allAvaliation,
@@ -32,7 +30,7 @@ export default function Dashboard({
   allSystem,
   recentAvaliation,
 }: HomeProps) {
-  verifyToken();
+ 
   const { isOpen } = useContext(SidebarContext);
 
   return (
@@ -100,10 +98,22 @@ export default function Dashboard({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get("/avaliation");
-  const totalUser = await api.get("/user");
-  const totalSystems = await api.get("/system");
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      }
+    };
+  }
+
+  const { data } = await apiClient.get("/avaliation");
+  const totalUser = await apiClient.get("/user");
+  const totalSystems = await apiClient.get("/system");
 
   const allAvaliation = data.totalAvaliation;
   const allUser = totalUser.data.totalUser;
@@ -116,6 +126,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       recentAvaliation,
       allSystem,
       allUser,
-    }
+    },
   };
 };
