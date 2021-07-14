@@ -34,26 +34,6 @@ export function signOut() {
   Router.push("/");
 }
 
-export function verifyToken() {
-  const { "feedback.token": token } = parseCookies();
-
-  useEffect(() => {
-    async function verify() {
-      const response = await api.get("/auth/check", {
-        params: { token: `Bearer ${token}` },
-      });
-
-      if (!token) {
-        Router.push("/");
-        const notify = () => toast.warning("Faça login primeiro");
-        notify();
-      }
-    }
-
-    verify();
-  }, [token]);
-}
-
 export function AuthProvider({ children }: AuthProvidorProps) {
   const [user, setUser] = useState<User>();
 
@@ -83,9 +63,12 @@ export function AuthProvider({ children }: AuthProvidorProps) {
           path: "/",
         });
 
-        Router.push("/dashboard");
+        api.defaults.headers['Authorization'] = `Bearer ${token}`
 
         setUser({ name: email });
+        
+        Router.push("/dashboard");
+
       } else {
         const notify = () => toast.error(response.data.error);
         notify();
