@@ -107,7 +107,7 @@ router.post("/authenticate", async (req, res) => {
 
       res.cookie("token", generateToken({ email }));
       res.status(200).json({
-        email: mail.split(".")[0],
+        email: mail,
         status: 1,
         auth: true,
         token: generateToken({ email: mail }),

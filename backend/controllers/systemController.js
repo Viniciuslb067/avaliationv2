@@ -5,6 +5,8 @@ const System = require("../models/System");
 
 const router = express.Router();
 
+router.use(authMiddleware)
+
 //Listar todos os sistemas
 router.get("/", async (req, res) => {
     try {
