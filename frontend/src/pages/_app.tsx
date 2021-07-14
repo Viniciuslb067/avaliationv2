@@ -1,7 +1,10 @@
 import "../styles/global.scss";
+import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 import axios from "axios";
 import https from "https";
@@ -16,6 +19,8 @@ import styles from "../styles/app.module.scss";
 axios.defaults.httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 })
+
+toast.configure();
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
