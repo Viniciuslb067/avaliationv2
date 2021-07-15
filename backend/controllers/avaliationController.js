@@ -1,15 +1,14 @@
 const express = require("express");
 const datefns = require("date-fns")
 const authMiddleware = require("../middlewares/auth");
+const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
 const Avaliation = require("../models/Avaliation");
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
 //Listar todas as avaliações
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const avaliationOn = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Ativada'])
         const avaliationOff = await Avaliation.find({}).sort({ createdAt: "desc" }).where('status').all(['Desativada'])
@@ -37,7 +36,7 @@ router.get("/", async (req, res) => {
 });
 
 //Listar uma avaliação
-router.get("/:avaliationId", async (req, res) => {
+router.get("/:avaliationId", authMiddleware, async (req, res) => {
     try {
         const avaliation = await Avaliation.findById(req.params.avaliationId)
         return res.json(avaliation)
@@ -46,7 +45,7 @@ router.get("/:avaliationId", async (req, res) => {
     }
 });
 //Criar uma avaliação
-router.post("/", async (req, res) => {
+router.post("/", ensureAuthMiddleware, async (req, res) => {
     try {
         const { question, requester, start_date, end_date, system } = req.body;
 
@@ -66,7 +65,7 @@ router.post("/", async (req, res) => {
     }
 });
 //Editar uma avaliação
-router.put("/:avaliationId", async (req, res) => {
+router.put("/:avaliationId", ensureAuthMiddleware, async (req, res) => {
     try {
         const { question, requester, start_date, end_date } = req.body;
 
@@ -83,7 +82,7 @@ router.put("/:avaliationId", async (req, res) => {
     }
 });
 //Deletar uma avaliação
-router.delete("/:avaliationId", async (req, res) => {
+router.delete("/:avaliationId", ensureAuthMiddleware, async (req, res) => {
     try {
         await Avaliation.findByIdAndRemove(req.params.avaliationId);
         return res.status(200).json({ status: 1, success: "Avaliação excluida com sucesso" });

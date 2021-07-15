@@ -1,5 +1,5 @@
 const express = require("express");
-const authMiddleware = require("../middlewares/auth");
+const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
 const Avaliation = require("../models/Avaliation");
 const Result = require("../models/Result");
@@ -46,7 +46,7 @@ router.get("/:system", async (req, res) => {
   }
 });
 
-router.get("/result/:avaliationId", authMiddleware, async (req, res) => {
+router.get("/result/:avaliationId", ensureAuthMiddleware, async (req, res) => {
   try {
     const find = await Avaliation.findOne({
       _id: req.params.avaliationId,

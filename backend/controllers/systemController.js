@@ -1,14 +1,13 @@
 const express = require("express");
 const authMiddleware = require("../middlewares/auth");
+const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
 const System = require("../models/System");
 
 const router = express.Router();
 
-router.use(authMiddleware)
-
 //Listar todos os sistemas
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const systems = await System.find();
         const totalSystems = await System.countDocuments();
@@ -18,7 +17,7 @@ router.get("/", async (req, res) => {
     }
 });
 //Listar um sistema
-router.get("/:systemId", async (req, res) => {
+router.get("/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         const system = await System.findById(req.params.systemId);
         return res.json(system);
@@ -27,7 +26,7 @@ router.get("/:systemId", async (req, res) => {
     }
 });
 //Cadastrar um sistema
-router.post("/", async (req, res) => {
+router.post("/", ensureAuthMiddleware, async (req, res) => {
     try {
         const { name, dns, area } = req.body;
 
@@ -48,7 +47,7 @@ router.post("/", async (req, res) => {
     }
 });
 //Editar um sistema
-router.put("/:systemId", async (req, res) => {
+router.put("/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         const { dns, name, area } = req.body;
 
@@ -65,7 +64,7 @@ router.put("/:systemId", async (req, res) => {
     }
 });
 //Deletar um sistema
-router.delete("/:systemId", async (req, res) => {
+router.delete("/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         await System.findByIdAndRemove(req.params.systemId);
         return res.status(200).json({ status: 1, success: "Sistema excluido com sucesso" });

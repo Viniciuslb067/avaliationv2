@@ -1,21 +1,20 @@
 const express = require("express");
 const authMiddleware = require("../middlewares/auth");
+const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
 const User = require("../models/User");
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
 //Listar todos os usuários
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   const users = await User.find();
   const totalUser = await User.countDocuments();
 
   return res.json({ users, totalUser });
 });
 //Listar um usuário
-router.get("/:userId", async (req, res) => {
+router.get("/:userId", ensureAuthMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     return res.json(user);
@@ -24,11 +23,11 @@ router.get("/:userId", async (req, res) => {
   }
 });
 //Editar um usuário
-router.put("/:userId", async (req, res) => {
+router.put("/:userId", ensureAuthMiddleware, async (req, res) => {
   try {
     const { name, role, access } = req.body;
 
-    if (!name || !role || !access) {
+    if (!name || !role) {
       return res
         .status(200)
         .json({ status: 2, error: "Preencha todos os campos" });
@@ -46,7 +45,7 @@ router.put("/:userId", async (req, res) => {
   }
 });
 //Deletar um usuário
-router.delete("/:userId", async (req, res) => {
+router.delete("/:userId", ensureAuthMiddleware, async (req, res) => {
   try {
     await User.findByIdAndRemove(req.params.userId);
 

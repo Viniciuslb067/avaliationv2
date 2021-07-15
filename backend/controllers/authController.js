@@ -30,20 +30,6 @@ router.get("/me/:token", async (req, res) => {
   return res.status(200).json({ user });
 });
 
-router.get("/logout", async (req, res) => {
-  const token = req.headers.token;
-
-  if (token) {
-    res.cookie("token", null, { httpOnly: true });
-  } else {
-    res.status(401).send("Erro ao sair");
-  }
-
-  return res
-    .status(200)
-    .json({ status: 1, success: "Sessão finalizada com sucesso" });
-});
-
 router.post("/authenticate", async (req, res) => {
   const { email, password } = req.body;
 
@@ -90,10 +76,13 @@ router.post("/authenticate", async (req, res) => {
                 cpf: entry.object.cpf,
               });
             }
+            if (user) {
+              items.push(entry.object, user.role);
+            }
           });
-          res.on('error', function (err) {
-            console.error('error: ' + err.message);
-            reject( error )
+          res.on("error", function (err) {
+            console.error("error: " + err.message);
+            reject(error);
           });
           res.on("end", function (result) {
             resolve(items);
@@ -104,14 +93,17 @@ router.post("/authenticate", async (req, res) => {
 
     const userData = await search();
 
-    console.log(userData);
+    const userRole = await User.findOne({ cpf: userData[0].cpf });
+
+    const role = userRole ? userRole.role : "user";
 
     res.cookie("token", generateToken({ email }));
     res.status(200).json({
       name: userData[0].givenName,
+      role: role,
+      auth: true,
       email: mail,
-      status: 1,
-      token: generateToken({ email: mail }),
+      token: generateToken({ email: mail, role: role }),
     });
   });
 
