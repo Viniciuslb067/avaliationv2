@@ -31,15 +31,15 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
         const { name, dns, area } = req.body;
 
         if (!dns || !name || !area) {
-            return res.status(200).json({ status: 2, error: "Preencha todos os campos!" })
+            return res.status(200).json({ error: "Preencha todos os campos!" })
         }
 
         if (await System.findOne({ dns: dns, name: name })) {
-            return res.status(200).json({ status: 2, error: "Sistema já cadastrado!" });
+            return res.status(200).json({ error: "Sistema já cadastrado!" });
         } else {
             await System.create(req.body);
 
-            return res.status(200).json({ status: 1, success: "Sistema cadastrado com sucesso!" })
+            return res.status(200).json({ success: "Sistema cadastrado com sucesso!" })
         }
 
     } catch (err) {
@@ -57,7 +57,7 @@ router.put("/:systemId", ensureAuthMiddleware, async (req, res) => {
 
         const systemUpdate = await System.findByIdAndUpdate(req.params.systemId, req.body, { new: true });
         
-        return res.status(200).json({ status: 1, success: "Sistema atualizado com sucesso", systemUpdate });
+        return res.status(200).json({ success: "Sistema atualizado com sucesso", systemUpdate });
 
     } catch (err) {
         return res.status(400).send({ error: "Erro ao atualizar o sistema" });
@@ -67,7 +67,7 @@ router.put("/:systemId", ensureAuthMiddleware, async (req, res) => {
 router.delete("/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         await System.findByIdAndRemove(req.params.systemId);
-        return res.status(200).json({ status: 1, success: "Sistema excluido com sucesso" });
+        return res.status(200).json({ success: "Sistema excluido com sucesso" });
     } catch (err) {
         return res.status(400).send({ error: "Erro ao excluir um sistema" }) 
     }

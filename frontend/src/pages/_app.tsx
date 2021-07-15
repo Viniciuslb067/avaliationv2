@@ -18,14 +18,14 @@ import styles from "../styles/app.module.scss";
 
 axios.defaults.httpsAgent = new https.Agent({
   rejectUnauthorized: false,
-})
+});
 
 toast.configure();
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
-  const showHeaderAndSidebar = 
+  const showHeaderAndSidebar =
     router.pathname === "/" ||
     router.pathname === "/register" ||
     router.pathname === "/assess/[slug]";
@@ -40,17 +40,17 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-      <AuthProvider>
-        <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
-          <div className={styles.wrapper}>
-            {!showHeaderAndSidebar && <Sidebar />}
-            <main>
-              {!showHeaderAndSidebar && <Header />}
-              <Component {...pageProps} />
-            </main>
-          </div>
-        </SidebarContext.Provider>
-      </AuthProvider>
+    <AuthProvider>
+      <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
+        <div className={styles.wrapper}>
+          {!showHeaderAndSidebar && <Sidebar />}
+          <main>
+            {!showHeaderAndSidebar && <Header />}
+            <Component {...pageProps} />
+          </main>
+        </div>
+      </SidebarContext.Provider>
+    </AuthProvider>
   );
 }
 

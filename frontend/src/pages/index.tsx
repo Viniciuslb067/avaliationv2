@@ -1,20 +1,16 @@
 import Head from "next/head";
-import Router, { useRouter } from "next/router";
-import { useEffect } from "react";
 import { parseCookies } from "nookies";
+import { GetServerSideProps } from "next";
 import { useState, useContext } from "react";
 import { AiFillHome } from "react-icons/ai";
 import { AuthContext } from "../contexts/AuthContext";
 
 import styles from "../styles/index.module.scss";
-import { GetServerSideProps } from "next";
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { "feedback.token": token } = parseCookies();
-  
+
   const { signIn } = useContext(AuthContext);
 
   async function handleSubmit() {
@@ -24,15 +20,6 @@ export default function Login() {
     };
     await signIn(data);
   }
-
-  useEffect(() => {
-    async function verifyIsAuthenticated() {
-      if(token && router.pathname === "/") {
-        Router.push("/dashboard")
-      }
-    }
-    verifyIsAuthenticated();
-  }, []);
 
   const handleKeypress = (e) => {
     if (e.charCode === 13) {

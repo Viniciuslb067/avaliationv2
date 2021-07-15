@@ -45,7 +45,7 @@ export default function System({ system }: SystemProps) {
         setDepartment(res.data.area);
       })
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
 
@@ -59,7 +59,7 @@ export default function System({ system }: SystemProps) {
     await api
       .put("/system/" + uuid, data)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           setIsModalVisible(false);
@@ -84,7 +84,7 @@ export default function System({ system }: SystemProps) {
     await api
       .delete("/system/" + id)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           Router.push("/system");

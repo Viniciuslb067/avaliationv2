@@ -57,8 +57,6 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         password,
       });
 
-      console.log(response.data);
-
       if (response.data.auth === true) {
         const { token, name, role } = response.data;
 

@@ -37,14 +37,14 @@ export default function Assessment({
   const { isOpen } = useContext(SidebarContext);
   const { user } = useContext(AuthContext);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [uuid, setUuid] = useState("");
-  const [question, setQuestion] = useState("");
-  const [requester, setRequester] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [system, setSystem] = useState("");
-  const [status, setStatus] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [uuid, setUuid] = useState<string>("");
+  const [question, setQuestion] = useState<string>("");
+  const [requester, setRequester] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [system, setSystem] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   async function getData(id) {
     await api
@@ -58,7 +58,7 @@ export default function Assessment({
         setStatus(res.data.status);
       })
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
 
@@ -73,7 +73,7 @@ export default function Assessment({
     await api
       .put("/avaliation/" + uuid, data)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           setIsModalVisible(false);
@@ -84,7 +84,7 @@ export default function Assessment({
         }
       })
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
 
@@ -92,7 +92,7 @@ export default function Assessment({
     await api
       .delete("/avaliation/" + id)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
           Router.push("/assessment");
@@ -379,7 +379,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   const { data } = await apiClient.get("/avaliation");
-  const systems = await apiClient.get("/system");
 
   const avaliationOn = data.avaliationOn.map((item) => {
     return {
@@ -399,21 +398,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   });
 
-  const system = systems.data.systems.map((item) => {
-    return {
-      dns: item.dns,
-    };
-  });
-
   const allAvaliationOn = avaliationOn;
   const allAvaliationOff = avaliationOff;
-  const allSystem = system;
 
   return {
     props: {
       allAvaliationOn,
       allAvaliationOff,
-      allSystem,
     },
   };
 };

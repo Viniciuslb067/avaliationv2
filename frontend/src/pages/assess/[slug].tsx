@@ -46,7 +46,7 @@ export default function Assess() {
     await api
       .post("/avaliate/" + id, data)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           setIsModalVisible(false);
         } else {
           const notify = () =>
@@ -57,7 +57,7 @@ export default function Assess() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert(err)
       });
   }
 

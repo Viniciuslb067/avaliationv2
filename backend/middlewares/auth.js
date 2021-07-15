@@ -23,8 +23,6 @@ module.exports = (req, res, next) => {
     if (err)
       return res.status(401).json({ error: "Token inválido" });
 
-      console.log(decoded)
-
     req.userEmail = decoded.email;
     return next();
   });

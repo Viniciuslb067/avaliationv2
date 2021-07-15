@@ -33,7 +33,6 @@ export default function User({ user }: UserProps) {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [role, setRole] = useState<string>("");
-  const [access, setAccess] = useState<string>("");
 
   async function getData(id) {
     await api
@@ -42,15 +41,12 @@ export default function User({ user }: UserProps) {
         setName(res.data.name);
         setEmail(res.data.email);
         setRole(res.data.role);
-        setAccess(res.data.access);
       })
-      
+
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
-
-  console.log(role)
 
   async function handleSubmit() {
     const data = {
@@ -62,7 +58,7 @@ export default function User({ user }: UserProps) {
     await api
       .put("/user/" + uuid, data)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           setIsModalVisible(false);
@@ -73,7 +69,7 @@ export default function User({ user }: UserProps) {
         }
       })
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
 
@@ -87,17 +83,17 @@ export default function User({ user }: UserProps) {
     await api
       .delete("/user/" + id)
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
-          notify();
           Router.push("/user");
+          notify();
         } else {
           const notify = () => toast.warning(res.data.error);
           notify();
         }
       })
       .catch((err) => {
-        throw new Error(err);
+        alert(err);
       });
   }
 
@@ -144,26 +140,7 @@ export default function User({ user }: UserProps) {
                   disabled
                 />
               </div>
-              <div className={styles.fields}>
-                <label htmlFor="">Status</label>
-                <select
-                  required
-                  defaultValue={access}
-                  onChange={(e) => setAccess(e.target.value)}
-                >
-                  {access === "Pendente" ? (
-                    <>
-                      <option>Pendente</option>
-                      <option>Liberado</option>
-                    </>
-                  ) : (
-                    <>
-                      <option>Liberado</option>
-                      <option>Pendente</option>
-                    </>
-                  )}
-                </select>
-              </div>
+
               <div className={styles.fields}>
                 <label htmlFor="">Função</label>
                 <select
@@ -181,7 +158,9 @@ export default function User({ user }: UserProps) {
                       <option value="user">Usuário</option>
                       <option value="admin">Administrador</option>
                     </>
-                  ): ""}
+                  ) : (
+                    ""
+                  )}
                 </select>
               </div>
             </div>
@@ -201,6 +180,7 @@ export default function User({ user }: UserProps) {
                       <tr>
                         <td>Nome</td>
                         <td>Email</td>
+                        <td>Função</td>
                         <td></td>
                         <td></td>
                       </tr>
@@ -211,7 +191,11 @@ export default function User({ user }: UserProps) {
                           <tr key={key}>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
-                            <td>{item.role === "admin" ? "Administrador" : "Usuário"}</td>
+                            <td>
+                              {item.role === "admin"
+                                ? "Administrador"
+                                : "Usuário"}
+                            </td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />

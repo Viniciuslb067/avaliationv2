@@ -25,12 +25,10 @@ router.get("/:userId", ensureAuthMiddleware, async (req, res) => {
 //Editar um usuário
 router.put("/:userId", ensureAuthMiddleware, async (req, res) => {
   try {
-    const { name, role, access } = req.body;
+    const { name, role } = req.body;
 
     if (!name || !role) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "Preencha todos os campos" });
+      return res.status(200).json({ error: "Preencha todos os campos" });
     }
 
     const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
@@ -39,7 +37,7 @@ router.put("/:userId", ensureAuthMiddleware, async (req, res) => {
 
     return res
       .status(200)
-      .json({ status: 1, success: "Usuário atualizado com sucesso", user });
+      .json({ success: "Usuário atualizado com sucesso", user });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao atualizar um usuário" });
   }
@@ -49,9 +47,7 @@ router.delete("/:userId", ensureAuthMiddleware, async (req, res) => {
   try {
     await User.findByIdAndRemove(req.params.userId);
 
-    return res
-      .status(200)
-      .json({ status: 1, success: "Usuário excluido com sucesso" });
+    return res.status(200).json({ success: "Usuário excluido com sucesso" });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao excluir um usuário" });
   }

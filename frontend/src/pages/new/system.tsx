@@ -23,7 +23,7 @@ export default function NewSystem() {
         area,
       })
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success === 1) {
           const notify = () => toast.success(res.data.success);
           notify();
           Router.push("/dashboard");
@@ -33,7 +33,7 @@ export default function NewSystem() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert(err)
       });
   }
 

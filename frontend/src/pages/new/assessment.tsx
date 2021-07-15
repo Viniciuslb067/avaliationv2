@@ -32,7 +32,7 @@ export default function NewAssessment({ systemData }) {
         system,
       })
       .then((res) => {
-        if (res.data.status === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           Router.push("/dashboard");
@@ -42,7 +42,7 @@ export default function NewAssessment({ systemData }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert(err)
       });
   }
 

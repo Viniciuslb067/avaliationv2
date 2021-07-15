@@ -131,7 +131,6 @@ router.get("/result/:avaliationId", ensureAuthMiddleware, async (req, res) => {
     return res
       .status(400)
       .send({ error: "Erro ao listar os resultados: " + err });
-    console.log(err);
   }
 });
 
@@ -150,7 +149,7 @@ router.post("/:avaliationId", async (req, res) => {
     if (!note) {
       return res
         .status(200)
-        .json({ status: 2, error: "Antes de enviar avalie o sistema!" });
+        .json({ error: "Antes de enviar avalie o sistema!" });
     } else {
       await Result.create({
         ip_user: ip,
@@ -163,7 +162,6 @@ router.post("/:avaliationId", async (req, res) => {
       });
 
       return res.status(200).json({
-        status: 1,
         success: "Muito obrigado por responder a avaliação!",
       });
     }

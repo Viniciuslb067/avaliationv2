@@ -19,7 +19,7 @@ router.get("/me/:token", async (req, res) => {
 
   jwt.verify(req.params.token, authConfig.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ status: 2, error: "Token inválido" });
+      return res.status(401).json({ error: "Token inválido" });
     }
 
     userEmail = decoded.email;
@@ -36,9 +36,7 @@ router.post("/authenticate", async (req, res) => {
   const username = `uid=${email}@inss.gov.br`;
 
   if (!email || !password) {
-    return res
-      .status(200)
-      .json({ status: 2, error: "Preencha todos os campos" });
+    return res.status(200).json({ error: "Preencha todos os campos" });
   }
 
   const [mail] = email.split(",", 1);
@@ -54,9 +52,7 @@ router.post("/authenticate", async (req, res) => {
 
   client.bind(username, password, async (err) => {
     if (err) {
-      return res
-        .status(200)
-        .json({ status: 2, error: "Usuário ou senha incorreto" });
+      return res.status(200).json({ error: "Usuário ou senha incorreto" });
     }
 
     let search = function () {
@@ -64,7 +60,7 @@ router.post("/authenticate", async (req, res) => {
       return new Promise((resolve, reject) => {
         client.search("ou=INSS,dc=gov,dc=br", opts, (err, res) => {
           if (err) {
-            return res.status(200).json({ status: 2, error: err });
+            return res.status(200).json({ error: err });
           }
           res.on("searchEntry", async (entry) => {
             items.push(entry.object);
@@ -106,10 +102,6 @@ router.post("/authenticate", async (req, res) => {
       token: generateToken({ email: mail, role: role }),
     });
   });
-
-  // if (await User.findOne({ email: `${email}@inss.gov.br`, access: "Bloqueado" })) {
-  //   return res.status(200).json({ status: 2, error: "Acesso bloqueado, aguardando a aprovação" });
-  // }
 });
 
 module.exports = (app) => app.use("/auth", router);
