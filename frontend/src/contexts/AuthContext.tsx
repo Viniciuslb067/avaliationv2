@@ -12,6 +12,7 @@ toast.configure();
 interface User {
   name: string;
   email?: string;
+  role: string;
 }
 
 interface SignInCredentials {
@@ -43,8 +44,8 @@ export function AuthProvider({ children }: AuthProvidorProps) {
 
     if (token) {
       api.get("/auth/me/" + token).then((response) => {
-        const { name } = response.data.user;
-        setUser({ name: name });
+        const { name, role } = response.data.user;
+        setUser({ name, role });
       });
     }
   }, []);
@@ -56,23 +57,23 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         password,
       });
 
-      console.log(response.data)
+      console.log(response.data);
 
-      if (response.data.status === 1) {
-        const { token, name } = response.data;
+      if (response.data.auth === true) {
+        const { token, name, role } = response.data;
 
         setCookie(undefined, "feedback.token", token, {
           maxAge: 60 * 60 * 24 * 1, // 1 dia
           path: "/",
         });
 
-        api.defaults.headers['Authorization'] = `Bearer ${token}`
+        api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
-        setUser({ name: name });
-        
+        setUser({ name, role });
+
         Router.push("/dashboard");
-
-      } else {
+      }
+      if (response.data.error) {
         const notify = () => toast.error(response.data.error);
         notify();
       }

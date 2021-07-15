@@ -7,10 +7,11 @@ import { Modal } from "antd";
 import { toast } from "react-toastify";
 import { parseCookies } from "nookies";
 
-import { SidebarContext } from "../contexts/SidebarContext";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { BsGraphUp } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
+import { SidebarContext } from "../contexts/SidebarContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 import { api } from "../services/api";
 import { getAPIClient } from "../services/axios";
@@ -34,6 +35,7 @@ export default function Assessment({
   allAvaliationOff,
 }: AssessmentProps) {
   const { isOpen } = useContext(SidebarContext);
+  const { user } = useContext(AuthContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [uuid, setUuid] = useState("");
@@ -217,16 +219,20 @@ export default function Assessment({
             </div>
           </Modal>
 
-          <div className={styles.headerActions}>
-            <Link href="/new/assessment">
-              <button>
-                <span>
-                  <IoMdAdd color="white" />
-                </span>
-                <span className={styles.text}>Avaliação</span>
-              </button>
-            </Link>
-          </div>
+          {user?.role === "user" ? (
+            ""
+          ) : (
+            <div className={styles.headerActions}>
+              <Link href="/new/assessment">
+                <button>
+                  <span>
+                    <IoMdAdd color="white" />
+                  </span>
+                  <span className={styles.text}>Avaliação</span>
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
         <div className={styles.grid}>
           <div className={styles.table}>
@@ -255,23 +261,33 @@ export default function Assessment({
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.system}</td>
-                            <td>
-                              <span onClick={() => openModalAndGetId(item.id)}>
-                                <AiOutlineEdit size={20} color="orange" />
-                              </span>
-                            </td>
-                            <td>
-                              <Link href={`/metrics/${item.id}`}>
-                                <span>
-                                  <BsGraphUp size={20} color="blue" />
-                                </span>
-                              </Link>
-                            </td>
-                            <td>
-                              <span onClick={() => deleteAssesssment(item.id)}>
-                                <AiOutlineDelete size={20} color="red" />
-                              </span>
-                            </td>
+                            {user?.role === "user" ? (
+                              <td></td>
+                            ) : (
+                              <>
+                                <td>
+                                  <span
+                                    onClick={() => openModalAndGetId(item.id)}
+                                  >
+                                    <AiOutlineEdit size={20} color="orange" />
+                                  </span>
+                                </td>
+                                <td>
+                                  <Link href={`/metrics/${item.id}`}>
+                                    <span>
+                                      <BsGraphUp size={20} color="blue" />
+                                    </span>
+                                  </Link>
+                                </td>
+                                <td>
+                                  <span
+                                    onClick={() => deleteAssesssment(item.id)}
+                                  >
+                                    <AiOutlineDelete size={20} color="red" />
+                                  </span>
+                                </td>
+                              </>
+                            )}
                           </tr>
                         );
                       })}
@@ -308,23 +324,33 @@ export default function Assessment({
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.system}</td>
-                            <td>
-                              <span onClick={() => openModalAndGetId(item.id)}>
-                                <AiOutlineEdit size={20} color="orange" />
-                              </span>
-                            </td>
-                            <td>
-                              <Link href={`/metrics/${item.id}`}>
-                                <span>
-                                  <BsGraphUp size={20} color="blue" />
-                                </span>
-                              </Link>
-                            </td>
-                            <td>
-                              <span onClick={() => deleteAssesssment(item.id)}>
-                                <AiOutlineDelete size={20} color="red" />
-                              </span>
-                            </td>
+                            {user?.role === "user" ? (
+                              <td></td>
+                            ) : (
+                              <>
+                                <td>
+                                  <span
+                                    onClick={() => openModalAndGetId(item.id)}
+                                  >
+                                    <AiOutlineEdit size={20} color="orange" />
+                                  </span>
+                                </td>
+                                <td>
+                                  <Link href={`/metrics/${item.id}`}>
+                                    <span>
+                                      <BsGraphUp size={20} color="blue" />
+                                    </span>
+                                  </Link>
+                                </td>
+                                <td>
+                                  <span
+                                    onClick={() => deleteAssesssment(item.id)}
+                                  >
+                                    <AiOutlineDelete size={20} color="red" />
+                                  </span>
+                                </td>
+                              </>
+                            )}
                           </tr>
                         );
                       })}

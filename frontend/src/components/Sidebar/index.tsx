@@ -64,22 +64,30 @@ export function Sidebar() {
               </li>
             </ul>
             <ul>
-              <li>
-                <Link href="/user">
-                  <a>
-                    <span>{isOpen ? <HiOutlineUsers /> : ""}</span>
-                    {isOpen ? "Usuários" : ""}
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/system">
-                  <a>
-                    <span>{isOpen ? <RiComputerLine /> : ""}</span>
-                    {isOpen ? "Sistemas" : ""}
-                  </a>
-                </Link>
-              </li>
+              {user?.role === "user" ? (
+                ""
+              ) : (
+                <li>
+                  <Link href="/user">
+                    <a>
+                      <span>{isOpen ? <HiOutlineUsers /> : ""}</span>
+                      {isOpen ? "Usuários" : ""}
+                    </a>
+                  </Link>
+                </li>
+              )}
+              {user?.role === "user" ? (
+                ""
+              ) : (
+                <li>
+                  <Link href="/system">
+                    <a>
+                      <span>{isOpen ? <RiComputerLine /> : ""}</span>
+                      {isOpen ? "Sistemas" : ""}
+                    </a>
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

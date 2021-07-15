@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import decode from "jwt-decode";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import { useContext } from "react";
@@ -7,6 +8,7 @@ import { useContext } from "react";
 import { Card } from "../components/Card/index";
 import { ChartHome } from "../components/ChartHome/index";
 import { SidebarContext } from "../contexts/SidebarContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 import { getAPIClient } from "../services/axios";
 import styles from "../styles/dashboard.module.scss";
@@ -101,6 +103,8 @@ export default function Dashboard({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx);
   const { ["feedback.token"]: token } = parseCookies(ctx);
+  
+  const user = decode(token);
 
   if (!token) {
     return {

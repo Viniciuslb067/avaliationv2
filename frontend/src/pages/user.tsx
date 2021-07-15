@@ -18,6 +18,7 @@ type User = {
   id: string;
   name: string;
   email: string;
+  role: string;
 };
 
 type UserProps = {
@@ -43,17 +44,19 @@ export default function User({ user }: UserProps) {
         setRole(res.data.role);
         setAccess(res.data.access);
       })
+      
       .catch((err) => {
         throw new Error(err);
       });
   }
+
+  console.log(role)
 
   async function handleSubmit() {
     const data = {
       name: name,
       email: email,
       role: role,
-      access: access,
     };
 
     await api
@@ -161,6 +164,26 @@ export default function User({ user }: UserProps) {
                   )}
                 </select>
               </div>
+              <div className={styles.fields}>
+                <label htmlFor="">Função</label>
+                <select
+                  required
+                  defaultValue={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  {role === "admin" ? (
+                    <>
+                      <option value="admin">Administrador</option>
+                      <option value="user">Usuário</option>
+                    </>
+                  ) : role === "user" ? (
+                    <>
+                      <option value="user">Usuário</option>
+                      <option value="admin">Administrador</option>
+                    </>
+                  ): ""}
+                </select>
+              </div>
             </div>
           </Modal>
         </div>
@@ -188,6 +211,7 @@ export default function User({ user }: UserProps) {
                           <tr key={key}>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
+                            <td>{item.role === "admin" ? "Administrador" : "Usuário"}</td>
                             <td>
                               <span onClick={() => openModalAndGetId(item.id)}>
                                 <AiOutlineEdit size={20} color="orange" />
@@ -233,6 +257,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       id: item._id,
       name: item.name,
       email: item.email,
+      role: item.role,
     };
   });
 
