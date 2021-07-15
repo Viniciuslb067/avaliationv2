@@ -1,21 +1,16 @@
 import Head from "next/head";
 import Router from "next/router";
-import { GetServerSideProps } from "next";
-import { useState } from "react";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { parseCookies } from "nookies";
+import { GetServerSideProps } from "next";
 
 import { api } from "../../services/api";
+import { getAPIClient } from "../../services/axios";
 
 import styles from "./assessment.module.scss";
 
-import "react-toastify/dist/ReactToastify.css";
-import { parseCookies } from "nookies";
-import { getAPIClient } from "../../services/axios";
-
-toast.configure();
-
 export default function NewAssessment({ systemData }) {
-  
   const [question, setQuestion] = useState("");
   const [requester, setRequester] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -24,7 +19,7 @@ export default function NewAssessment({ systemData }) {
 
   async function handleSubmit() {
     await api
-      .post("/avaliation", {
+      .post("/assessment", {
         question,
         requester,
         start_date: startDate,
@@ -42,7 +37,7 @@ export default function NewAssessment({ systemData }) {
         }
       })
       .catch((err) => {
-        alert(err)
+        alert(err);
       });
   }
 

@@ -11,24 +11,24 @@ import { getAPIClient } from "../services/axios";
 
 import styles from "../styles/dashboard.module.scss";
 
-type Avaliation = {
+type Assessment = {
   question: string;
   requester: string;
   status: string;
 };
 
 type HomeProps = {
-  recentAvaliation: Avaliation[];
-  allAvaliation: number;
+  recentAssessment: Assessment[];
+  allAssessment: number;
   allUser: number;
   allSystem: number;
 };
 
 export default function Dashboard({
-  allAvaliation,
+  allAssessment,
   allUser,
   allSystem,
-  recentAvaliation,
+  recentAssessment,
 }: HomeProps) {
   const { isOpen } = useContext(SidebarContext);
 
@@ -50,7 +50,7 @@ export default function Dashboard({
           </div>
         </div>
         <Card
-          numberAvaliation={allAvaliation}
+          numberAvaliation={allAssessment}
           numberUsers={allUser}
           numberSystems={allSystem}
         />
@@ -76,7 +76,7 @@ export default function Dashboard({
                       </tr>
                     </thead>
                     <tbody>
-                      {recentAvaliation.map((item, key) => {
+                      {recentAssessment.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.question}</td>
@@ -110,19 +110,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const { data } = await apiClient.get("/avaliation");
+  const { data } = await apiClient.get("/assessment");
   const totalUser = await apiClient.get("/user");
   const totalSystems = await apiClient.get("/system");
 
-  const allAvaliation = data.totalAvaliation;
+  const allAssessment = data.totalAssessment;
   const allUser = totalUser.data.totalUser;
   const allSystem = totalSystems.data.totalSystems;
-  const recentAvaliation = data.recentAvaliations;
+  const recentAssessment = data.recentAssessment;
 
   return {
     props: {
-      allAvaliation,
-      recentAvaliation,
+      allAssessment,
+      recentAssessment,
       allSystem,
       allUser,
     },

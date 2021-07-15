@@ -135,7 +135,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const apiClient = getAPIClient(ctx);
   const { slug } = ctx.params;
-  const { data } = await apiClient.get(`/avaliate/result/${slug}`);
+  const { data } = await apiClient.get(`/assess/result/${slug}`);
 
   const allData = {
     id: data.data._id,

@@ -26,7 +26,7 @@ export default function Assess() {
 
   useEffect(() => {
     async function getData() {
-      await api.get("/avaliate/" + slug).then((res) => {
+      await api.get("/assess/" + slug).then((res) => {
         res.data.map((item) => {
           setAlreadyAssess(item.assess);
           setAssessment(item.assessment);
@@ -44,7 +44,7 @@ export default function Assess() {
       system: `${osName}  ${osVersion}`,
     };
     await api
-      .post("/avaliate/" + id, data)
+      .post("/assess/" + id, data)
       .then((res) => {
         if (res.data.success) {
           setIsModalVisible(false);
@@ -67,7 +67,7 @@ export default function Assess() {
       system: `${osName}  ${osVersion}`,
     };
     setIsModalVisible(false);
-    await api.post("/avaliate/skip/" + id, data);
+    await api.post("/assess/skip/" + id, data);
   }
 
   const renderCard = (card, index) => {

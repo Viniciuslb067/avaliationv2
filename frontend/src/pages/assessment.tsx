@@ -18,7 +18,7 @@ import { getAPIClient } from "../services/axios";
 
 import styles from "../styles/assessment.module.scss";
 
-type Avaliation = {
+type Assessment = {
   id: string;
   question: string;
   requester: string;
@@ -26,13 +26,13 @@ type Avaliation = {
 };
 
 type AssessmentProps = {
-  allAvaliationOn: Avaliation[];
-  allAvaliationOff: Avaliation[];
+  allAssessmentOn: Assessment[];
+  allAssessmentOff: Assessment[];
 };
 
 export default function Assessment({
-  allAvaliationOn,
-  allAvaliationOff,
+  allAssessmentOn,
+  allAssessmentOff,
 }: AssessmentProps) {
   const { isOpen } = useContext(SidebarContext);
   const { user } = useContext(AuthContext);
@@ -48,7 +48,7 @@ export default function Assessment({
 
   async function getData(id) {
     await api
-      .get("/avaliation/" + id)
+      .get("/assessment/" + id)
       .then((res) => {
         setQuestion(res.data.question);
         setRequester(res.data.requester);
@@ -71,7 +71,7 @@ export default function Assessment({
       status: status,
     };
     await api
-      .put("/avaliation/" + uuid, data)
+      .put("/assessment/" + uuid, data)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);
@@ -90,14 +90,14 @@ export default function Assessment({
 
   async function deleteAssesssment(id) {
     await api
-      .delete("/avaliation/" + id)
+      .delete("/assessment/" + id)
       .then((res) => {
-        if (res.data.success === 1) {
+        if (res.data.success) {
           const notify = () => toast.success(res.data.success);
           notify();
           Router.push("/assessment");
         } else {
-          const notify = () => toast.warning(res.data.error);
+          const notify = () => toast.error(res.data.error);
           notify();
         }
       })
@@ -255,7 +255,7 @@ export default function Assessment({
                       </tr>
                     </thead>
                     <tbody>
-                      {allAvaliationOn.map((item, key) => {
+                      {allAssessmentOn.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.question}</td>
@@ -318,7 +318,7 @@ export default function Assessment({
                       </tr>
                     </thead>
                     <tbody>
-                      {allAvaliationOff.map((item, key) => {
+                      {allAssessmentOff.map((item, key) => {
                         return (
                           <tr key={key}>
                             <td>{item.question}</td>
@@ -378,9 +378,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  const { data } = await apiClient.get("/avaliation");
+  const { data } = await apiClient.get("/assessment");
 
-  const avaliationOn = data.avaliationOn.map((item) => {
+  const assessmentOn = data.assessmentOn.map((item) => {
     return {
       id: item._id,
       question: item.question,
@@ -389,7 +389,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   });
 
-  const avaliationOff = data.avaliationOff.map((item) => {
+  const assessmentOff = data.assessmentOff.map((item) => {
     return {
       id: item._id,
       question: item.question,
@@ -398,13 +398,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   });
 
-  const allAvaliationOn = avaliationOn;
-  const allAvaliationOff = avaliationOff;
+  const allAssessmentOn = assessmentOn;
+  const allAssessmentOff = assessmentOff;
 
   return {
     props: {
-      allAvaliationOn,
-      allAvaliationOff,
+      allAssessmentOn,
+      allAssessmentOff,
     },
   };
 };
