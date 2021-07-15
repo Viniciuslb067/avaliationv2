@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 require("./controllers/authController")(app);
-require("./controllers/avaliationController")(app);
+require("./controllers/assessmentController")(app);
 require("./controllers/assessController")(app);
 require("./controllers/systemController")(app);
 require("./controllers/userController")(app);
@@ -23,6 +23,7 @@ require("./controllers/userController")(app);
 //     },
 //     app
 //   )
+
   app.listen(3001, () => {
     console.log("Servidor iniciado!");
   });

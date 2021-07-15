@@ -1,7 +1,7 @@
 const express = require("express");
 const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
-const Avaliation = require("../models/Avaliation");
+const Assessment = require("../models/Assessment");
 const Result = require("../models/Result");
 
 const router = express.Router();
@@ -14,7 +14,7 @@ router.get("/:system", async (req, res) => {
       req.socket.remoteAddress ||
       (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-    const findOneAssess = await Avaliation.findOne(
+    const findOneAssess = await Assessment.findOne(
       { system: req.params.system },
       ["_id"]
     )
@@ -26,11 +26,11 @@ router.get("/:system", async (req, res) => {
     } else {
       const verifyAlreadyAssess = await Result.findOne({
         ip_user: ip,
-        avaliation: findOneAssess,
+        assessment: findOneAssess,
       });
 
       if (!verifyAlreadyAssess) {
-        const assessment = await Avaliation.find({ _id: findOneAssess }, [
+        const assessment = await Assessment.find({ _id: findOneAssess }, [
           "question",
         ])
           .sort({ createdAt: "desc" })
@@ -46,68 +46,68 @@ router.get("/:system", async (req, res) => {
   }
 });
 
-router.get("/result/:avaliationId", ensureAuthMiddleware, async (req, res) => {
+router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
   try {
-    const find = await Avaliation.findOne({
-      _id: req.params.avaliationId,
+    const find = await Assessment.findOne({
+      _id: req.params.assessId,
     }).exec();
 
     if (find) {
       const findResult = Result.findOne({
-        avaliation: req.params.avaliationId,
+        assessment: req.params.assessId,
       }).exec();
       if (findResult) {
         const notes = [
           await Result.countDocuments({
             note: 1,
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
           await Result.countDocuments({
             note: 2,
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
           await Result.countDocuments({
             note: 3,
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
           await Result.countDocuments({
             note: 4,
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
           await Result.countDocuments({
             note: 5,
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
         ];
 
         const status = [
           await Result.countDocuments({
             status: "Enviado",
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
           await Result.countDocuments({
             status: "Ignorado",
-            avaliation: req.params.avaliationId,
+            assessment: req.params.assessId,
           }),
         ];
 
-        const data = await Avaliation.findOne({
-          _id: req.params.avaliationId,
+        const data = await Assessment.findOne({
+          _id: req.params.assessId,
         }).exec();
 
         const comments = await Result.find(
-          { avaliation: req.params.avaliationId, comments: { $gt: "" } },
+          { assessment: req.params.assessId, comments: { $gt: "" } },
           ["comments", "ip_user", "createdAt", "note", "info"]
         )
           .where("status")
           .all(["Enviado"]);
         const commentsTotal = await Result.countDocuments({
-          avaliation: req.params.avaliationId,
+          assessment: req.params.assessId,
           comments: { $gt: "" },
         });
 
         const browserName = await Result.find(
-          { avaliation: req.params.avaliationId },
+          { assessment: req.params.assessId },
           "browser"
         );
 
@@ -134,9 +134,9 @@ router.get("/result/:avaliationId", ensureAuthMiddleware, async (req, res) => {
   }
 });
 
-router.post("/:avaliationId", async (req, res) => {
+router.post("/:assessId", async (req, res) => {
   try {
-    const { avaliationId } = req.params;
+    const { assessId } = req.params;
 
     const { note, comments, browser, system } = req.body;
 
@@ -158,7 +158,7 @@ router.post("/:avaliationId", async (req, res) => {
         note,
         comments,
         status: "Enviado",
-        avaliation: avaliationId,
+        assessment: assessId,
       });
 
       return res.status(200).json({
@@ -170,9 +170,9 @@ router.post("/:avaliationId", async (req, res) => {
   }
 });
 
-router.post("/skip/:avaliationId", async (req, res) => {
+router.post("/skip/:assessId", async (req, res) => {
   try {
-    const { avaliationId } = req.params;
+    const { assessId } = req.params;
     const { browser, system } = req.body;
 
     const ip =
@@ -186,7 +186,7 @@ router.post("/skip/:avaliationId", async (req, res) => {
       browser,
       system,
       status: "Ignorado",
-      avaliation: avaliationId,
+      assessment: assessId,
     });
   } catch (err) {
     console.log(err);
@@ -194,4 +194,4 @@ router.post("/skip/:avaliationId", async (req, res) => {
   }
 });
 
-module.exports = (app) => app.use("/avaliate", router);
+module.exports = (app) => app.use("/assess", router);

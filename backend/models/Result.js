@@ -13,9 +13,9 @@ const ResultSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  avaliation: {
+  assessment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Avaliation",
+    ref: "Assessment",
     required: true,
   },
   note: {
