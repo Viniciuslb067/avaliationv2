@@ -7,21 +7,23 @@ module.exports = (req, res, next) => {
   if (!authHeader)
     return res
       .status(401)
-      .json({ status: 2, error: "Token não foi informado!" });
+      .json({ error: "Token não foi informado!" });
 
   const parts = authHeader.split(" ");
 
   if (!parts.length === 2)
-    return res.status(401).json({ status: 2, error: "Erro no token" });
+    return res.status(401).json({ error: "Erro no token" });
 
   const [scheme, token] = parts;
 
   if (!/^Bearer$/i.test(scheme))
-    return res.status(401).json({ status: 2, error: "Token fora do padrão" });
+    return res.status(401).json({ error: "Token fora do padrão" });
 
   jwt.verify(token, authConfig.secret, (err, decoded) => {
     if (err)
-      return res.status(401).json({ status: 2, error: "Token inválido" });
+      return res.status(401).json({ error: "Token inválido" });
+
+      console.log(decoded)
 
     req.userEmail = decoded.email;
     return next();
