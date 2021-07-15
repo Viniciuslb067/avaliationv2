@@ -3,43 +3,43 @@ const datefns = require("date-fns");
 const authMiddleware = require("../middlewares/auth");
 const ensureAuthMiddleware = require("../middlewares/ensureAuth");
 
-const Avaliation = require("../models/Avaliation");
+const Assessment = require("../models/Assessment");
 
 const router = express.Router();
 
 //Listar todas as avaliações
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    const avaliationOn = await Avaliation.find({})
+    const assessmentOn = await Assessment.find({})
       .sort({ createdAt: "desc" })
       .where("status")
       .all(["Ativada"]);
-    const avaliationOff = await Avaliation.find({})
+    const assessmentOff = await Assessment.find({})
       .sort({ createdAt: "desc" })
       .where("status")
       .all(["Desativada"]);
-    const recentAvaliations = await Avaliation.find({})
+    const recentAssessment = await Assessment.find({})
       .sort({ createdAt: "desc" })
       .where("status")
       .all(["Ativada"])
       .limit(10);
-    const totalAvaliation = await Avaliation.countDocuments();
+    const totalAssessment = await Assessment.countDocuments();
 
     await Promise.all(
-      avaliationOn.map(async (status) => {
+      assessmentOn.map(async (status) => {
         const data = status.end_date;
         const parsedDate = datefns.parseISO(data);
         const past = datefns.isAfter(parsedDate, new Date());
         const future = datefns.isBefore(parsedDate, new Date());
 
         if (past === false) {
-          await Avaliation.updateMany(
+          await Assessment.updateMany(
             { _id: status._id },
             { $set: { status: "Desativada" } }
           );
         }
         if (future === false) {
-          await Avaliation.updateMany(
+          await Assessment.updateMany(
             { _id: status._id },
             { $set: { status: "Ativada" } }
           );
@@ -48,10 +48,10 @@ router.get("/", authMiddleware, async (req, res) => {
     );
 
     return res.json({
-      avaliationOn,
-      avaliationOff,
-      totalAvaliation,
-      recentAvaliations,
+      assessmentOn,
+      assessmentOff,
+      totalAssessment,
+      recentAssessment,
     });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao listar as avaliações" });
@@ -59,10 +59,10 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 //Listar uma avaliação
-router.get("/:avaliationId", authMiddleware, async (req, res) => {
+router.get("/:assessmentId", authMiddleware, async (req, res) => {
   try {
-    const avaliation = await Avaliation.findById(req.params.avaliationId);
-    return res.json(avaliation);
+    const assessment = await Assessment.findById(req.params.assessmentId);
+    return res.json(assessment);
   } catch (err) {
     return res.status(400).send({ error: "Erro ao listar a avaliação" });
   }
@@ -77,7 +77,7 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
     }
 
     if (
-      await Avaliation.findOne({ system: system })
+      await Assessment.findOne({ system: system })
         .where("status")
         .all("Ativada")
     ) {
@@ -85,10 +85,10 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
         error: "Já existe uma avaliação ativa para este sistema!",
       });
     } else {
-      const avaliation = await Avaliation.create({ ...req.body });
+      const assessment = await Assessment.create({ ...req.body });
       return res.status(200).json({
         success: "Avaliação criada com sucesso",
-        avaliation,
+        assessment,
       });
     }
   } catch (err) {
@@ -96,7 +96,7 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
   }
 });
 //Editar uma avaliação
-router.put("/:avaliationId", ensureAuthMiddleware, async (req, res) => {
+router.put("/:assessmentId", ensureAuthMiddleware, async (req, res) => {
   try {
     const { question, requester, start_date, end_date } = req.body;
 
@@ -104,28 +104,28 @@ router.put("/:avaliationId", ensureAuthMiddleware, async (req, res) => {
       return res.status(200).json({ error: "Preencha todos os campos" });
     }
 
-    const avaliation = await Avaliation.findByIdAndUpdate(
-      req.params.avaliationId,
+    const assessment = await Assessment.findByIdAndUpdate(
+      req.params.assessmentId,
       req.body,
       { new: true }
     );
 
     return res.status(200).json({
       success: "Avaliação atualizada com sucesso",
-      avaliation,
+      assessment,
     });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao atualizar uma avaliação" });
   }
 });
 //Deletar uma avaliação
-router.delete("/:avaliationId", ensureAuthMiddleware, async (req, res) => {
+router.delete("/:assessmentId", ensureAuthMiddleware, async (req, res) => {
   try {
-    await Avaliation.findByIdAndRemove(req.params.avaliationId);
+    await Assessment.findByIdAndRemove(req.params.assessmentId);
     return res.status(200).json({ success: "Avaliação excluida com sucesso" });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao deletar uma avaliação" });
   }
 });
 
-module.exports = (app) => app.use("/avaliation", router);
+module.exports = (app) => app.use("/assessment", router);

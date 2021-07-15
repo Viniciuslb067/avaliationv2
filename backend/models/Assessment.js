@@ -1,6 +1,6 @@
 const mongoose = require("../database");
 
-const AvaliationSchema = new mongoose.Schema({
+const AssessmentSchema = new mongoose.Schema({
   question: {
     type: String,
     required: true,
@@ -33,5 +33,5 @@ const AvaliationSchema = new mongoose.Schema({
   },
 });
 
-const Avaliation = mongoose.model("Avaliation", AvaliationSchema);
-module.exports = Avaliation;
+const Assessment = mongoose.model("Assessment", AssessmentSchema);
+module.exports = Assessment;
