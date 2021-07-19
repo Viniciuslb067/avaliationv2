@@ -74,8 +74,8 @@ export function PieChart({ status }) {
                 },
               ],
             }}
-            height={100}
-            width={100}
+            height={50}
+            width={50}
             options={{
               title: {
                 display: true,
@@ -96,7 +96,7 @@ export function PieChart({ status }) {
               responsive: true,
               legend: {
                 labels: {
-                  fontSize: 15,
+                  fontSize: 16,
                 },
               },
             }}
@@ -109,13 +109,13 @@ export function PieChart({ status }) {
 
 export function PolarAreaChart({ browserInfo }) {
 
-  const abc = browserInfo.map(item => {
-    return {
-      browserName: item.browserName
-    }
+  var name
+  browserInfo.map(item => {
+    name = item.browserName
   })
 
-  console.log(abc)
+  console.log(name)
+  console.log(browserInfo)
 
   return (
     <>
@@ -128,11 +128,11 @@ export function PolarAreaChart({ browserInfo }) {
           <PolarArea
           type="Polar"
             data={{
-              labels: [abc.browserName],
+              labels: [browserInfo[0].browserName, browserInfo[1].browserName, browserInfo[2].browserName, browserInfo[3].browserName, ],
               datasets: [
                 {
                   label: "Estrelas",
-                  data: [browserInfo[0].total, 5, 8 , 10 ,5],
+                  data: [browserInfo[0].total, browserInfo[1].total, browserInfo[2].total, browserInfo[3].total],
                   backgroundColor: [
                     "rgb(54, 162, 235)",
                     "rgb(246, 46, 89)",

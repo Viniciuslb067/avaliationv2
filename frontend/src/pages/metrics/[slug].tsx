@@ -6,7 +6,7 @@ import {
   PieChart,
   PolarAreaChart,
 } from "../../components/ChartMetrics";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -16,10 +16,11 @@ import styles from "./assessment.module.scss";
 
 interface Comments {
   ip_user: string;
-  info: string;
-  comments: string;
   createdAt: string;
   note: number;
+  comments: string;
+  browser: string;
+  system: string;
 }
 
 interface Assessment {
@@ -94,7 +95,8 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                       <td>Comentário</td>
                       <td>Data</td>
                       <td>Nota</td>
-                      <td>Informações</td>
+                      <td>Navegador</td>
+                      <td>Sistema</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -110,7 +112,8 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
                             )}
                           </td>
                           <td>{item.note} Estrelas</td>
-                          <td>{item.info}</td>
+                          <td>{item.browser}</td>
+                          <td>{item.system}</td>
                         </tr>
                       );
                     })}
@@ -125,34 +128,28 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx);
   const { slug } = ctx.params;
+  console.log(slug);
   const { data } = await apiClient.get(`/assess/result/${slug}`);
 
   const allData = {
-    id: data.data._id,
-    question: data.data.question,
-    requester: data.data.requester,
-    system: data.data.system,
-    getStatus: data.data.status,
-    startDate: format(parseISO(data.data.start_date), "d MMMM yyyy", {
+    id: data.infoAssessment._id,
+    question: data.infoAssessment.question,
+    requester: data.infoAssessment.requester,
+    system: data.infoAssessment.system,
+    getStatus: data.infoAssessment.status,
+    startDate: format(parseISO(data.infoAssessment.start_date), "d MMMM yyyy", {
       locale: ptBR,
     }),
-    endDate: format(parseISO(data.data.end_date), "d MMMM yyyy", {
+    endDate: format(parseISO(data.infoAssessment.end_date), "d MMMM yyyy", {
       locale: ptBR,
     }),
     notes: data.notes,
-    status: data.status,
+    status: data.submissions,
     comments: data.comments,
-    commentsTotal: data.commentsTotal,
+    commentsTotal: data.totalComments,
     browserInfo: data.browserInfo,
   };
 
@@ -160,6 +157,5 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     props: {
       allData,
     },
-    revalidate: 1,
   };
 };

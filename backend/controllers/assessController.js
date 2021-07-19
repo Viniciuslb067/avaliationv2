@@ -42,7 +42,9 @@ router.get("/:system", async (req, res) => {
       }
     }
   } catch (err) {
-    return res.status(400).send({ error: "Erro ao listar as avaliações" });
+    return res
+      .status(400)
+      .send({ error: "Erro ao listar as avaliações" + err });
   }
 });
 
@@ -53,10 +55,15 @@ router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
     }).exec();
 
     if (find) {
-      const findResult = Result.findOne({
+      const findResult = await Result.findOne({
         assessment: req.params.assessId,
       }).exec();
+
       if (findResult) {
+        const infoAssessment = await Assessment.findOne({
+          _id: req.params.assessId,
+        }).exec();
+
         const notes = [
           await Result.countDocuments({
             note: 1,
@@ -80,7 +87,7 @@ router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
           }),
         ];
 
-        const status = [
+        const submissions = [
           await Result.countDocuments({
             status: "Enviado",
             assessment: req.params.assessId,
@@ -91,40 +98,41 @@ router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
           }),
         ];
 
-        const data = await Assessment.findOne({
-          _id: req.params.assessId,
-        }).exec();
-
         const comments = await Result.find(
           { assessment: req.params.assessId, comments: { $gt: "" } },
-          ["comments", "ip_user", "createdAt", "note", "info"]
+          ["comments", "ip_user", "createdAt", "note", "browser", "system"]
         )
           .where("status")
-          .all(["Enviado"]);
-        const commentsTotal = await Result.countDocuments({
+          .all(["Enviado"])
+
+          console.log(comments)
+
+        const totalComments = await Result.countDocuments({
           assessment: req.params.assessId,
           comments: { $gt: "" },
         });
 
-        const browserName = await Result.find(
-          { assessment: req.params.assessId },
-          "browser"
-        );
+         const browserName = await Result.find(
+           { assessment: req.params.assessId },
+           "browser"
+         );
 
-        const browserInfo = await Promise.all(
-          browserName.map(async (browser) => {
-            const total = await Result.countDocuments({
-              browser: browser.browser,
-            });
+         const browserInfo = await Promise.all(
+           browserName.map(async (browser) => {
+             const total = await Result.countDocuments({
+               browser: browser.browser,
+             });
 
-            return {
-              browserName: browser.browser,
-              total: total,
-            };
-          })
-        );
+             return {
+               browserName: browser.browser,
+               total: total,
+             };
+           })
+         );
 
-        res.json({ notes, status, data, comments, commentsTotal, browserInfo });
+         console.log(browserName)
+
+        res.json({ infoAssessment, notes, submissions, comments, totalComments, browserInfo });
       }
     }
   } catch (err) {
@@ -166,7 +174,7 @@ router.post("/:assessId", async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(400).send({ error: "Erro ao avaliar" });
+    return res.status(400).send({ error: "Erro ao avaliar" + err });
   }
 });
 
@@ -189,7 +197,6 @@ router.post("/skip/:assessId", async (req, res) => {
       assessment: assessId,
     });
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ error: "Erro ao pular avaliação: " + err });
   }
 });
