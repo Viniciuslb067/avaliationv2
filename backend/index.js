@@ -13,6 +13,7 @@ require("./controllers/assessmentController")(app);
 require("./controllers/assessController")(app);
 require("./controllers/systemController")(app);
 require("./controllers/userController")(app);
+require("./controllers/entrieController")(app);
 
 
 // https
