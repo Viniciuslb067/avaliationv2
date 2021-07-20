@@ -1,5 +1,5 @@
 const express = require("express");
-const ensureAuthMiddleware = require("../middlewares/ensureAuth");
+const authMiddleware = require("../middlewares/auth");
 
 const Assessment = require("../models/Assessment");
 const Result = require("../models/Result");
@@ -48,7 +48,7 @@ router.get("/:system", async (req, res) => {
   }
 });
 
-router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
+router.get("/result/:assessId", authMiddleware, async (req, res) => {
   try {
     const find = await Assessment.findOne({
       _id: req.params.assessId,
@@ -103,36 +103,43 @@ router.get("/result/:assessId", ensureAuthMiddleware, async (req, res) => {
           ["comments", "ip_user", "createdAt", "note", "browser", "system"]
         )
           .where("status")
-          .all(["Enviado"])
+          .all(["Enviado"]);
 
-          console.log(comments)
+        console.log(comments);
 
         const totalComments = await Result.countDocuments({
           assessment: req.params.assessId,
           comments: { $gt: "" },
         });
 
-         const browserName = await Result.find(
-           { assessment: req.params.assessId },
-           "browser"
-         );
+        const browserName = await Result.find(
+          { assessment: req.params.assessId },
+          "browser"
+        );
 
-         const browserInfo = await Promise.all(
-           browserName.map(async (browser) => {
-             const total = await Result.countDocuments({
-               browser: browser.browser,
-             });
+        const browserInfo = await Promise.all(
+          browserName.map(async (browser) => {
+            const total = await Result.countDocuments({
+              browser: browser.browser,
+            });
 
-             return {
-               browserName: browser.browser,
-               total: total,
-             };
-           })
-         );
+            return {
+              browserName: browser.browser,
+              total: total,
+            };
+          })
+        );
 
-         console.log(browserName)
+        console.log(browserInfo);
 
-        res.json({ infoAssessment, notes, submissions, comments, totalComments, browserInfo });
+        res.json({
+          infoAssessment,
+          notes,
+          submissions,
+          comments,
+          totalComments,
+          browserInfo,
+        });
       }
     }
   } catch (err) {
