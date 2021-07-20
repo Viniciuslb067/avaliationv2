@@ -15,6 +15,9 @@ const SystemSchema = new mongoose.Schema({
     uppercase: true,
     required: true,
   },
+  entries: {
+    type: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -12,5 +12,14 @@ export function getAPIClient(ctx?: any) {
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
   }
 
+  // api.interceptors.response.use(response => {
+  //   return response;
+  // }, error => {
+  //   if(error.response.status === 401) {
+  //     throw new Error("Você não possui permissão para acessar esse conteúdo")
+  //   }
+  //   return error;
+  // })
+
   return api;
 }

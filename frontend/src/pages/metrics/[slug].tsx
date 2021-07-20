@@ -9,6 +9,7 @@ import {
 import { GetServerSideProps } from "next";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { format, parseISO } from "date-fns";
+import { parseCookies } from "nookies";
 import ptBR from "date-fns/locale/pt-BR";
 
 import { getAPIClient } from "../../services/axios";
@@ -129,11 +130,21 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const apiClient = getAPIClient(ctx);
   const { slug } = ctx.params;
-  console.log(slug);
-  const { data } = await apiClient.get(`/assess/result/${slug}`);
+  const apiClient = getAPIClient(ctx);
+  const { ["feedback.token"]: token } = parseCookies(ctx);
+  
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
+  const { data } = await apiClient.get(`/assess/result/${slug}`);
+  
   const allData = {
     id: data.infoAssessment._id,
     question: data.infoAssessment.question,

@@ -53,7 +53,7 @@ export function PieChart({ status }) {
     <>
       <div className={styles.analyticsCard}>
         <div className={styles.analyticsHead}>
-          <h3>Estrelas</h3>
+          <h3>Submissões</h3>
         </div>
 
         <div className={styles.analyticsChart}>
@@ -128,11 +128,11 @@ export function PolarAreaChart({ browserInfo }) {
           <PolarArea
           type="Polar"
             data={{
-              labels: [browserInfo[0].browserName, browserInfo[1].browserName, browserInfo[2].browserName, browserInfo[3].browserName, ],
+              labels: [browserInfo[0].browserName, browserInfo[1].browserName, browserInfo[2].browserName,  ],
               datasets: [
                 {
                   label: "Estrelas",
-                  data: [browserInfo[0].total, browserInfo[1].total, browserInfo[2].total, browserInfo[3].total],
+                  data: [browserInfo[0].total, browserInfo[1].total, browserInfo[2].total,],
                   backgroundColor: [
                     "rgb(54, 162, 235)",
                     "rgb(246, 46, 89)",

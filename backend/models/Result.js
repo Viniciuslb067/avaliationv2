@@ -28,6 +28,10 @@ const ResultSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  entry: {
+    type: Date,
+    default: Date.now
+  },
   createdAt: {
     type: Date,
     default: Date.now,

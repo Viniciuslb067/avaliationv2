@@ -249,9 +249,9 @@ export default function Assessment({
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
                         <td>Sistema</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        {user?.role === "user" ? "" : <td></td>}
+                        {user?.role === "user" ? "" : <td></td>}
+                        {user?.role === "user" ? "" : <td></td>}
                       </tr>
                     </thead>
                     <tbody>
@@ -261,6 +261,13 @@ export default function Assessment({
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.system}</td>
+                            <td>
+                              <Link href={`/metrics/${item.id}`}>
+                                <span>
+                                  <BsGraphUp size={20} color="blue" />
+                                </span>
+                              </Link>
+                            </td>
                             {user?.role === "user" ? (
                               <td></td>
                             ) : (
@@ -271,13 +278,6 @@ export default function Assessment({
                                   >
                                     <AiOutlineEdit size={20} color="orange" />
                                   </span>
-                                </td>
-                                <td>
-                                  <Link href={`/metrics/${item.id}`}>
-                                    <span>
-                                      <BsGraphUp size={20} color="blue" />
-                                    </span>
-                                  </Link>
                                 </td>
                                 <td>
                                   <span
@@ -312,9 +312,9 @@ export default function Assessment({
                         <td>Título Avaliação</td>
                         <td>Departamento</td>
                         <td>Sistema</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        {user?.role === "user" ? "" : <td></td>}
+                        {user?.role === "user" ? "" : <td></td>}
+                        {user?.role === "user" ? "" : <td></td>}
                       </tr>
                     </thead>
                     <tbody>
@@ -324,6 +324,13 @@ export default function Assessment({
                             <td>{item.question}</td>
                             <td>{item.requester}</td>
                             <td>{item.system}</td>
+                            <td>
+                              <Link href={`/metrics/${item.id}`}>
+                                <span>
+                                  <BsGraphUp size={20} color="blue" />
+                                </span>
+                              </Link>
+                            </td>
                             {user?.role === "user" ? (
                               <td></td>
                             ) : (
@@ -334,13 +341,6 @@ export default function Assessment({
                                   >
                                     <AiOutlineEdit size={20} color="orange" />
                                   </span>
-                                </td>
-                                <td>
-                                  <Link href={`/metrics/${item.id}`}>
-                                    <span>
-                                      <BsGraphUp size={20} color="blue" />
-                                    </span>
-                                  </Link>
                                 </td>
                                 <td>
                                   <span

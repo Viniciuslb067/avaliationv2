@@ -27,6 +27,9 @@ const AssessmentSchema = new mongoose.Schema({
     required: true,
     default: "Ativada",
   },
+  entries: {
+    type: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
