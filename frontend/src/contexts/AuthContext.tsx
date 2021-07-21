@@ -76,7 +76,7 @@ export function AuthProvider({ children }: AuthProvidorProps) {
         notify();
       }
     } catch (err) {
-      throw new Error(err);
+      alert(err)
     }
   }
 

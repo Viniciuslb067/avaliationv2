@@ -33,6 +33,16 @@ export function BarChart({ notes }) {
     ],
   };
 
+  const options = {
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1
+        }
+      }
+    }
+  }
+
   return (
     <>
       <div className={styles.analyticsCard}>
@@ -41,7 +51,7 @@ export function BarChart({ notes }) {
         </div>
 
         <div className={styles.analyticsChart}>
-          <Bar type="Bar" data={data} height={350} width={450} />
+          <Bar type="Bar" data={data} options={options} height={350} width={450} />
         </div>
       </div>
     </>
@@ -107,70 +117,3 @@ export function PieChart({ status }) {
   );
 }
 
-export function PolarAreaChart({ browserInfo }) {
-
-  var name
-  browserInfo.map(item => {
-    name = item.browserName
-  })
-
-  console.log(name)
-  console.log(browserInfo)
-
-  return (
-    <>
-      <div className={styles.analyticsCard}>
-        <div className={styles.analyticsHead}>
-          <h3>Estrelas</h3>
-        </div>
-
-        <div className={styles.analyticsChart}>
-          <PolarArea
-          type="Polar"
-            data={{
-              labels: [browserInfo[0].browserName, browserInfo[1].browserName, browserInfo[2].browserName,  ],
-              datasets: [
-                {
-                  label: "Estrelas",
-                  data: [browserInfo[0].total, browserInfo[1].total, browserInfo[2].total,],
-                  backgroundColor: [
-                    "rgb(54, 162, 235)",
-                    "rgb(246, 46, 89)",
-                  ],
-                  borderWidth: 0.9,
-                  borderColor: "#FFFFFF",
-                },
-              ],
-            }}
-            height={100}
-            width={100}
-            options={{
-              title: {
-                display: true,
-                text: "Enviados/Pulados",
-                position: "top",
-                fontSize: 50,
-                fontColor: "#000000",
-                padding: 20,
-              },
-              animation: {
-                animateScale: true,
-                animateRotate: true,
-              },
-              tooltips: {
-                enabled: true,
-              },
-              maintainAspectRatio: true,
-              responsive: true,
-              legend: {
-                labels: {
-                  fontSize: 15,
-                },
-              },
-            }}
-          />
-        </div>
-      </div>
-    </>
-  );
-}

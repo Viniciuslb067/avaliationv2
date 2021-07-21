@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { GetServerSideProps } from "next";
 import {
   browserName,
   browserVersion,
@@ -11,14 +12,13 @@ import {
 
 import { api } from "../../services/api";
 import styles from "./assess.module.scss";
-import { GetServerSideProps } from "next";
 
 export default function Assess() {
   const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [alreadyAssess, setAlreadyAssess] = useState<boolean>();
   const [assessment, setAssessment] = useState([]);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState<string>("");
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
@@ -57,7 +57,7 @@ export default function Assess() {
         }
       })
       .catch((err) => {
-        alert(err)
+        alert(err);
       });
   }
 

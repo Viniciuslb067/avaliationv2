@@ -4,7 +4,6 @@ import { CardMetrics } from "../../components/CardMetrics";
 import {
   BarChart,
   PieChart,
-  PolarAreaChart,
 } from "../../components/ChartMetrics";
 import { GetServerSideProps } from "next";
 import { SidebarContext } from "../../contexts/SidebarContext";
@@ -29,11 +28,13 @@ interface Assessment {
   question: string;
   requester: string;
   system: string;
+  totalEntries: number;
   startDate: string;
   endDate: string;
   getStatus: string;
   notes: [];
   status: [];
+  media: number;
   comments: Comments[];
   commentsTotal: number;
   browserInfo: {
@@ -61,24 +62,22 @@ export default function MetricsAssessment({ allData }: AssessmentProps) {
         <div className={styles.pageHeader}>
           <div>
             <h1>Dashboard</h1>
-            <small>
-              Aqui você pode acompanhar o andamento de uma avaliação.
-            </small>
+            <small>Avaliação feita pela {allData.requester}</small>
           </div>
         </div>
+
         <CardMetrics
-          requester={allData.requester}
+          totalEntries={allData.totalEntries}
           question={allData.question}
           system={allData.system}
           status={allData.status}
-          startDate={allData.status}
+          media={allData.media}
           endDate={allData.commentsTotal}
         />
 
         <div className={styles.grid}>
           <BarChart notes={allData.notes} />
           <PieChart status={allData.status} />
-          <PolarAreaChart browserInfo={allData.browserInfo} />
         </div>
 
         <div className={styles.table}>
@@ -133,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { slug } = ctx.params;
   const apiClient = getAPIClient(ctx);
   const { ["feedback.token"]: token } = parseCookies(ctx);
-  
+
   if (!token) {
     return {
       redirect: {
@@ -144,12 +143,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const { data } = await apiClient.get(`/assess/result/${slug}`);
-  
+  const entries = await apiClient.get(
+    `/entry/entries/${data.infoAssessment.system}`
+  );
+
   const allData = {
     id: data.infoAssessment._id,
     question: data.infoAssessment.question,
     requester: data.infoAssessment.requester,
     system: data.infoAssessment.system,
+    totalEntries: entries.data.totalEntries,
     getStatus: data.infoAssessment.status,
     startDate: format(parseISO(data.infoAssessment.start_date), "d MMMM yyyy", {
       locale: ptBR,
@@ -159,6 +162,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }),
     notes: data.notes,
     status: data.submissions,
+    media: data.mediaFormatted,
     comments: data.comments,
     commentsTotal: data.totalComments,
     browserInfo: data.browserInfo,
