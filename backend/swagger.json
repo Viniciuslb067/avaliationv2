@@ -122,6 +122,31 @@
           }
         }
       }
+    },
+    "/system/": {
+      "post": {
+        "summary": "Cadastrar um sistema",
+        "description": "Essa rota será responsável por cadastrar um sistema",
+        "tags": ["System"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/System"
+              },
+              "examples": {
+                "system": {
+                  "value": {
+                    "name": "SISREF",
+                    "dns": "sisref.inss.gov.br",
+                    "area": "DADIS"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -133,6 +158,20 @@
             "type": "string"
           },
           "password": {
+            "type": "string"
+          }
+        }
+      },
+      "System": {
+        "type": "object",
+        "properties": {
+          "dns": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "area": {
             "type": "string"
           }
         }
