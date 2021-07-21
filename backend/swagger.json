@@ -1,0 +1,149 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de avaliação de sistemas",
+    "description": "Essa API tem como objetivo avaliar sistemas",
+    "termsOfService": "http://localhost:3001/terms",
+    "contact": {
+      "email": "dti@inss.gov.br"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "API para realizar test"
+    },
+    {
+      "url": "http://www-feedback.prevnet",
+      "description": "API de produção"
+    }
+  ],
+  "paths": {
+    "/auth/authenticate": {
+      "post": {
+        "summary": "Autenticação utilizando LDAP",
+        "description": "Essa rota será responsável por autenticar um usuário",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "vinicius.barbosa",
+                    "password": "1234"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "auth": {
+                      "type": "boolean"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me/{token}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar dados de um usuário",
+        "summary": "Buscar dados de um usuário",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Token para buscar os dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                          "role": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                    }
+                  }
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
