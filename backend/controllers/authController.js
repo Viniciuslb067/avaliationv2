@@ -21,7 +21,6 @@ router.get("/me/:token", async (req, res) => {
     if (err) {
       return res.status(401).json({ error: "Token inválido" });
     }
-
     userEmail = decoded.email;
   });
 

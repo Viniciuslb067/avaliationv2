@@ -98,14 +98,22 @@ router.get("/result/:assessId", authMiddleware, async (req, res) => {
           }),
         ];
 
+        const media =
+          (notes[0] * 1 +
+            notes[1] * 2 +
+            notes[2] * 3 +
+            notes[3] * 4 +
+            notes[4] * 5) /
+          submissions[0];
+
+        const mediaFormatted = media.toFixed(1);
+
         const comments = await Result.find(
           { assessment: req.params.assessId, comments: { $gt: "" } },
           ["comments", "ip_user", "createdAt", "note", "browser", "system"]
         )
           .where("status")
           .all(["Enviado"]);
-
-        console.log(comments);
 
         const totalComments = await Result.countDocuments({
           assessment: req.params.assessId,
@@ -130,12 +138,11 @@ router.get("/result/:assessId", authMiddleware, async (req, res) => {
           })
         );
 
-        console.log(browserInfo);
-
         res.json({
           infoAssessment,
           notes,
           submissions,
+          mediaFormatted,
           comments,
           totalComments,
           browserInfo,

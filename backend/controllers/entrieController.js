@@ -1,14 +1,14 @@
 const express = require("express");
 const datefns = require("date-fns");
 
-const Assessment = require("../models/Assessment");
-const Result = require("../models/Result");
 const System = require("../models/System");
 const Entrie = require("../models/Entrie");
 
+const authMiddleware = require("../middlewares/auth");
+
 const router = express.Router();
 
-//Listar todos os sistemas
+//Registrar uma entrada em um sistema
 router.get("/:system", async (req, res) => {
   try {
     const ip =
@@ -20,35 +20,50 @@ router.get("/:system", async (req, res) => {
     const today = datefns.format(new Date(), "dd/MM/yyyy");
     const system = await System.findOne({ dns: req.params.system });
 
-    const findEntry = await Entrie.findOne({ system, ip_user: ip })
+    if (!system) {
+      return res.status(404).send({ error: "Not Found" });
+    }
+
+    const findEntry = await Entrie.findOne({ system, ip_user: ip });
 
     if (!findEntry) {
       await Entrie.create({
         system: system._id,
         ip_user: ip,
       });
-    } else {
-      const entrieDate = await Entrie.findOne(
+    }
+
+    if (findEntry) {
+      const { entry } = await Entrie.findOne(
         { system: system._id, ip_user: ip },
         ["entry"]
-      );
-      
-      const entrieDateFormated = "21/07/2021"
+      )
+      .sort({ entry: "desc" })
+      const entrieDateFormated = datefns.format(entry, "dd/MM/yyyy");
 
-      if (!(today === entrieDateFormated)) {
+      if (!(entrieDateFormated === today)) {
         await Entrie.create({
           system: system._id,
           ip_user: ip,
         });
-        if(findEntry && )
-        console.log("IF")
-      } else {
-        console.log("CAIU NO ELSE");
       }
     }
   } catch (err) {
-    return res.status(400).send({ error: "Erro ao listar os sistemas " + err });
+    return res.status(400).send({ error: "Erro registar uma entrada " + err });
   }
+});
+
+router.get("/entries/:system", authMiddleware, async (req, res) => {
+
+  const system = await System.findOne({ dns: req.params.system })
+
+  if (!system) {
+    return res.status(404).send({ error: "Not Found" });
+  }
+
+  const totalEntries = await Entrie.countDocuments({ system: system })
+
+  return res.status(200).json({ totalEntries })
 });
 
 module.exports = (app) => app.use("/entry", router);
