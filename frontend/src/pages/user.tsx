@@ -50,13 +50,11 @@ export default function User({ user }: UserProps) {
 
   async function handleSubmit() {
     const data = {
-      name: name,
-      email: email,
       role: role,
     };
 
     await api
-      .put("/user/" + uuid, data)
+      .put("/user/update/" + uuid, data)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);
@@ -81,7 +79,7 @@ export default function User({ user }: UserProps) {
 
   async function deleteUser(id) {
     await api
-      .delete("/user/" + id)
+      .delete("/delete/user/" + id)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);
@@ -234,7 +232,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const { data } = await apiClient.get("/user");
+  const { data } = await apiClient.get("/user/list");
 
   const user = data.users.map((item) => {
     return {

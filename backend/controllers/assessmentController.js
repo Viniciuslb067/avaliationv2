@@ -8,7 +8,7 @@ const Assessment = require("../models/Assessment");
 const router = express.Router();
 
 //Listar todas as avaliações
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/list", authMiddleware, async (req, res) => {
   try {
     const assessmentOn = await Assessment.find({})
       .sort({ createdAt: "desc" })
@@ -50,8 +50,8 @@ router.get("/", authMiddleware, async (req, res) => {
     return res.json({
       assessmentOn,
       assessmentOff,
-      totalAssessment,
       recentAssessment,
+      totalAssessment,
     });
   } catch (err) {
     return res.status(400).send({ error: "Erro ao listar as avaliações" });
@@ -96,7 +96,7 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
   }
 });
 //Editar uma avaliação
-router.put("/:assessmentId", ensureAuthMiddleware, async (req, res) => {
+router.put("/update/:assessmentId", ensureAuthMiddleware, async (req, res) => {
   try {
     const { question, requester, start_date, end_date } = req.body;
 
@@ -119,7 +119,7 @@ router.put("/:assessmentId", ensureAuthMiddleware, async (req, res) => {
   }
 });
 //Deletar uma avaliação
-router.delete("/:assessmentId", ensureAuthMiddleware, async (req, res) => {
+router.delete("/delete/:assessmentId", ensureAuthMiddleware, async (req, res) => {
   try {
     await Assessment.findByIdAndRemove(req.params.assessmentId);
     return res.status(200).json({ success: "Avaliação excluida com sucesso" });

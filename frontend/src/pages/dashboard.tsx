@@ -110,9 +110,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const { data } = await apiClient.get("/assessment");
-  const totalUser = await apiClient.get("/user");
-  const totalSystems = await apiClient.get("/system");
+  const { data } = await apiClient.get("/assessment/list");
+  const totalUser = await apiClient.get("/user/list");
+  const totalSystems = await apiClient.get("/system/list");
 
   const allAssessment = data.totalAssessment;
   const allUser = totalUser.data.totalUser;

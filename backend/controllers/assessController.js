@@ -120,24 +120,6 @@ router.get("/result/:assessId", authMiddleware, async (req, res) => {
           comments: { $gt: "" },
         });
 
-        const browserName = await Result.find(
-          { assessment: req.params.assessId },
-          "browser"
-        );
-
-        const browserInfo = await Promise.all(
-          browserName.map(async (browser) => {
-            const total = await Result.countDocuments({
-              browser: browser.browser,
-            });
-
-            return {
-              browserName: browser.browser,
-              total: total,
-            };
-          })
-        );
-
         res.json({
           infoAssessment,
           notes,
@@ -145,7 +127,6 @@ router.get("/result/:assessId", authMiddleware, async (req, res) => {
           mediaFormatted,
           comments,
           totalComments,
-          browserInfo,
         });
       }
     }

@@ -7,7 +7,7 @@ const System = require("../models/System");
 const router = express.Router();
 
 //Listar todos os sistemas
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/list", authMiddleware, async (req, res) => {
     try {
         const systems = await System.find();
         const totalSystems = await System.countDocuments();
@@ -22,7 +22,7 @@ router.get("/:systemId", ensureAuthMiddleware, async (req, res) => {
         const system = await System.findById(req.params.systemId);
         return res.json(system);
     } catch (err) {
-        return res.status(400).send({ error: "Erro ao listar um sistema" });
+        return res.status(400).send({ error: "Erro ao exibir um sistema" });
     }
 });
 //Cadastrar um sistema
@@ -47,7 +47,7 @@ router.post("/", ensureAuthMiddleware, async (req, res) => {
     }
 });
 //Editar um sistema
-router.put("/:systemId", ensureAuthMiddleware, async (req, res) => {
+router.put("/update/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         const { dns, name, area } = req.body;
 
@@ -57,14 +57,14 @@ router.put("/:systemId", ensureAuthMiddleware, async (req, res) => {
 
         const systemUpdate = await System.findByIdAndUpdate(req.params.systemId, req.body, { new: true });
         
-        return res.status(200).json({ success: "Sistema atualizado com sucesso", systemUpdate });
+        return res.status(200).json({ success: "Sistema atualizado com sucesso", system: systemUpdate });
 
     } catch (err) {
         return res.status(400).send({ error: "Erro ao atualizar o sistema" });
     }
 });
 //Deletar um sistema
-router.delete("/:systemId", ensureAuthMiddleware, async (req, res) => {
+router.delete("/delete/:systemId", ensureAuthMiddleware, async (req, res) => {
     try {
         await System.findByIdAndRemove(req.params.systemId);
         return res.status(200).json({ success: "Sistema excluido com sucesso" });

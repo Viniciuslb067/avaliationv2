@@ -378,7 +378,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  const { data } = await apiClient.get("/assessment");
+  const { data } = await apiClient.get("/assessment/list");
 
   const assessmentOn = data.assessmentOn.map((item) => {
     return {

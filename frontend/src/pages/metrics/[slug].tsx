@@ -37,10 +37,6 @@ interface Assessment {
   media: number;
   comments: Comments[];
   commentsTotal: number;
-  browserInfo: {
-    browserName: string;
-    browserTotal: number;
-  };
 }
 
 interface AssessmentProps {
@@ -165,7 +161,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     media: data.mediaFormatted,
     comments: data.comments,
     commentsTotal: data.totalComments,
-    browserInfo: data.browserInfo,
   };
 
   return {
