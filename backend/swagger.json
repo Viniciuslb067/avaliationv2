@@ -24,7 +24,7 @@
       "post": {
         "summary": "Autenticação utilizando LDAP",
         "description": "Essa rota será responsável por autenticar um usuário",
-        "tags": ["User"],
+        "tags": ["Auth"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -77,7 +77,7 @@
       "get": {
         "description": "Essa rota será responsável por buscar dados de um usuário",
         "summary": "Buscar dados de um usuário",
-        "tags": ["User"],
+        "tags": ["Auth"],
         "parameters": [
           {
             "name": "token",
@@ -128,6 +128,7 @@
         "summary": "Cadastrar um sistema",
         "description": "Essa rota será responsável por cadastrar um sistema",
         "tags": ["System"],
+        "security": [{"bearerAuth": []}],
         "requestBody": {
           "content": {
             "application/json": {
@@ -144,6 +145,1155 @@
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/system/{systemId}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar um sistema específico",
+        "summary": "Buscar dados de um sistema",
+        "tags": ["System"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "systemId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "dns": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "area": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/system/list": {
+      "get": {
+        "description": "Essa rota será responsável por buscar todos os sistemas",
+        "summary": "Listar todos os sistemas cadastrados",
+        "tags": ["System"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "systems": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "dns": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "area": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "totalSystems": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/system/update/{systemId}": {
+      "put": {
+        "summary": "Atualizar um sistema",
+        "description": "Essa rota será responsável por atualizar um sistema",
+        "tags": ["System"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "systemId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/System"
+              },
+              "examples": {
+                "system": {
+                  "value": {
+                    "name": "SISREF",
+                    "dns": "sisref.inss.gov.br",
+                    "area": "DADIS"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    },
+                    "system": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "dns": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "area": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/system/delete/{systemId}": {
+      "delete": {
+        "description": "Essa rota será responsável por excluir um sistema específico",
+        "summary": "Excluir um sistema",
+        "tags": ["System"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "systemId",
+            "in": "path",
+            "description": "id para excluir o sistema",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description":"Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/assessment/": {
+      "post": {
+        "description": "Essa rota será responsável por criar uma avaliação",
+        "summary": "Criar uma nova avaliação",
+        "tags": ["Assessment"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assessment"
+              },
+              "examples": {
+                "assessment": {
+                  "value": {
+                    "question": "O que você está achando do sistema?",
+                    "requester": "DTI",
+                    "start_date": "2021-07-19",
+                    "end_date": "2021-07-31",
+                    "system": "www-humanograma.prevnet"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    },
+                    "assessment": {
+                      "$ref":"#/components/schemas/Assessment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/assessment/{assessmentId}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar uma avaliação específica",
+        "summary": "Buscar dados de uma avaliação",
+        "tags": ["Assessment"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "_id": {
+                      "type": "string"
+                    },
+                    "question": {
+                      "type": "string"
+                    },
+                    "requester": {
+                      "type": "string"
+                    },
+                    "start_date": {
+                      "type": "string"
+                    },
+                    "end_date": {
+                      "type": "string"
+                    },
+                    "system": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/assessment/list": {
+      "get": {
+        "description": "Essa rota será responsável por buscar todas as avaliações",
+        "summary": "Listar todas as avaliações",
+        "tags": ["Assessment"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assessmentOn": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "question": {
+                            "type": "string"
+                          },
+                          "requester": {
+                            "type": "string"
+                          },
+                          "start_date": {
+                            "type": "string"
+                          },
+                          "end_date": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "assessmentOff": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "question": {
+                            "type": "string"
+                          },
+                          "requester": {
+                            "type": "string"
+                          },
+                          "start_date": {
+                            "type": "string"
+                          },
+                          "end_date": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "recentAssessment": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "question": {
+                            "type": "string"
+                          },
+                          "requester": {
+                            "type": "string"
+                          },
+                          "start_date": {
+                            "type": "string"
+                          },
+                          "end_date": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "totalAssessment": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+        
+        
+      }
+    },
+    "/assessment/update/{assessmentId}": {
+      "put": {
+        "summary": "Atualizar uma avaliação",
+        "description": "Essa rota será responsável por cadastrar um sistema",
+        "tags": ["Assessment"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assessment"
+              },
+              "examples": {
+                "assessment": {
+                  "value": {
+                    "question": "O que você está achando?",
+                    "requester": "DADIS",
+                    "start_date": "2021-07-01",
+                    "end_date": "2021-07-31"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    },
+                    "assessment": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string"
+                        },
+                        "_id": {
+                          "type": "string"
+                        },
+                        "question": {
+                          "type": "string"
+                        },
+                        "requester": {
+                          "type": "string"
+                        },
+                        "start_date": {
+                          "type": "string"
+                        },
+                        "end_date": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/assessment/delete/{assessmentId}": {
+      "delete": {
+        "description": "Essa rota será responsável por excluir uma avaliação específica",
+        "summary": "Excluir uma avaliação",
+        "tags": ["Assessment"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "description": "id para excluir a avaliação",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description":"Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar um usuário específico",
+        "summary": "Buscar dados de um usuário",
+        "tags": ["User"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "type": "string"
+                    },
+                    "_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/list": {
+      "get": {
+        "description": "Essa rota será responsável por buscar todos os usuários",
+        "summary": "Listar todos os usuários cadastrados",
+        "tags": ["User"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "role": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "totalUser": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/update/{userId}": {
+      "put": {
+        "summary": "Atualizar um usuário",
+        "description": "Essa rota será responsável por atualizar um usuário",
+        "tags": ["User"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "assessment": {
+                  "value": {
+                    "role": "user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "role": {
+                          "type": "string"
+                        },
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/user/delete/{userId}": {
+      "delete": {
+        "description": "Essa rota será responsável por excluir um usuário específico",
+        "summary": "Excluir um usuário",
+        "tags": ["User"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id para excluir o usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description":"Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/assess/{system}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar uma avaliação específico",
+        "summary": "Buscar dados de uma avaliação",
+        "tags": ["Assess"],
+        "parameters": [
+          {
+            "name": "system",
+            "in": "path",
+            "description": "sistema para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "assess": {
+                        "type": "boolean"
+                      },
+                      "assessment": {
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string"
+                            },
+                            "question": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/assess/{assessId}": {
+      "post": {
+        "summary": "Avaliar um determinado sistema",
+        "description": "Essa rota será responsável por avaliar um sistema",
+        "tags": ["Assess"],
+        "parameters": [
+          {
+            "name": "assessId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/System"
+              },
+              "examples": {
+                "assess": {
+                  "value": {
+                    "note": 5,
+                    "comments": "Muito bom",
+                    "browser": "Chrome 91",
+                    "system": "Windows  10"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/assess/skip/{assessId}": {
+      "post": {
+        "summary": "Pular a avaliação de um determinado sistema",
+        "description": "Essa rota será responsável por pular a avaliação de um sistema",
+        "tags": ["Assess"],
+        "parameters": [
+          {
+            "name": "assessId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/System"
+              },
+              "examples": {
+                "assess": {
+                  "value": {
+                    "browser": "Chrome 91",
+                    "system": "Windows  10"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/assess/result/{assessId}": {
+      "get": {
+        "description": "Essa rota será responsável por buscar os dados de uma avaliação",
+        "summary": "Buscar dados de uma avaliação",
+        "tags": ["Assess"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "assessId",
+            "in": "path",
+            "description": "id para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "infoAssessment": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "_id": {
+                            "type": "string"
+                          },
+                          "question": {
+                            "type": "string"
+                          },
+                          "requester": {
+                            "type": "string"
+                          },
+                          "start_date": {
+                            "type": "string"
+                          },
+                          "end_date": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                      }
+                    },
+                    "notes": {
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "submissions": {
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "mediaFormatted": {
+                      "type": "number"
+                    },
+                    "comments": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "ip_user": {
+                            "type": "string"
+                          },
+                          "browser": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          },
+                          "note": {
+                            "type": "number"
+                          },
+                          "comments": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "totalComments": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/entry/{system}": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Entries"],
+        "parameters": [
+          {
+            "name": "system",
+            "in": "path",
+            "description": "sistema para registrar entrada",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/entry/entries/{system}": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Entries"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "system",
+            "in": "path",
+            "description": "sistema para buscar dados",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                      "totalEntries": {
+                        "type": "number"
+                      }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -172,6 +1322,26 @@
             "type": "string"
           },
           "area": {
+            "type": "string"
+          }
+        }
+      },
+      "Assessment": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "requester": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "system": {
             "type": "string"
           }
         }
