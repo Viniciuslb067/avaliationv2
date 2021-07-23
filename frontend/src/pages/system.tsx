@@ -57,7 +57,7 @@ export default function System({ system }: SystemProps) {
     };
 
     await api
-      .put("/system/" + uuid, data)
+      .put("/system/update/" + uuid, data)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);
@@ -82,7 +82,7 @@ export default function System({ system }: SystemProps) {
 
   async function deleteSystem(id) {
     await api
-      .delete("/system/" + id)
+      .delete("/system/delete/" + id)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);

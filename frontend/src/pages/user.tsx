@@ -79,7 +79,7 @@ export default function User({ user }: UserProps) {
 
   async function deleteUser(id) {
     await api
-      .delete("/delete/user/" + id)
+      .delete("/user/delete/" + id)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);

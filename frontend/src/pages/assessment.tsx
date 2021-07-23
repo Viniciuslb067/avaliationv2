@@ -71,7 +71,7 @@ export default function Assessment({
       status: status,
     };
     await api
-      .put("/assessment/" + uuid, data)
+      .put("/assessment/update/" + uuid, data)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);
@@ -90,7 +90,7 @@ export default function Assessment({
 
   async function deleteAssesssment(id) {
     await api
-      .delete("/assessment/" + id)
+      .delete("/assessment/delete/" + id)
       .then((res) => {
         if (res.data.success) {
           const notify = () => toast.success(res.data.success);

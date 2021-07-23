@@ -132,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  const { data } = await apiClient.get("/system");
+  const { data } = await apiClient.get("/system/list");
 
   const systems = data.systems.map((item) => {
     return {

@@ -98,3 +98,15 @@
   justify-content: center;
   padding: 12rem 0;
 }
+
+@media only screen and (max-width: 1024px) {
+  .modalFooter {
+    margin-top: 2rem;
+  }
+}
+
+@media only screen and (max-width: 1600px) {
+  .modalFooter {
+    margin-top: 4rem;
+  }
+}
