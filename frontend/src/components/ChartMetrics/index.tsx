@@ -84,8 +84,8 @@ export function PieChart({ status }) {
                 },
               ],
             }}
-            height={50}
-            width={50}
+            height={350}
+            width={450}
             options={{
               title: {
                 display: true,
