@@ -5,6 +5,7 @@ const ldap = require("ldapjs");
 const authConfig = require("../config/auth.json");
 
 const User = require("../models/User");
+const Lgpd = require("../models/Lgpd");
 
 const router = express.Router();
 
@@ -27,6 +28,28 @@ router.get("/me/:token", async (req, res) => {
   const user = await User.findOne({ email: `${userEmail}@inss.gov.br` });
 
   return res.status(200).json({ user });
+});
+
+router.post("/terms", async (req, res) => {
+  const { osName, osVersion, browserName, browserVersion } = req.body;
+
+  const getIp =
+    req.headers["x-forwarded-for"] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+  const ip = getIp.split("::ffff:")[1];
+  const date = new Date();
+
+  await Lgpd.create({
+    ip_user: ip,
+    browser: browserName + browserVersion,
+    os_system: osName + osVersion,
+  });
+
+  res.cookie("token", generateToken({ ip, date }));
+  res.status(200).json({ token: generateToken({ ip, date }) });
 });
 
 router.post("/authenticate", async (req, res) => {
