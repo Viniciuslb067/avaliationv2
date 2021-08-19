@@ -11,6 +11,7 @@ import https from "https";
 
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
+import { Lgpd } from "../components/Lgpd";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { AuthProvider } from "../contexts/AuthContext";
 
@@ -43,6 +44,7 @@ function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <SidebarContext.Provider value={{ isOpen, closeSidebar, openSidebar }}>
         <div className={styles.wrapper}>
+          <Lgpd />
           {!showHeaderAndSidebar && <Sidebar />}
           <main>
             {!showHeaderAndSidebar && <Header />}

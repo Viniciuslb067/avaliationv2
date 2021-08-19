@@ -113,7 +113,7 @@ export function CardMetrics({
               <div className={styles.cardHead}>
                 <span>Média</span>
               </div>
-              <h2>{media}</h2>
+              <h2>{media === NaN ? "0" : media}</h2>
             </div>
             <div className={styles.cardIcon}>
               <span>
